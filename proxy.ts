@@ -1,16 +1,28 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
+import createMiddleware from 'next-intl/middleware';
 
 const SESSION_COOKIE = 'poisik_session';
-const SESSION_MAX_AGE = 365 * 24 * 60 * 60; // 1 year
+const SESSION_MAX_AGE = 365 * 24 * 60 * 60;
+
+const locales = ['en', 'fr'];
+const defaultLocale = 'en';
+
+const intlMiddleware = createMiddleware({
+  locales,
+  defaultLocale,
+  localePrefix: 'always',
+});
 
 export function proxy(request: NextRequest) {
   const sessionId = request.cookies.get(SESSION_COOKIE)?.value;
 
+  const intlResponse = intlMiddleware(request);
+
   if (!sessionId) {
     const newSessionId = uuidv4();
-    const response = NextResponse.next();
+    const response = intlResponse || NextResponse.next();
     response.cookies.set(SESSION_COOKIE, newSessionId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -21,7 +33,7 @@ export function proxy(request: NextRequest) {
     return response;
   }
 
-  return NextResponse.next();
+  return intlResponse || NextResponse.next();
 }
 
 export const config = {
