@@ -1,3 +1,5 @@
+'use client';
+
 import { PoisikLogo, UploadDropzone } from '@/components/poisik';
 import { Lightbulb } from 'lucide-react';
 
