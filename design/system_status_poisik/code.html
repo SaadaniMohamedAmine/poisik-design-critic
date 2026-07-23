@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik | Audit Status States</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(27, 32, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1d2b3f;
+        }
+        .ai-glow-border {
+            position: relative;
+        }
+        .ai-glow-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(98, 148, 218, 0.2), transparent, rgba(98, 148, 218, 0.1));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#141c29",
+                      "surface-container-highest": "#30353d",
+                      "inverse-on-surface": "#2c3139",
+                      "background": "#0f141b",
+                      "on-primary": "#00315f",
+                      "on-tertiary": "#402d00",
+                      "tertiary-fixed-dim": "#f3bf4f",
+                      "on-primary-fixed": "#001c3b",
+                      "surface-container-lowest": "#090e15",
+                      "surface-bright": "#353942",
+                      "secondary-container": "#3f4756",
+                      "surface-container": "#1b2027",
+                      "surface-container-low": "#171c23",
+                      "primary": "#a6c8ff",
+                      "outline-variant": "#424750",
+                      "outline": "#8c919c",
+                      "tertiary": "#f3bf4f",
+                      "on-surface": "#dee2ed",
+                      "on-primary-fixed-variant": "#004786",
+                      "on-error": "#690005",
+                      "on-background": "#dee2ed",
+                      "tertiary-container": "#b98b1d",
+                      "on-tertiary-container": "#3a2800",
+                      "inverse-primary": "#275fa2",
+                      "secondary": "#bfc7d9",
+                      "surface-tint": "#a6c8ff",
+                      "on-secondary-fixed-variant": "#3f4756",
+                      "secondary-fixed-dim": "#bfc7d9",
+                      "on-surface-variant": "#c2c6d2",
+                      "surface-variant": "#30353d",
+                      "on-secondary-container": "#adb5c7",
+                      "on-error-container": "#ffdad6",
+                      "error-container": "#93000a",
+                      "primary-container": "#6294da",
+                      "surface": "#0f141b",
+                      "surface-container-high": "#252a32",
+                      "on-secondary": "#29313f",
+                      "error": "#ffb4ab",
+                      "surface-dim": "#0f141b",
+                      "secondary-fixed": "#dbe3f5",
+                      "tertiary-fixed": "#ffdea2",
+                      "on-tertiary-fixed-variant": "#5c4200",
+                      "primary-fixed-dim": "#a6c8ff",
+                      "on-tertiary-fixed": "#261900",
+                      "inverse-surface": "#dee2ed",
+                      "primary-fixed": "#d4e3ff",
+                      "on-primary-container": "#002b56"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "base": "4px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "lg": "24px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "sm": "8px",
+                      "margin": "32px",
+                      "xxl": "80px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</span>
+<nav class="hidden md:flex gap-lg items-center">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Dashboard</a>
+<a class="text-primary font-bold border-b-2 border-primary pb-1 text-label-md font-label-md" href="#">Audit Logs</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Knowledge Base</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex items-center gap-sm px-md py-xs bg-surface-container rounded-xl border border-outline-variant">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-md text-on-surface w-48" placeholder="Search audits..." type="text"/>
+</div>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-xl font-bold text-label-md hover:opacity-80 transition-opacity">Run New Audit</button>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary" data-icon="account_circle">account_circle</span>
+</div>
+</header>
+<!-- Main Content Layout -->
+<main class="pt-20 lg:pl-64 min-h-screen">
+<!-- SideNavBar -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-lg px-md w-64 bg-surface-container-low border-r border-outline-variant">
+<div class="mb-xl px-sm">
+<div class="flex items-center gap-sm mb-base">
+<div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container font-bold">A</div>
+<span class="text-headline-sm font-headline-md font-bold text-on-surface">Project Alpha</span>
+</div>
+<p class="text-label-sm font-label-sm text-outline px-[40px]">V2.4.0 Revision</p>
+</div>
+<nav class="flex-1 space-y-base">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="dashboard">dashboard</span>
+<span class="text-label-md font-label-md">Overview</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="palette">palette</span>
+<span class="text-label-md font-label-md">Visual Design</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="touch_app">touch_app</span>
+<span class="text-label-md font-label-md">Usability</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="visibility">visibility</span>
+<span class="text-label-md font-label-md">Accessibility</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary" data-icon="psychology">psychology</span>
+<span class="text-label-md font-label-md">AI Insights</span>
+</a>
+</nav>
+<div class="mt-auto space-y-base pt-lg border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-label-md font-label-md">Documentation</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-label-md font-label-md">Support</span>
+</a>
+<button class="w-full mt-md bg-surface-container-highest text-on-surface px-md py-sm rounded-xl font-bold text-label-md border border-outline-variant hover:bg-surface-bright transition-colors">
+                    Export Report
+                </button>
+</div>
+</aside>
+<!-- Page Canvas -->
+<div class="max-w-7xl mx-auto px-margin py-xxl">
+<!-- Header Section -->
+<div class="mb-xl flex flex-col md:flex-row md:items-end justify-between gap-lg">
+<div>
+<h1 class="text-display-lg font-display-lg text-on-background mb-base">Audit History</h1>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-2xl">Review and manage your design system audits. Track accessibility scores, visual consistency, and AI-driven UX recommendations.</p>
+</div>
+</div>
+<!-- Empty & Error States Grid (Bento Style) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+<!-- State A: Empty History (Large Hero Card) -->
+<div class="lg:col-span-8 flex flex-col justify-center items-center glass-panel ai-glow-border p-xxl rounded-xl text-center min-h-[480px]">
+<div class="w-24 h-24 mb-lg rounded-full bg-surface-container-highest flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[48px]" data-icon="history">history</span>
+</div>
+<h2 class="text-headline-lg font-headline-lg text-on-background mb-md">No analyses yet</h2>
+<p class="text-body-lg font-body-lg text-outline max-w-md mb-xl">Upload your first screenshot to get started with an automated design audit and AI insights.</p>
+<div class="flex gap-md">
+<button class="bg-primary-container text-on-primary-container px-xl py-md rounded-xl font-bold text-label-md hover:scale-95 transition-transform">
+                            Run First Audit
+                        </button>
+<button class="bg-transparent text-primary border border-outline px-xl py-md rounded-xl font-bold text-label-md hover:bg-surface-container-highest transition-colors">
+                            View Samples
+                        </button>
+</div>
+</div>
+<!-- Secondary States Column -->
+<div class="lg:col-span-4 flex flex-col gap-lg">
+<!-- State B: Upload Error -->
+<div class="glass-panel p-lg rounded-xl border-error/20 bg-surface-container-lowest flex flex-col h-full">
+<div class="flex items-start gap-md mb-md">
+<div class="p-base bg-error-container rounded-lg">
+<span class="material-symbols-outlined text-error" data-icon="upload_file">upload_file</span>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-background text-sm">Upload failed</h3>
+<p class="text-label-sm font-label-sm text-error">File exceeds 10MB</p>
+</div>
+</div>
+<p class="text-body-md font-body-md text-outline mb-lg flex-1">This file type isn't supported or the size is too large for the current analysis engine.</p>
+<button class="w-full py-sm rounded-lg border border-outline text-on-surface-variant font-bold text-label-sm hover:text-primary hover:border-primary transition-all">
+                            Try another file
+                        </button>
+</div>
+<!-- State C: API Error -->
+<div class="glass-panel p-lg rounded-xl bg-surface-container-high flex flex-col h-full ai-glow-border">
+<div class="flex items-start gap-md mb-md">
+<div class="p-base bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="cloud_off">cloud_off</span>
+</div>
+<div>
+<h3 class="text-headline-md font-headline-md text-on-background text-sm">System Interruption</h3>
+<p class="text-label-sm font-label-sm text-primary">Connection Lost</p>
+</div>
+</div>
+<p class="text-body-md font-body-md text-outline mb-lg flex-1">Something went wrong analyzing this image — please verify your connection and try again.</p>
+<button class="w-full py-sm rounded-lg bg-primary-container text-on-primary-container font-bold text-label-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+                            Retry Analysis
+                        </button>
+</div>
+</div>
+</div>
+<!-- Footer Meta Info Section (Empty Context) -->
+<div class="mt-xxl grid grid-cols-1 md:grid-cols-3 gap-xl border-t border-outline-variant pt-xl">
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+<div>
+<h4 class="text-label-md font-label-md text-on-surface mb-xs">AI-Powered Audits</h4>
+<p class="text-label-sm font-label-sm text-outline">Get deep insights into hierarchy, color contrast, and spacing automatically.</p>
+</div>
+</div>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary" data-icon="speed">speed</span>
+<div>
+<h4 class="text-label-md font-label-md text-on-surface mb-xs">Fast Turnaround</h4>
+<p class="text-label-sm font-label-sm text-outline">Most visual audits complete in under 15 seconds with high precision.</p>
+</div>
+</div>
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary" data-icon="verified">verified</span>
+<div>
+<h4 class="text-label-md font-label-md text-on-surface mb-xs">W3C Compliance</h4>
+<p class="text-label-sm font-label-sm text-outline">Accessibility checks mapped directly to global industry standards.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-xl px-margin flex flex-col md:flex-row justify-between items-center gap-md max-w-7xl mx-auto border-t border-outline-variant">
+<div class="flex flex-col md:flex-row items-center gap-md">
+<span class="text-label-md font-label-md font-bold text-on-surface">Poisik AI</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">© 2024 Poisik AI. All rights reserved.</span>
+</div>
+<nav class="flex gap-lg">
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors text-label-sm font-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors text-label-sm font-label-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors text-label-sm font-label-sm" href="#">Security</a>
+<a class="text-on-surface-variant font-medium hover:text-on-surface transition-colors text-label-sm font-label-sm" href="#">Status</a>
+</nav>
+</footer>
+<script>
+        // Micro-interaction for hover states
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.96)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = '';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = '';
+            });
+        });
+    </script>
+</body></html>

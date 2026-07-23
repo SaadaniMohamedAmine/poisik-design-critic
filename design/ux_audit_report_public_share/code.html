@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik | Shared Audit Report - Project Alpha</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#141c29",
+                    "surface-container-highest": "#30353d",
+                    "inverse-on-surface": "#2c3139",
+                    "background": "#0f141b",
+                    "on-primary": "#00315f",
+                    "on-tertiary": "#402d00",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "on-primary-fixed": "#001c3b",
+                    "surface-container-lowest": "#090e15",
+                    "surface-bright": "#353942",
+                    "secondary-container": "#3f4756",
+                    "surface-container": "#1b2027",
+                    "surface-container-low": "#171c23",
+                    "primary": "#a6c8ff",
+                    "outline-variant": "#424750",
+                    "outline": "#8c919c",
+                    "tertiary": "#f3bf4f",
+                    "on-surface": "#dee2ed",
+                    "on-primary-fixed-variant": "#004786",
+                    "on-error": "#690005",
+                    "on-background": "#dee2ed",
+                    "tertiary-container": "#b98b1d",
+                    "on-tertiary-container": "#3a2800",
+                    "inverse-primary": "#275fa2",
+                    "secondary": "#bfc7d9",
+                    "surface-tint": "#a6c8ff",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "on-surface-variant": "#c2c6d2",
+                    "surface-variant": "#30353d",
+                    "on-secondary-container": "#adb5c7",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "primary-container": "#6294da",
+                    "surface": "#0f141b",
+                    "surface-container-high": "#252a32",
+                    "on-secondary": "#29313f",
+                    "error": "#ffb4ab",
+                    "surface-dim": "#0f141b",
+                    "secondary-fixed": "#dbe3f5",
+                    "tertiary-fixed": "#ffdea2",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-surface": "#dee2ed",
+                    "primary-fixed": "#d4e3ff",
+                    "on-primary-container": "#002b56"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "xl": "48px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "margin": "32px",
+                    "xxl": "80px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f141b;
+            color: #dee2ed;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f141b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #30353d;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #424750;
+        }
+        .split-view-container {
+            height: calc(100vh - 80px);
+        }
+        .luxe-border {
+            border: 1px solid #1d2b3f;
+        }
+        .ai-glow-border {
+            position: relative;
+        }
+        .ai-glow-border::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(98, 148, 218, 0.2), transparent, rgba(98, 148, 218, 0.2));
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</span>
+<div class="hidden md:flex gap-lg items-center">
+<span class="text-on-surface-variant font-medium opacity-60">Read-only Report</span>
+<div class="h-4 w-px bg-outline-variant"></div>
+<span class="text-on-surface font-semibold font-label-md">Project Alpha V2.4.0</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<!-- Secondary CTA: Duplicate Analysis -->
+<button class="flex items-center gap-sm px-lg py-sm border border-outline text-on-surface rounded-lg font-label-md hover:bg-surface-container-highest transition-all duration-200 active:scale-95">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+<span>Duplicate this analysis</span>
+</button>
+<div class="flex items-center gap-sm ml-md">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors cursor-pointer">account_circle</span>
+</div>
+</div>
+</nav>
+<!-- Main Content: Split View -->
+<main class="pt-20 flex flex-col lg:flex-row h-screen overflow-hidden">
+<!-- Left Sidebar: Navigation & Project Meta (Shared SideNavBar influence) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-lg px-md w-64 bg-surface-container-low border-r border-outline-variant">
+<div class="mb-xl px-sm">
+<div class="flex items-center gap-sm mb-base">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary-container font-bold">A</div>
+<span class="text-on-surface font-bold font-headline-md text-headline-sm">Project Alpha</span>
+</div>
+<span class="text-on-surface-variant text-label-sm font-label-sm">V2.4.0 Revision • 24 Oct 2023</span>
+</div>
+<nav class="flex-1 space-y-base">
+<div class="flex items-center gap-md px-md py-sm bg-secondary-container text-on-secondary-container rounded-xl cursor-default">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">palette</span>
+<span class="font-label-md text-label-md">Visual Design</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">touch_app</span>
+<span class="font-label-md text-label-md">Usability</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-md text-label-md">Accessibility</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-label-md">AI Insights</span>
+</div>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant space-y-base">
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Documentation</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container-highest rounded-xl transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</div>
+</div>
+</aside>
+<!-- Right Content Area (Canvas) -->
+<div class="flex-1 lg:ml-64 flex flex-col md:flex-row overflow-hidden">
+<!-- Analysis Preview Canvas (Left side of split) -->
+<section class="flex-1 bg-surface-container-lowest p-lg md:p-xl overflow-y-auto custom-scrollbar flex flex-col gap-lg">
+<header class="mb-lg">
+<h1 class="text-headline-lg font-headline-lg text-on-surface mb-xs">UI Integrity Audit</h1>
+<p class="text-on-surface-variant max-w-2xl">Visual analysis of the primary dashboard interface. Focusing on spacing consistency, color contrast compliance, and interaction feedback loops.</p>
+</header>
+<!-- Featured Image with luxe frame -->
+<div class="relative group rounded-xl overflow-hidden luxe-border aspect-video bg-surface">
+<img class="w-full h-full object-cover opacity-90" data-alt="A professional, dark-themed user interface dashboard with a sleek bento-grid layout. The design features sophisticated data visualizations, minimalist charts, and high-end typography in shades of deep navy and charcoal. Subtle accent glows highlight key performance metrics. The overall aesthetic is professional, modern, and authoritative, suitable for a high-end AI auditing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYf_HabhHLvIlGCcd_QmBA0hn8EJqr7oiBE_2hytTav4r7EfAl7C63TLlI3wVvCXqGx5vrh2LQBaW3RyXHJTRASQHJGC5Kmzlyqpcf7pqmWUx_in_v_Vavvq58vVRgJ6omM914fIlIGvbME2llJV8bwlJUEjy0QPvV0HCf65gutbxIdCRIFMYbmSE84r-a8fuNTGI4kMs3VoTS6k14Ew056OarMjs0Wwh4dHXGaKWkSr4Cb-pUOkb_"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent pointer-events-none"></div>
+<div class="absolute bottom-md left-md flex gap-sm">
+<span class="px-md py-xs bg-surface/80 backdrop-blur-md rounded-full text-label-sm font-label-sm luxe-border flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                            Visual Anchor
+                        </span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Spacing Audit Card -->
+<div class="p-lg rounded-xl bg-surface-container-low luxe-border">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">straighten</span>
+<h3 class="text-headline-sm font-headline-md text-on-surface">Layout Rhythm</h3>
+</div>
+<span class="px-sm py-1 bg-tertiary/10 text-tertiary rounded text-[10px] font-bold uppercase tracking-wider">Warning</span>
+</div>
+<p class="text-body-md text-on-surface-variant mb-md">Inconsistent padding detected in the primary data widgets. Variations of 12px and 16px disrupt vertical rhythm.</p>
+<div class="h-2 w-full bg-surface rounded-full overflow-hidden">
+<div class="h-full bg-tertiary" style="width: 65%;"></div>
+</div>
+<div class="mt-xs flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>Score</span>
+<span>65/100</span>
+</div>
+</div>
+<!-- Contrast Audit Card -->
+<div class="p-lg rounded-xl bg-surface-container-low luxe-border">
+<div class="flex justify-between items-start mb-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">contrast</span>
+<h3 class="text-headline-sm font-headline-md text-on-surface">Color Contrast</h3>
+</div>
+<span class="px-sm py-1 bg-primary/10 text-primary rounded text-[10px] font-bold uppercase tracking-wider">Pass</span>
+</div>
+<p class="text-body-md text-on-surface-variant mb-md">All typography meets WCAG 2.1 AA standards. Tertiary text maintains a 4.5:1 ratio against surface backgrounds.</p>
+<div class="h-2 w-full bg-surface rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 98%;"></div>
+</div>
+<div class="mt-xs flex justify-between text-label-sm font-label-sm text-on-surface-variant">
+<span>Score</span>
+<span>98/100</span>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Insights Panel (Right side of split) -->
+<section class="w-full md:w-[400px] bg-background border-l border-outline-variant p-lg md:p-xl overflow-y-auto custom-scrollbar">
+<div class="flex items-center gap-sm mb-xl">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">psychology</span>
+<h2 class="text-headline-md font-headline-md text-on-surface">AI Insights</h2>
+</div>
+<div class="space-y-xl">
+<!-- Insight 1 -->
+<div class="ai-glow-border p-lg rounded-xl bg-surface-container-high/40 transition-all hover:bg-surface-container-high/60">
+<div class="flex items-center gap-sm mb-sm text-primary">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Optimized Priority</span>
+</div>
+<h4 class="text-on-surface font-semibold mb-xs">Reduce Visual Weight on Secondary Actions</h4>
+<p class="text-on-surface-variant text-body-md leading-relaxed">The current ghost button style for 'Export' has a border that's too heavy. We recommend reducing the outline to 10% opacity or removing it entirely to guide users toward 'Run New Audit'.</p>
+</div>
+<!-- Insight 2 -->
+<div class="p-lg rounded-xl border border-outline-variant bg-surface-container-low transition-all hover:border-primary/50">
+<div class="flex items-center gap-sm mb-sm text-tertiary">
+<span class="material-symbols-outlined text-[18px]">info</span>
+<span class="text-label-sm font-label-sm uppercase tracking-widest">Heuristic Check</span>
+</div>
+<h4 class="text-on-surface font-semibold mb-xs">Improve Empty State Feedback</h4>
+<p class="text-on-surface-variant text-body-md leading-relaxed">When search filters return no results, the current interface simply blanks the canvas. Recommend a "Zero Result" illustration and a "Clear All" secondary action.</p>
+</div>
+<!-- Metadata List -->
+<div class="pt-xl space-y-md">
+<h5 class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest border-b border-outline-variant pb-base">Report Context</h5>
+<div class="flex justify-between items-center py-xs">
+<span class="text-on-surface-variant">Audit Depth</span>
+<span class="text-on-surface font-medium">Enterprise</span>
+</div>
+<div class="flex justify-between items-center py-xs">
+<span class="text-on-surface-variant">Tokens Analyzed</span>
+<span class="text-on-surface font-medium">1,248</span>
+</div>
+<div class="flex justify-between items-center py-xs">
+<span class="text-on-surface-variant">Compliance Level</span>
+<span class="text-on-surface font-medium">AA Compliant</span>
+</div>
+</div>
+</div>
+<!-- Footer Badge -->
+<div class="mt-xxl flex flex-col items-center gap-md pb-md">
+<a class="group flex flex-col items-center gap-xs" href="#">
+<div class="px-md py-sm bg-surface-container-highest/50 backdrop-blur-sm rounded-full luxe-border group-hover:bg-primary/10 transition-all duration-300">
+<span class="text-label-sm font-label-sm text-on-surface-variant group-hover:text-primary">Made with <span class="text-on-surface font-bold group-hover:text-primary">Poisik</span></span>
+</div>
+</a>
+<p class="text-[10px] text-on-surface-variant opacity-40 text-center px-lg">This is a public read-only version of an automated UI integrity report generated by Poisik AI Engine.</p>
+</div>
+</section>
+</div>
+</main>
+<!-- Global Footer (Minimal) -->
+<footer class="fixed bottom-0 left-0 w-full z-40 bg-background/80 backdrop-blur-md border-t border-outline-variant hidden md:block">
+<div class="max-w-7xl mx-auto px-margin h-12 flex justify-between items-center">
+<span class="text-label-sm font-label-sm text-on-surface-variant opacity-60">© 2024 Poisik AI. Confidential Public Share View.</span>
+<div class="flex gap-lg">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for hover states
+        document.querySelectorAll('.ai-glow-border').forEach(el => {
+            el.addEventListener('mousemove', (e) => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                el.style.setProperty('--mouse-x', `${x}px`);
+                el.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+    </script>
+</body></html>

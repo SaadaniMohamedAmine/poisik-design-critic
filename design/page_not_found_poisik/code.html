@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f141b;
+            color: #dee2ed;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Subtle scanline effect for the 404 background */
+        .scanline-container {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanline-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(29, 43, 63, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* AI Glow pulse */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.15; }
+            50% { opacity: 0.3; }
+        }
+        .ai-glow {
+            animation: pulse-glow 4s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#141c29",
+                        "surface-container-highest": "#30353d",
+                        "inverse-on-surface": "#2c3139",
+                        "background": "#0f141b",
+                        "on-primary": "#00315f",
+                        "on-tertiary": "#402d00",
+                        "tertiary-fixed-dim": "#f3bf4f",
+                        "on-primary-fixed": "#001c3b",
+                        "surface-container-lowest": "#090e15",
+                        "surface-bright": "#353942",
+                        "secondary-container": "#3f4756",
+                        "surface-container": "#1b2027",
+                        "surface-container-low": "#171c23",
+                        "primary": "#a6c8ff",
+                        "outline-variant": "#424750",
+                        "outline": "#8c919c",
+                        "tertiary": "#f3bf4f",
+                        "on-surface": "#dee2ed",
+                        "on-primary-fixed-variant": "#004786",
+                        "on-error": "#690005",
+                        "on-background": "#dee2ed",
+                        "tertiary-container": "#b98b1d",
+                        "on-tertiary-container": "#3a2800",
+                        "inverse-primary": "#275fa2",
+                        "secondary": "#bfc7d9",
+                        "surface-tint": "#a6c8ff",
+                        "on-secondary-fixed-variant": "#3f4756",
+                        "secondary-fixed-dim": "#bfc7d9",
+                        "on-surface-variant": "#c2c6d2",
+                        "surface-variant": "#30353d",
+                        "on-secondary-container": "#adb5c7",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "primary-container": "#6294da",
+                        "surface": "#0f141b",
+                        "surface-container-high": "#252a32",
+                        "on-secondary": "#29313f",
+                        "error": "#ffb4ab",
+                        "surface-dim": "#0f141b",
+                        "secondary-fixed": "#dbe3f5",
+                        "tertiary-fixed": "#ffdea2",
+                        "on-tertiary-fixed-variant": "#5c4200",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "on-tertiary-fixed": "#261900",
+                        "inverse-surface": "#dee2ed",
+                        "primary-fixed": "#d4e3ff",
+                        "on-primary-container": "#002b56"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "base": "4px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "8px",
+                        "margin": "32px",
+                        "xxl": "80px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background selection:bg-primary/30">
+<!-- Header / Top Navigation Shell (Filtered for 404 to prioritize content canvas) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+</div>
+</header>
+<main class="min-h-screen flex flex-col items-center justify-center pt-20 px-margin relative overflow-hidden">
+<!-- Background Atmospheric Element -->
+<div class="absolute inset-0 pointer-events-none">
+
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-[120px] ai-glow"></div>
+</div>
+<!-- 404 Container -->
+<div class="z-10 flex flex-col items-center max-w-2xl text-center">
+<!-- Large Muted Typography -->
+<div class="scanline-container mb-lg">
+<h1 class="text-[120px] md:text-[200px] font-black leading-none tracking-tighter text-outline-variant/30 select-none opacity-50">
+                    404
+                </h1>
+</div>
+<!-- Expert Tone Message -->
+<div class="space-y-md mb-xl">
+<h2 class="text-headline-md font-headline-md text-on-surface">Resource Not Found</h2>
+<p class="text-body-md font-body-md text-on-surface-variant max-w-md mx-auto leading-relaxed">
+                    The requested audit cannot be located. This path may have expired or been moved by the system administrator.
+                </p>
+</div>
+<!-- Action Cluster -->
+<div class="flex flex-col sm:flex-row items-center gap-md">
+<a class="px-xl py-md bg-primary-container text-on-primary-container font-label-md text-label-md rounded-xl hover:opacity-90 active:scale-95 transition-all inline-flex items-center gap-sm" href="/">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+                    Return to Home
+                </a>
+<button class="px-xl py-md border border-outline-variant text-on-surface-variant font-label-md text-label-md rounded-xl hover:bg-surface-container-highest transition-all inline-flex items-center gap-sm">
+<span class="material-symbols-outlined" data-icon="support">support</span>
+                    Contact Support
+                </button>
+</div>
+</div>
+<!-- Secondary Layout Information (Bento Hint) -->
+<div class="mt-xxl grid grid-cols-1 md:grid-cols-3 gap-lg max-w-5xl w-full z-10">
+<div class="p-lg rounded-xl border border-outline-variant bg-surface-container-low/50 backdrop-blur-sm">
+<div class="flex items-center gap-sm text-primary mb-sm">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Audit Logs</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Check your recent activity logs to see if the session was recently closed.</p>
+</div>
+<div class="p-lg rounded-xl border border-outline-variant bg-surface-container-low/50 backdrop-blur-sm">
+<div class="flex items-center gap-sm text-primary mb-sm">
+<span class="material-symbols-outlined" data-icon="menu_book">menu_book</span>
+<span class="font-label-md text-label-md">Knowledge Base</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Explore documentation on how Poisik handles resource expiration.</p>
+</div>
+<div class="p-lg rounded-xl border border-outline-variant bg-surface-container-low/50 backdrop-blur-sm">
+<div class="flex items-center gap-sm text-primary mb-sm">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span class="font-label-md text-label-md">Search Dashboard</span>
+</div>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Use our global search to find the audit by Project ID or Timestamp.</p>
+</div>
+</div>
+</main>
+<!-- Simple Footer (Mandatory styling from JSON) -->
+<footer class="w-full py-xl px-margin flex flex-col md:flex-row justify-between items-center gap-md max-w-7xl mx-auto border-t border-outline-variant mt-xxl">
+<div class="flex flex-col items-center md:items-start gap-xs">
+<span class="text-label-md font-label-md font-bold text-on-surface">Poisik AI</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant">© 2024 Poisik AI. All rights reserved.</span>
+</div>
+<div class="flex gap-lg">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Terms of Service</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Security</a>
+</div>
+</footer>
+<script>
+        // Micro-interaction: Mouse tracking glow
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.querySelector('.ai-glow');
+            if (glow) {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                glow.style.transform = `translate(${(x - 0.5) * 50}px, ${(y - 0.5) * 50}px) translate(-50%, -50%)`;
+            }
+        });
+
+        // Subtle 404 glitch effect logic
+        const h1 = document.querySelector('h1');
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                h1.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                h1.style.opacity = '0.3';
+                setTimeout(() => {
+                    h1.style.transform = 'translate(0,0)';
+                    h1.style.opacity = '0.5';
+                }, 50);
+            }
+        }, 200);
+    </script>
+</body></html>

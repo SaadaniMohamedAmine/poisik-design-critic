@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik | AI-Driven UI Audit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#141c29",
+                    "surface-container-highest": "#30353d",
+                    "inverse-on-surface": "#2c3139",
+                    "background": "#0f141b",
+                    "on-primary": "#00315f",
+                    "on-tertiary": "#402d00",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "on-primary-fixed": "#001c3b",
+                    "surface-container-lowest": "#090e15",
+                    "surface-bright": "#353942",
+                    "secondary-container": "#3f4756",
+                    "surface-container": "#1b2027",
+                    "surface-container-low": "#171c23",
+                    "primary": "#a6c8ff",
+                    "outline-variant": "#424750",
+                    "outline": "#8c919c",
+                    "tertiary": "#f3bf4f",
+                    "on-surface": "#dee2ed",
+                    "on-primary-fixed-variant": "#004786",
+                    "on-error": "#690005",
+                    "on-background": "#dee2ed",
+                    "tertiary-container": "#b98b1d",
+                    "on-tertiary-container": "#3a2800",
+                    "inverse-primary": "#275fa2",
+                    "secondary": "#bfc7d9",
+                    "surface-tint": "#a6c8ff",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "on-surface-variant": "#c2c6d2",
+                    "surface-variant": "#30353d",
+                    "on-secondary-container": "#adb5c7",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "primary-container": "#6294da",
+                    "surface": "#0f141b",
+                    "surface-container-high": "#252a32",
+                    "on-secondary": "#29313f",
+                    "error": "#ffb4ab",
+                    "surface-dim": "#0f141b",
+                    "secondary-fixed": "#dbe3f5",
+                    "tertiary-fixed": "#ffdea2",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-surface": "#dee2ed",
+                    "primary-fixed": "#d4e3ff",
+                    "on-primary-container": "#002b56",
+                    "border-strong": "#263954"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "base": "4px",
+                    "xl": "48px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "xs": "4px",
+                    "gutter": "24px",
+                    "sm": "8px",
+                    "margin": "32px",
+                    "xxl": "80px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { background-color: #0a0f16; }
+        .dashed-border {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23263954' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+        }
+        .ai-glow {
+            box-shadow: inset 0 0 20px rgba(98, 148, 218, 0.05);
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</span>
+<nav class="hidden md:flex ml-xl gap-lg">
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Audit Logs</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Knowledge Base</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 text-label-md font-label-md" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex gap-sm mr-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="account_circle">account_circle</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-lg py-sm rounded-xl font-bold text-label-md font-label-md hover:opacity-90 transition-opacity">
+                Run New Audit
+            </button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="min-h-screen flex items-center justify-center pt-20 px-margin relative">
+<!-- Background Ambient Effect -->
+<div class="absolute inset-0 pointer-events-none overflow-hidden">
+<div class="absolute -top-1/4 -right-1/4 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute -bottom-1/4 -left-1/4 w-[600px] h-[600px] bg-tertiary/5 blur-[120px] rounded-full"></div>
+</div>
+<section class="max-w-2xl w-full z-10">
+<!-- Header Text -->
+<div class="text-center mb-xl">
+<h1 class="text-display-lg font-display-lg text-on-background mb-base">Analyze Interface</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Upload a design to receive deep AI insights on accessibility, visual hierarchy, and usability.</p>
+</div>
+<!-- Upload Card -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-lg ai-glow">
+<!-- Dropzone Area (Inactive state hidden, showing selected state) -->
+<div class="hidden">
+<div class="dashed-border rounded-xl p-xxl flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-surface-container-high transition-all duration-300">
+<div class="w-16 h-16 bg-surface-container-highest rounded-full flex items-center justify-center mb-lg group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-[32px]" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<p class="text-body-lg font-body-lg text-on-surface mb-xs">Drag &amp; drop your UI screenshot, or click to browse</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">Accepted formats: JPG, PNG, WebP — max 10MB</p>
+</div>
+</div>
+<!-- Selected File State -->
+<div class="space-y-lg">
+<div class="flex items-center gap-lg p-md bg-surface-container rounded-lg border border-border-strong">
+<!-- Thumbnail Preview -->
+<div class="w-24 h-24 rounded-md overflow-hidden flex-shrink-0 relative group">
+<img class="w-full h-full object-cover" data-alt="A high-fidelity minimalist SaaS dashboard UI design with deep navy backgrounds, clean white typography, and subtle blue accent elements. The interface features complex data visualizations including line charts and a bento-grid layout for system metrics. The aesthetic is professional, sophisticated, and reflects a dark luxe design system with precise 8px spacing and sharp border definitions." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuXlg4QIrp_uYXrLsbcuzX73ovagHikcoL60NGgdFcoeZDoFZY8iw-aH71XOVFDsKkIIR-dd8g2wkTtxnQagMH5ejqT-pAkBAtfSmJChDd5lnk_0RrGrrRWGeEWh2cZHB4UaHXOTJCZTl6GjO0o2Ejqb9nOVPTj7daFqBy-7-FOGjNojj54UND3Q0yqkvGk1jV36tsn9FxW3sDoMNJY4ADoyVjTVRg-WQHgNw9PaAwRWcuiVJrU76G"/>
+<div class="absolute inset-0 bg-background/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity cursor-pointer">
+<span class="material-symbols-outlined text-on-surface" data-icon="visibility">visibility</span>
+</div>
+</div>
+<!-- File Info -->
+<div class="flex-grow">
+<div class="flex justify-between items-start mb-xs">
+<div>
+<h3 class="text-body-md font-body-md font-semibold text-on-surface">dashboard_v2.png</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">2.4 MB • PNG Image</p>
+</div>
+<button class="text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Progress Bar Simulation -->
+<div class="w-full h-1 bg-surface-container-highest rounded-full overflow-hidden mt-md">
+<div class="w-full h-full bg-primary-container"></div>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="flex flex-col md:flex-row items-center justify-between gap-md pt-md border-t border-outline-variant">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-label-md font-label-md">Security scan passed</span>
+</div>
+<div class="flex gap-md w-full md:w-auto">
+<button class="flex-1 md:flex-none border border-outline-variant text-on-surface px-xl py-md rounded-lg font-medium text-label-md font-label-md hover:bg-surface-container-highest transition-colors">
+                                Change File
+                            </button>
+<button class="flex-1 md:flex-none bg-primary-container text-on-primary-container px-xxl py-md rounded-lg font-bold text-label-md font-label-md hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-sm shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-[20px]" data-icon="psychology">psychology</span>
+                                Analyze
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Insight Hint -->
+<div class="mt-lg p-md rounded-xl bg-surface-container-highest/30 border border-outline-variant/30 flex items-start gap-md">
+<span class="material-symbols-outlined text-tertiary mt-0.5" data-icon="lightbulb">lightbulb</span>
+<p class="text-label-md font-label-md text-on-surface-variant italic">
+                    "Pro tip: High-resolution exports (2x) yield more accurate typography audits."
+                </p>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="fixed bottom-0 left-0 w-full bg-background border-t border-outline-variant py-md px-margin">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-md">
+<div class="flex items-center gap-lg">
+<span class="text-label-md font-label-md font-bold text-on-surface">Poisik AI</span>
+<p class="text-label-sm font-label-sm text-on-surface-variant opacity-70">© 2024 Poisik AI. All rights reserved.</p>
+</div>
+<div class="flex gap-xl">
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Terms of Service</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Security</a>
+<a class="text-label-sm font-label-sm text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-xs" href="#">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Status
+                </a>
+</div>
+</div>
+</footer>
+<script>
+        // Simple micro-interaction for the analyze button
+        const analyzeBtn = document.querySelector('button.bg-primary-container');
+        if(analyzeBtn) {
+            analyzeBtn.addEventListener('click', function() {
+                this.innerHTML = `<span class="material-symbols-outlined animate-spin" data-icon="progress_activity">progress_activity</span> Processing...`;
+                this.classList.add('opacity-80');
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = `<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span> Complete`;
+                    this.classList.remove('bg-primary-container');
+                    this.classList.add('bg-tertiary-container', 'text-on-tertiary-container');
+                }, 2000);
+            });
+        }
+    </script>
+</body></html>
