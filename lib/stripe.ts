@@ -1,10 +1,17 @@
 import Stripe from 'stripe';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+export function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY is not set');
+  }
+  return new Stripe(key);
+}
 
 export const PRO_PRICE_ID = process.env.STRIPE_PRO_PRICE_ID || 'price_placeholder';
 
 export async function createCheckoutSession(customerEmail?: string) {
+  const stripe = getStripe();
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
@@ -22,9 +29,12 @@ export async function createCheckoutSession(customerEmail?: string) {
   return session;
 }
 
-export function createCustomerPortalUrl(customerId: string) {
-  return stripe.billingPortal.sessions.create({
+export async function createCustomerPortalUrl(customerId: string) {
+  const stripe = getStripe();
+  const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
     return_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/pricing`,
   });
+
+  return session;
 }
