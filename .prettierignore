@@ -1,0 +1,15 @@
+.next/
+node_modules/
+pnpm-lock.yaml
+
+# Read-only reference / plan material (not app source, do not modify)
+/features/
+/design/
+/docs/
+/.superpowers/
+
+# Agent tooling scratch space (gitignored, not part of the project)
+/.remember/
+
+# Generated boilerplate maintained by Next.js tooling, not hand-authored source
+/AGENTS.md
