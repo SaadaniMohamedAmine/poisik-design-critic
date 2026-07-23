@@ -1,6 +1,6 @@
 'use client';
 
-import { PoisikLogo } from '@/components/poisik';
+import { PoisikLogo, LanguageSwitcher } from '@/components/poisik';
 import { ArrowRight, Eye, Contrast, Lightbulb } from 'lucide-react';
 
 const features = [
@@ -62,12 +62,15 @@ export default function LandingPage() {
             </a>
           </nav>
         </div>
-        <a
-          href="/upload"
-          className="rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
-        >
-          Run New Audit
-        </a>
+        <div className="flex items-center gap-md">
+          <LanguageSwitcher />
+          <a
+            href="/upload"
+            className="rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
+          >
+            Run New Audit
+          </a>
+        </div>
       </header>
 
       <main className="relative pt-20">
