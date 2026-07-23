@@ -13,6 +13,7 @@ const eslintConfig = defineConfig([
     'out/**',
     'build/**',
     'next-env.d.ts',
+    '.remember/**',
   ]),
   // Must be last so its rule overrides win over next/core-web-vitals'
   // stylistic rules, preventing conflicts with Prettier formatting.
