@@ -4,3 +4,5 @@ export { AnnotationMarker } from './AnnotationMarker';
 export { CategoryScoreBar } from './CategoryScoreBar';
 export { UploadDropzone } from './UploadDropzone';
 export { JsonLd } from './JsonLd';
+export { ReportView } from './ReportView';
+export { AnalysisLoading } from './AnalysisLoading';
