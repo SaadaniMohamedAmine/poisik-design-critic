@@ -7,9 +7,14 @@ export default function SettingsPage() {
   const { data: session } = useSession();
   const [deleting, setDeleting] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   async function handleExport() {
     const res = await fetch('/api/account');
+    if (!res.ok) {
+      setActionError('Could not export your data. Please try again.');
+      return;
+    }
     const blob = await res.blob();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -21,7 +26,12 @@ export default function SettingsPage() {
 
   async function handleDelete() {
     setDeleting(true);
-    await fetch('/api/account', { method: 'DELETE' });
+    const res = await fetch('/api/account', { method: 'DELETE' });
+    if (!res.ok) {
+      setDeleting(false);
+      setActionError('Something went wrong deleting your account. Please try again.');
+      return;
+    }
     await signOut({ callbackUrl: '/' });
   }
 
@@ -47,6 +57,8 @@ export default function SettingsPage() {
           Export my data
         </button>
       </section>
+
+      {actionError && <p className="text-label-sm text-accent-signal">{actionError}</p>}
 
       <section className="space-y-md rounded-xl border border-border-strong bg-surface p-lg">
         <h2 className="text-headline-md font-medium text-text-primary">Delete account</h2>
