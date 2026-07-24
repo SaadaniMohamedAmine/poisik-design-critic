@@ -9,3 +9,7 @@ export { AnalysisLoading } from './AnalysisLoading';
 export { CommandPalette } from './CommandPalette';
 export { GlitchText } from './GlitchText';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { AppShell } from './AppShell';
+export { TopBarAuth } from './TopBarAuth';
+export { Sidebar } from './Sidebar';
+export { UserDropdown } from './UserDropdown';
