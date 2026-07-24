@@ -67,7 +67,7 @@ export default function NotFound() {
 
           <div className="mb-xl space-y-md">
             <h2 className="text-headline-md font-medium text-text-primary">Resource Not Found</h2>
-            <p className="mx-auto max-w-md text-body-md leading-relaxed text-text-secondary">
+            <p className="mx-auto max-w-md text-base leading-relaxed text-text-secondary">
               {t.notFound}
             </p>
           </div>

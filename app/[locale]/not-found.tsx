@@ -43,7 +43,7 @@ export default function LocaleNotFound() {
 
           <div className="mb-xl space-y-md">
             <h2 className="text-headline-md font-medium text-text-primary">Resource Not Found</h2>
-            <p className="mx-auto max-w-md text-body-md leading-relaxed text-text-secondary">
+            <p className="mx-auto max-w-md text-base leading-relaxed text-text-secondary">
               The requested audit cannot be located. This path may have expired or been moved by the
               system administrator.
             </p>
