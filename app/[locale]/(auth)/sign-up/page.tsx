@@ -133,7 +133,7 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {error && <p className="text-label-sm text-destructive">{error}</p>}
+            {error && <p className="text-label-sm text-accent-signal">{error}</p>}
 
             <button
               type="submit"
