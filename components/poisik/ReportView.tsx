@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Download, Share2, MapPin } from 'lucide-react';
+import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
 import { PoisikLogo, CircularGauge, AnnotationMarker, CategoryScoreBar } from '@/components/poisik';
 import { Button } from '@/components/ui/button';
 import type { AnalysisResult } from '@/lib/schemas';
@@ -34,6 +34,8 @@ const severityStyles = {
 export function ReportView({ result, isReadOnly }: ReportViewProps) {
   const [activeFilter, setActiveFilter] = useState('all');
   const [expandedIssue, setExpandedIssue] = useState<string | null>(null);
+  const [expandedFix, setExpandedFix] = useState<string | null>(null);
+  const [copiedFix, setCopiedFix] = useState<string | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
 
   const filteredIssues =
@@ -177,6 +179,48 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
                       </div>
                     )}
                   </div>
+                  {issue.code_fix && (
+                    <div className="mt-lg">
+                      <button
+                        onClick={() => setExpandedFix(expandedFix === issue.id ? null : issue.id)}
+                        className="text-label-md font-medium text-accent-signal hover:underline"
+                      >
+                        {expandedFix === issue.id ? 'Hide fix' : 'View fix'}
+                      </button>
+                      {expandedFix === issue.id && (
+                        <div className="mt-md space-y-md">
+                          {issue.code_fix.before && issue.code_fix.after && (
+                            <div className="flex items-center gap-lg">
+                              <div className="flex items-center gap-md">
+                                <span className="text-label-sm text-text-muted">Before</span>
+                                <div className="size-8 rounded border border-border" style={{ backgroundColor: issue.code_fix.before }} />
+                                <code className="text-label-sm text-text-secondary">{issue.code_fix.before}</code>
+                              </div>
+                              <span className="text-text-muted">&rarr;</span>
+                              <div className="flex items-center gap-md">
+                                <span className="text-label-sm text-text-muted">After</span>
+                                <div className="size-8 rounded border border-border" style={{ backgroundColor: issue.code_fix.after }} />
+                                <code className="text-label-sm text-accent-signal">{issue.code_fix.after}</code>
+                              </div>
+                            </div>
+                          )}
+                          <div className="relative rounded-lg border border-border bg-bg-base p-md">
+                            <pre className="overflow-x-auto text-label-sm text-text-primary"><code>{issue.code_fix.snippet}</code></pre>
+                            <button
+                              onClick={async () => {
+                                await navigator.clipboard.writeText(issue.code_fix.snippet);
+                                setCopiedFix(issue.id);
+                                setTimeout(() => setCopiedFix(null), 2000);
+                              }}
+                              className="absolute top-md right-md rounded bg-surface px-2 py-1 text-label-sm text-text-secondary transition-colors hover:text-accent-signal"
+                            >
+                              {copiedFix === issue.id ? <Check className="size-4 text-accent-signal" /> : <Copy className="size-4" />}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
