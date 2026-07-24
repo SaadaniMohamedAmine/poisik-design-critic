@@ -871,13 +871,15 @@ Server component — fetches the session and (best-effort) usage placeholders, t
 ```tsx
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
+import { getLocale } from 'next-intl/server';
 import { TopBarAuth } from './TopBarAuth';
 import { Sidebar } from './Sidebar';
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
   const session = await auth();
   if (!session?.user) {
-    redirect('/sign-in');
+    const locale = await getLocale();
+    redirect({ href: '/sign-in', locale });
     return null;
   }
 
