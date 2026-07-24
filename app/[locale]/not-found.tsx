@@ -41,9 +41,9 @@ export default function LocaleNotFound() {
         <div className="z-10 flex max-w-2xl flex-col items-center text-center">
           <GlitchText text="404" />
 
-          <div className="mb-xl space-y-md">
+          <div className="mb-xl space-y-4">
             <h2 className="text-headline-md font-medium text-text-primary">Resource Not Found</h2>
-            <p className="mx-auto max-w-md text-base leading-relaxed text-text-secondary">
+            <p className="text-base leading-relaxed text-text-secondary">
               The requested audit cannot be located. This path may have expired or been moved by the
               system administrator.
             </p>
