@@ -12,10 +12,10 @@ export async function GET(_req: NextRequest, context: { params: Promise<{ id: st
     return NextResponse.json({ error: 'Analysis not found' }, { status: 404 });
   }
 
-  const cookieStore = (await import('next/headers')).cookies;
-  const sessionId = (await cookieStore()).get('poisik_session')?.value;
-
-  if (!analysis.isPublic && analysis.sessionId !== sessionId) {
+  // Anonymous-session ownership no longer applies (see prisma/schema.prisma —
+  // Analysis is project-scoped now). Only the public-share path still applies
+  // until Phase B adds real project-ownership checks (see features/07-history.md).
+  if (!analysis.isPublic) {
     return NextResponse.json({ error: 'Analysis not found' }, { status: 404 });
   }
 
