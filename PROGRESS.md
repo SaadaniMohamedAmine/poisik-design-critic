@@ -1,5 +1,18 @@
 # Poisik — Progress Log
 
+## TODO — Lighthouse Manual Audit
+- Ouvrir Chrome DevTools → onglet Lighthouse → "Analyze page load"
+- Tester chaque route : `/en/`, `/en/upload`, `/en/demo`, `/en/pricing`, `/en/history`, `/en/compare`
+- Viser 100/100 sur Performance, Accessibility, Best Practices, SEO
+- Si un score < 100, documenter la raison ici
+
+## Phase 7 — Differentiateurs secondaires
+- Benchmark Comparison: hardcoded reference dataset, caption near score gauge
+- Command Palette: Cmd+K with cmdk, navigation actions + language switch
+- Streaming Report: SSE endpoint for Groq streaming, progressive narration in loading screen
+- Public API: POST /api/v1/analyze with API key auth
+- CLI Tool: poisik analyze <file|url> with --json and --open flags
+
 ## Phase 6 — Differentiateurs prioritaires
 - Fix In Code: code_fix schema, AI prompt, UI with Copy button on issue cards
 - Live URL Analysis: upload/URL toggle on `/upload`, screenshot capture API with Playwright

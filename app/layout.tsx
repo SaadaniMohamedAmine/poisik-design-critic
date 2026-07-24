@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { JsonLd } from '@/components/poisik/JsonLd';
+import { CommandPalette } from '@/components/poisik/CommandPalette';
 import './globals.css';
 
 const inter = Inter({
@@ -57,6 +58,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <JsonLd />
+        <CommandPalette />
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>

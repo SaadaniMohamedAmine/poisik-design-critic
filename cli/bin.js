@@ -1,0 +1,69 @@
+#!/usr/bin/env node
+
+const API_BASE = process.env.POISIK_API_URL || 'https://poisik-design-critic.vercel.app';
+const API_KEY = process.env.POISIK_API_KEY;
+
+async function main() {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  const target = args[1];
+  const flags = args.filter((a) => a.startsWith('--'));
+
+  if (!command || command !== 'analyze' || !target) {
+    console.log('Usage: poisik analyze <file|url> [--json] [--open]');
+    process.exit(1);
+  }
+
+  if (!API_KEY) {
+    console.error('Error: POISIK_API_KEY environment variable is not set');
+    process.exit(1);
+  }
+
+  const isUrl = target.startsWith('http://') || target.startsWith('https://');
+  const body = isUrl ? { imageUrl: target } : { imageBase64: require('fs').readFileSync(target, 'base64') };
+
+  try {
+    const response = await fetch(`${API_BASE}/api/v1/analyze`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': API_KEY,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      console.error(`Error (${response.status}): ${err.error || 'Unknown error'}`);
+      process.exit(1);
+    }
+
+    const result = await response.json();
+
+    if (flags.includes('--json')) {
+      console.log(JSON.stringify(result, null, 2));
+    } else {
+      console.log(`\n  Overall Score: ${result.overall_score}/100\n`);
+      console.log('  Top Issues:');
+      result.issues.slice(0, 3).forEach((issue, i) => {
+        console.log(`    ${i + 1}. [${issue.severity.toUpperCase()}] ${issue.title}`);
+        console.log(`       ${issue.recommendation}`);
+        console.log();
+      });
+    }
+
+    if (flags.includes('--open')) {
+      const open = require('child_process').execSync;
+      const platform = process.platform;
+      const url = `${API_BASE}/en/report/demo`;
+      if (platform === 'darwin') open(`open ${url}`);
+      else if (platform === 'win32') open(`start ${url}`);
+      else open(`xdg-open ${url}`);
+    }
+  } catch (err) {
+    console.error('Error:', err.message);
+    process.exit(1);
+  }
+}
+
+main();
