@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
 import { PoisikLogo, CircularGauge, AnnotationMarker, CategoryScoreBar } from '@/components/poisik';
+import { getClosestBenchmark } from '@/lib/benchmarks';
 import { Button } from '@/components/ui/button';
 import type { AnalysisResult } from '@/lib/schemas';
 
@@ -116,6 +117,22 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
               <h2 className="mt-md text-headline-md font-medium text-text-primary">
                 Overall Design Score
               </h2>
+              {(() => {
+                const cmp = getClosestBenchmark(result.overall_score);
+                if (!cmp) return null;
+                const { benchmark, diff, isAbove } = cmp;
+                let text = '';
+                if (diff <= 2) {
+                  text = `${result.overall_score} — comparable to ${benchmark.name} (${benchmark.score})`;
+                } else if (isAbove) {
+                  text = `${result.overall_score} — ahead of ${benchmark.name} (${benchmark.score}) by ${diff} pts`;
+                } else {
+                  text = `${result.overall_score} — ${benchmark.name} (${benchmark.score}) is ${diff} pts ahead`;
+                }
+                return (
+                  <p className="mt-2 text-label-sm text-text-muted">{text}</p>
+                );
+              })()}
             </div>
 
             <div className="mb-xl space-y-md">
