@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
+import { useLocale } from 'next-intl';
 import { HelpCircle, Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
@@ -11,6 +12,7 @@ const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 
 export default function SignInPage() {
   const glowRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const locale = useLocale();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -133,7 +135,7 @@ export default function SignInPage() {
           <div className="grid grid-cols-2 gap-md">
             <button
               type="button"
-              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard` })}
               className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low"
             >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
