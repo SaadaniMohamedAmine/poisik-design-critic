@@ -37,6 +37,7 @@ export const metadata: Metadata = {
     description: 'AI-powered UX/UI audit tool. Get an expert-level design critique in seconds.',
     images: ['/opengraph-image.png'],
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   robots: {
     index: true,
     follow: true,
