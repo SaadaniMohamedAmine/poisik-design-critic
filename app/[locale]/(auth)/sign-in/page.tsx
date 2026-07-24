@@ -1,11 +1,33 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { HelpCircle, Mail, Lock } from 'lucide-react';
+
+const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
 
 export default function SignInPage() {
   const glowRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    const res = await signIn('credentials', { email, password, redirect: false });
+    setLoading(false);
+    if (res?.error) {
+      setError('Incorrect email or password.');
+      return;
+    }
+    router.push('/dashboard');
+  }
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -45,7 +67,7 @@ export default function SignInPage() {
             <p className="text-base text-text-secondary">Sign in to your AI auditing dashboard</p>
           </div>
 
-          <form className="space-y-lg" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-lg" onSubmit={handleSubmit}>
             <div className="space-y-sm">
               <label htmlFor="email" className="block text-label-md text-text-secondary">
                 Email address
@@ -56,6 +78,8 @@ export default function SignInPage() {
                   id="email"
                   type="email"
                   placeholder="name@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                 />
               </div>
@@ -79,16 +103,21 @@ export default function SignInPage() {
                   id="password"
                   type="password"
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                 />
               </div>
             </div>
 
+            {error && <p className="text-label-sm text-destructive">{error}</p>}
+
             <button
               type="submit"
-              className="w-full h-12 rounded-lg bg-accent-signal text-label-md font-bold text-white transition-all hover:brightness-110 active:scale-[0.98]"
+              disabled={loading}
+              className="w-full h-12 rounded-lg bg-accent-signal text-label-md font-bold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Sign In
+              {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
@@ -102,18 +131,39 @@ export default function SignInPage() {
           </div>
 
           <div className="grid grid-cols-2 gap-md">
-            <button className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low">
+            <button
+              type="button"
+              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low"
+            >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.9 3.28-2.06 4.48-1.18 1.18-3.04 2.48-6.18 2.48-5.02 0-9.1-4.08-9.1-9.1s4.08-9.1 9.1-9.1c2.72 0 4.7 1.06 6.16 2.46l2.3-2.3c-2.12-2.02-4.88-3.56-8.46-3.56-6.62 0-12 5.38-12 12s5.38 12 12 12c3.58 0 6.28-1.18 8.4-3.4 2.18-2.18 2.88-5.22 2.88-7.66 0-.48-.04-.96-.12-1.42h-8.76z" />
               </svg>
               Google
             </button>
-            <button className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-              Facebook
-            </button>
+            {FACEBOOK_AUTH_ENABLED ? (
+              <button
+                type="button"
+                onClick={() => signIn('facebook', { callbackUrl: '/dashboard' })}
+                className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                Facebook
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="flex items-center justify-center gap-sm h-11 rounded-lg border border-border-strong bg-transparent text-label-md text-text-secondary transition-colors hover:bg-surface-container-low cursor-not-allowed opacity-50"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                Facebook — coming soon
+              </button>
+            )}
           </div>
 
           <div className="mt-xl text-center">

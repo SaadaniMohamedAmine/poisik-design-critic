@@ -1,11 +1,50 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { Mail, Lock } from 'lucide-react';
+
+const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
 
 export default function SignUpPage() {
   const glowRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
+    setLoading(true);
+
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setError(data.error ?? 'Something went wrong.');
+      setLoading(false);
+      return;
+    }
+
+    await signIn('credentials', { email, password, redirect: false });
+    setLoading(false);
+    router.push('/dashboard');
+  }
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -42,7 +81,7 @@ export default function SignUpPage() {
             </p>
           </div>
 
-          <form className="mt-lg flex flex-col gap-md" onSubmit={(e) => e.preventDefault()}>
+          <form className="mt-lg flex flex-col gap-md" onSubmit={handleSubmit}>
             <div className="flex flex-col gap-xs">
               <label htmlFor="email" className="ml-xs text-label-md text-text-secondary">
                 Email address
@@ -53,6 +92,8 @@ export default function SignUpPage() {
                   id="email"
                   type="email"
                   placeholder="name@company.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                 />
               </div>
@@ -68,6 +109,8 @@ export default function SignUpPage() {
                   id="password"
                   type="password"
                   placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                 />
               </div>
@@ -83,16 +126,21 @@ export default function SignUpPage() {
                   id="confirm-password"
                   type="password"
                   placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                 />
               </div>
             </div>
 
+            {error && <p className="text-label-sm text-destructive">{error}</p>}
+
             <button
               type="submit"
-              className="mt-sm rounded-lg bg-accent-signal py-sm px-md text-label-md font-bold uppercase tracking-wider text-white transition-all active:scale-[0.98]"
+              disabled={loading}
+              className="mt-sm rounded-lg bg-accent-signal py-sm px-md text-label-md font-bold uppercase tracking-wider text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Sign Up
+              {loading ? 'Signing up...' : 'Sign Up'}
             </button>
           </form>
 
@@ -105,7 +153,11 @@ export default function SignUpPage() {
           </div>
 
           <div className="flex flex-col gap-sm sm:flex-row">
-            <button className="btn-secondary flex-1 flex items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent py-sm transition-colors hover:bg-surface-container-low">
+            <button
+              type="button"
+              onClick={() => signIn('google', { callbackUrl: '/dashboard' })}
+              className="btn-secondary flex-1 flex items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent py-sm transition-colors hover:bg-surface-container-low"
+            >
               <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path
                   d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -126,12 +178,29 @@ export default function SignUpPage() {
               </svg>
               <span className="text-label-md text-text-secondary">Google</span>
             </button>
-            <button className="btn-secondary flex-1 flex items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent py-sm transition-colors hover:bg-surface-container-low">
-              <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-              </svg>
-              <span className="text-label-md text-text-secondary">Facebook</span>
-            </button>
+            {FACEBOOK_AUTH_ENABLED ? (
+              <button
+                type="button"
+                onClick={() => signIn('facebook', { callbackUrl: '/dashboard' })}
+                className="btn-secondary flex-1 flex items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent py-sm transition-colors hover:bg-surface-container-low"
+              >
+                <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                <span className="text-label-md text-text-secondary">Facebook</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="btn-secondary flex-1 flex items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent py-sm transition-colors hover:bg-surface-container-low cursor-not-allowed opacity-50"
+              >
+                <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                </svg>
+                <span className="text-label-md text-text-secondary">Facebook — coming soon</span>
+              </button>
+            )}
           </div>
 
           <p className="mt-sm text-center text-label-md text-text-secondary">
