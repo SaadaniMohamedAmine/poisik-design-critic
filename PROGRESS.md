@@ -1,5 +1,12 @@
 # Poisik — Progress Log
 
+## Phase 7 — Differentiateurs secondaires
+- Benchmark Comparison: hardcoded reference dataset, caption near score gauge
+- Command Palette: Cmd+K with cmdk, navigation actions + language switch
+- Streaming Report: SSE endpoint for Groq streaming, progressive narration in loading screen
+- Public API: POST /api/v1/analyze with API key auth
+- CLI Tool: poisik analyze <file|url> with --json and --open flags
+
 ## Phase 6 — Differentiateurs prioritaires
 - Fix In Code: code_fix schema, AI prompt, UI with Copy button on issue cards
 - Live URL Analysis: upload/URL toggle on `/upload`, screenshot capture API with Playwright
