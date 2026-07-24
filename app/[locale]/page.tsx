@@ -39,35 +39,37 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-bg-base text-text-primary antialiased">
-      <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center justify-between border-b border-border bg-bg-base/80 px-margin backdrop-blur-md">
-        <div className="flex items-center gap-xl">
-          <PoisikLogo size="md" />
-          <nav className="hidden items-center gap-lg md:flex">
-            <a
-              href="#features"
-              className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-            >
-              {n('features')}
-            </a>
+      <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center border-b border-border bg-bg-base/80 backdrop-blur-md">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-margin">
+          <div className="flex items-center gap-xl">
+            <PoisikLogo size="md" className="text-headline-lg font-extrabold text-accent-signal" />
+            <nav className="hidden items-center gap-lg md:flex">
+              <a
+                href="#features"
+                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
+              >
+                {n('features')}
+              </a>
+              <Link
+                href="/demo"
+                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
+              >
+                {n('demo')}
+              </Link>
+            </nav>
+          </div>
+          <div className="flex items-center gap-md">
+            <span className="hidden rounded-full border border-border px-md py-xs text-label-sm font-medium text-text-secondary md:inline">
+              {n('freePlan')}
+            </span>
+            <LanguageSwitcher />
             <Link
-              href="/demo"
-              className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
+              href="/upload"
+              className="rounded-full bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
             >
-              {n('demo')}
+              {t('cta')}
             </Link>
-          </nav>
-        </div>
-        <div className="flex items-center gap-md">
-          <span className="hidden rounded-full border border-border px-md py-xs text-label-sm font-medium text-text-secondary md:inline">
-            {n('freePlan')}
-          </span>
-          <LanguageSwitcher />
-          <Link
-            href="/upload"
-            className="rounded-full bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
-          >
-            {t('cta')}
-          </Link>
+          </div>
         </div>
       </header>
 
