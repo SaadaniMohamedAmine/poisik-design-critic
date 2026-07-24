@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#30353d",
+                        "surface-tint": "#a6c8ff",
+                        "on-error": "#690005",
+                        "surface-container-low": "#171c23",
+                        "surface-container-lowest": "#090e15",
+                        "primary": "#a6c8ff",
+                        "on-surface-variant": "#c2c6d2",
+                        "inverse-surface": "#dee2ed",
+                        "inverse-on-surface": "#2c3139",
+                        "surface-container": "#1b2027",
+                        "secondary": "#bfc7d9",
+                        "on-surface": "#dee2ed",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "on-secondary-container": "#adb5c7",
+                        "on-primary-fixed": "#001c3b",
+                        "surface": "#0f141b",
+                        "secondary-fixed-dim": "#bfc7d9",
+                        "tertiary-fixed-dim": "#f3bf4f",
+                        "on-primary-fixed-variant": "#004786",
+                        "outline": "#8c919c",
+                        "on-tertiary": "#402d00",
+                        "secondary-fixed": "#dbe3f5",
+                        "tertiary-fixed": "#ffdea2",
+                        "inverse-primary": "#275fa2",
+                        "secondary-container": "#3f4756",
+                        "surface-dim": "#0f141b",
+                        "on-tertiary-fixed": "#261900",
+                        "on-secondary-fixed": "#141c29",
+                        "surface-container-highest": "#30353d",
+                        "surface-bright": "#353942",
+                        "on-secondary": "#29313f",
+                        "surface-container-high": "#252a32",
+                        "on-tertiary-fixed-variant": "#5c4200",
+                        "tertiary-container": "#b98b1d",
+                        "error-container": "#93000a",
+                        "tertiary": "#f3bf4f",
+                        "on-secondary-fixed-variant": "#3f4756",
+                        "outline-variant": "#424750",
+                        "on-error-container": "#ffdad6",
+                        "error": "#ffb4ab",
+                        "on-tertiary-container": "#3a2800",
+                        "primary-fixed": "#d4e3ff",
+                        "primary-container": "#6294da",
+                        "on-primary": "#00315f",
+                        "on-background": "#dee2ed",
+                        "background": "#0f141b",
+                        "on-primary-container": "#002b56"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xxl": "80px",
+                        "md": "16px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xs": "4px",
+                        "xl": "48px",
+                        "margin": "32px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .modal-blur-bg {
+            backdrop-filter: blur(12px);
+        }
+        .accent-glow {
+            box-shadow: 0 0 80px -20px rgba(95, 156, 242, 0.15);
+        }
+        .inner-glow {
+            box-shadow: inset 0 0 20px rgba(98, 148, 218, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-hidden">
+<!-- Mocked Blurred Dashboard Background -->
+<div class="fixed inset-0 flex overflow-hidden opacity-50 blur-sm grayscale-[0.2]">
+<!-- SideNavBar Mock -->
+<aside class="h-screen w-64 bg-surface-container-low border-r border-outline-variant flex flex-col p-md gap-lg">
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-primary"></div>
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tighter">poisik</span>
+</div>
+<nav class="flex flex-col gap-sm">
+<div class="flex items-center gap-md px-md py-sm bg-surface-container-highest text-on-surface rounded-xl">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-container rounded-xl">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</div>
+</nav>
+</aside>
+<!-- Content Area Mock -->
+<main class="flex-1 p-margin overflow-y-auto">
+<header class="flex justify-between items-center mb-xl">
+<h1 class="font-headline-lg text-headline-lg">UX Audit Overview</h1>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">language</span>
+<div class="w-10 h-10 rounded-full bg-surface-container-high border border-outline-variant"></div>
+</div>
+</header>
+<!-- Bento Grid Mock -->
+<div class="grid grid-cols-12 gap-lg">
+<div class="col-span-8 h-80 bg-surface-container rounded-xl border border-outline-variant p-lg"></div>
+<div class="col-span-4 h-80 bg-surface-container rounded-xl border border-outline-variant p-lg"></div>
+<div class="col-span-4 h-64 bg-surface-container rounded-xl border border-outline-variant p-lg"></div>
+<div class="col-span-8 h-64 bg-surface-container rounded-xl border border-outline-variant p-lg"></div>
+</div>
+</main>
+</div>
+<!-- Modal Overlay -->
+<div class="fixed inset-0 bg-background/60 modal-blur-bg flex items-center justify-center z-50 p-md">
+<!-- Upgrade Modal -->
+<div class="relative w-full max-w-[560px] bg-[#121a27] border border-[#1d2b3f] rounded-xl overflow-hidden accent-glow inner-glow">
+<!-- Soft Ambient Background Effect -->
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-[#5f9cf2]/10 blur-[80px] rounded-full pointer-events-none"></div>
+<div class="absolute -bottom-24 -right-24 w-64 h-64 bg-[#5f9cf2]/5 blur-[80px] rounded-full pointer-events-none"></div>
+<div class="relative p-xl flex flex-col gap-lg">
+<!-- Close Button -->
+<button class="absolute top-md right-md text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+<!-- Header -->
+<div class="text-center space-y-sm">
+<div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-container/20 text-primary mb-md">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-primary font-bold">You've used all 3 analyses this month</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-sm mx-auto">Upgrade to Pro for unlimited audits and expert code fixes.</p>
+</div>
+<!-- Comparison Table -->
+<div class="mt-md border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest/50">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant bg-surface-container">
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Features</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Free</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-primary uppercase tracking-wider">Pro</th>
+</tr>
+</thead>
+<tbody class="font-label-md text-label-md">
+<tr class="border-b border-outline-variant/50">
+<td class="px-lg py-md text-on-surface">Analyses / month</td>
+<td class="px-lg py-md text-on-surface-variant">3</td>
+<td class="px-lg py-md text-primary font-bold">Unlimited</td>
+</tr>
+<tr class="border-b border-outline-variant/50">
+<td class="px-lg py-md text-on-surface">Code fixes</td>
+<td class="px-lg py-md text-on-surface-variant">Limited</td>
+<td class="px-lg py-md text-primary font-bold">Included</td>
+</tr>
+<tr>
+<td class="px-lg py-md text-on-surface">Custom audit rules</td>
+<td class="px-lg py-md text-on-surface-variant">No</td>
+<td class="px-lg py-md text-primary font-bold">Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- CTA Actions -->
+<div class="flex flex-col gap-md pt-md">
+<button class="w-full bg-primary-container text-on-primary-container h-14 rounded-xl font-label-md text-label-md font-bold hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-sm">
+                        Upgrade to Pro
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="w-full text-on-surface-variant hover:text-on-surface font-label-md text-label-md py-sm transition-colors">
+                        Maybe later
+                    </button>
+</div>
+<!-- Trust Badges / Footer -->
+<div class="flex justify-center items-center gap-xl opacity-40 grayscale">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="text-[10px] uppercase tracking-widest font-bold">Secure Payment</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">published_with_changes</span>
+<span class="text-[10px] uppercase tracking-widest font-bold">Cancel Anytime</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.classList.add('ripple');
+                btn.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+<style>
+        .ripple {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body></html>

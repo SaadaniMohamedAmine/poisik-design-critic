@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project Alpha - Poisik Audit Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f141b;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(23, 28, 35, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #1d2b3f;
+        }
+        .audit-row:hover {
+            background: #162131;
+            border-color: #263954;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #30353d;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#b98b1d",
+                        "on-background": "#dee2ed",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#141c29",
+                        "on-primary": "#00315f",
+                        "on-secondary-fixed-variant": "#3f4756",
+                        "on-primary-container": "#002b56",
+                        "inverse-primary": "#275fa2",
+                        "surface-container-highest": "#30353d",
+                        "surface": "#0f141b",
+                        "surface-dim": "#0f141b",
+                        "surface-bright": "#353942",
+                        "on-tertiary": "#402d00",
+                        "inverse-surface": "#dee2ed",
+                        "tertiary-fixed": "#ffdea2",
+                        "on-surface-variant": "#c2c6d2",
+                        "secondary-container": "#3f4756",
+                        "on-tertiary-container": "#3a2800",
+                        "on-primary-fixed": "#001c3b",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "outline-variant": "#424750",
+                        "inverse-on-surface": "#2c3139",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#adb5c7",
+                        "background": "#0f141b",
+                        "primary-container": "#6294da",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#090e15",
+                        "tertiary": "#f3bf4f",
+                        "on-tertiary-fixed-variant": "#5c4200",
+                        "on-primary-fixed-variant": "#004786",
+                        "outline": "#8c919c",
+                        "tertiary-fixed-dim": "#f3bf4f",
+                        "surface-variant": "#30353d",
+                        "surface-container-high": "#252a32",
+                        "surface-container": "#1b2027",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#261900",
+                        "secondary-fixed-dim": "#bfc7d9",
+                        "primary-fixed": "#d4e3ff",
+                        "primary": "#a6c8ff",
+                        "surface-tint": "#a6c8ff",
+                        "on-surface": "#dee2ed",
+                        "secondary-fixed": "#dbe3f5",
+                        "on-secondary": "#29313f",
+                        "secondary": "#bfc7d9",
+                        "surface-container-low": "#171c23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "margin": "32px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "xxl": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface custom-scrollbar selection:bg-primary-container selection:text-on-primary-container">
+<!-- Authenticated App Shell -->
+<div class="flex min-h-screen">
+<!-- Side Navigation (Shared Component Integration) -->
+<aside class="hidden md:flex flex-col h-full py-lg px-md z-40 fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant">
+<div class="flex flex-col gap-sm mb-xxl">
+<div class="font-headline-md text-headline-md text-on-surface px-md">Poisik</div>
+<div class="px-md">
+<h2 class="text-on-surface font-headline-md text-headline-md">Audit Console</h2>
+<p class="text-on-surface-variant font-label-md text-label-md">Expert Analysis</p>
+</div>
+</div>
+<nav class="flex-1 space-y-sm">
+<!-- Dashboard Tab (Inactive) -->
+<a class="flex items-center gap-md px-md py-sm transition-transform scale-98 active:scale-95 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest rounded-xl" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Projects Tab (Active Mapping for "Project Detail") -->
+<a class="flex items-center gap-md px-md py-sm transition-transform scale-98 active:scale-95 bg-secondary-container text-on-secondary-container rounded-xl" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</a>
+</nav>
+<div class="mt-auto pt-lg border-t border-outline-variant">
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-on-surface rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-label-md text-label-md">Pro Plan</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:text-on-surface rounded-xl transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 min-h-screen relative">
+<!-- Top App Bar (Shared Component Integration) -->
+<header class="fixed top-0 right-0 md:left-64 left-0 h-16 bg-surface z-50 flex justify-between items-center px-lg border-b border-outline-variant">
+<div class="flex items-center gap-md">
+<span class="md:hidden material-symbols-outlined cursor-pointer text-on-surface">menu</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Projects /</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Project Alpha</span>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex gap-sm">
+<button class="p-sm rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant cursor-pointer">
+<span class="material-symbols-outlined">edit</span>
+</button>
+<button class="p-sm rounded-full hover:bg-surface-container-high transition-colors text-error cursor-pointer">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a senior tech consultant in a dark minimalist studio. The lighting is dramatic and low-key, with cold blue rim lighting highlighting the contours of the face. The background is a soft-focus navy gradient, creating a sophisticated and authoritative atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJOsXRDU-TAzqgSUvuRi3TSfZu3iQWXUdvuUjmVR7dVNxHQboPM6-JaCaZQhmU2Sc3GA9vUrqTWa0dml5uiZVj3Q9a96vNtw62mPqM6BA-o7ZSFj9MrMjz02DBDWkIYbE51hbtey_kzxBm-Qts5mjg1eBpI_hjNFO849_7z-rtVcDd4ZEEwBLMbUYOHciorfMko0kNvD8qYbk9Q4HMQQtZPc1fj6K_50e_76QFprPNIu5yhQHzlESzLv7J5e7oqmixJBzbJvsbu54"/>
+</div>
+</div>
+</header>
+<!-- Scrollable Content Canvas -->
+<div class="pt-24 pb-xxl px-margin max-w-[1280px] mx-auto">
+<!-- Score Trend Bento Section -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-xl">
+<!-- Primary Chart Card -->
+<div class="lg:col-span-2 glass-card rounded-xl p-lg overflow-hidden relative">
+<div class="flex justify-between items-start mb-lg">
+<div>
+<h3 class="text-on-surface-variant font-label-md text-label-md uppercase tracking-wider mb-xs">Audit Score Trend</h3>
+<div class="flex items-baseline gap-sm">
+<span class="text-display-lg font-display-lg">84</span>
+<span class="text-tertiary font-label-md text-label-md">+4.2% vs last month</span>
+</div>
+</div>
+<div class="flex gap-xs">
+<span class="px-sm py-xs bg-surface-container-highest rounded text-label-sm font-label-sm text-on-surface">30D</span>
+<span class="px-sm py-xs hover:bg-surface-container-highest rounded text-label-sm font-label-sm text-on-surface-variant cursor-pointer transition-colors">90D</span>
+</div>
+</div>
+<!-- Visual Representation of Chart -->
+<div class="h-48 w-full flex items-end gap-sm mt-md">
+<!-- Simplified Decorative Bars -->
+<div class="flex-1 bg-primary/20 rounded-t-sm h-1/2 transition-all hover:h-2/3 hover:bg-primary/40 cursor-help"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-3/5 transition-all hover:h-2/3 hover:bg-primary/40 cursor-help"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-2/3 transition-all hover:h-3/4 hover:bg-primary/40 cursor-help"></div>
+<div class="flex-1 bg-primary/40 rounded-t-sm h-3/4 transition-all hover:h-4/5 hover:bg-primary/60 cursor-help border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-2/3 transition-all hover:h-3/4 hover:bg-primary/40 cursor-help"></div>
+<div class="flex-1 bg-primary/60 rounded-t-sm h-5/6 transition-all hover:h-[90%] hover:bg-primary/80 cursor-help border-t-2 border-primary"></div>
+<div class="flex-1 bg-primary/20 rounded-t-sm h-4/5 transition-all hover:h-[85%] hover:bg-primary/40 cursor-help"></div>
+</div>
+<!-- Subtle background glow for AI section -->
+<div class="absolute -bottom-16 -right-16 w-64 h-64 bg-primary/5 blur-[100px] pointer-events-none"></div>
+</div>
+<!-- Meta Info Bento -->
+<div class="flex flex-col gap-gutter">
+<div class="glass-card rounded-xl p-lg flex-1">
+<h4 class="text-on-surface-variant font-label-md text-label-md mb-md">Key Findings</h4>
+<div class="space-y-md">
+<div class="flex items-center gap-md">
+<div class="h-2 w-2 rounded-full bg-error"></div>
+<p class="text-body-md font-body-md text-on-surface flex-1">3 Critical UX bottlenecks</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="h-2 w-2 rounded-full bg-tertiary"></div>
+<p class="text-body-md font-body-md text-on-surface flex-1">7 Contrast failures</p>
+</div>
+<div class="flex items-center gap-md">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+<p class="text-body-md font-body-md text-on-surface flex-1">AI verified fixes pending</p>
+</div>
+</div>
+</div>
+<div class="bg-primary-container/10 border border-primary/20 rounded-xl p-lg flex flex-col justify-center items-center text-center">
+<span class="material-symbols-outlined text-primary mb-sm" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<p class="text-label-md font-label-md text-primary">Audit Strategy Optimized</p>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-xs">Next scan in 14 hours</p>
+</div>
+</div>
+</section>
+<!-- Recent Analyses Section -->
+<section>
+<div class="flex justify-between items-end mb-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Analyses</h3>
+<p class="text-on-surface-variant font-label-md text-label-md">Sorted by newest</p>
+</div>
+<div class="space-y-sm">
+<!-- Analysis Item 1 -->
+<div class="audit-row flex items-center gap-lg p-md border border-outline-variant rounded-xl transition-all duration-200 cursor-pointer group">
+<div class="h-16 w-24 bg-surface-container-highest rounded-lg overflow-hidden shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A futuristic UI dashboard showing intricate data visualizations and dark-mode charts. The interface has a sophisticated navy and slate gray color palette with glowing blue highlights. The perspective is a sharp-angled close-up, focusing on crisp lines and high-quality typography in an AI-auditing context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdPn-DsBQiI1L8ye0D7iFNJKb6bp5FcCD4qX_Ts5MlI2PQAXYrkt58QQGmtaLUiAh57QwDsEiM8GuOwbHluoxg8LaR2PX-bF4M0mq6e2SNI7nkNUdwrT-va-KcLh7nmyeXL-RTwczLIlYWF5I6ThV1oB96PFYeWI6o1Kd93zAL8fPsNrekjcVs_dY1SLk1ekFVWmeJZ3cIqmVFkzEN1Iv8Ky_BkfD6f30dSkD96215SZWA1zMuV5MXTp1d2A-WAdjS754xEVsvsTM"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-lg font-body-lg text-on-surface truncate">V2 Checkout Flow Audit</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">May 12, 2024 • Full System Scan</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="hidden sm:flex flex-col items-end">
+<span class="text-body-md font-body-md text-on-surface">Score: 92</span>
+<div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[92%]"></div>
+</div>
+</div>
+<span class="bg-primary/10 text-primary px-md py-xs rounded-full font-label-sm text-label-sm border border-primary/20">PASSED</span>
+<a class="text-primary font-label-md text-label-md group-hover:underline flex items-center gap-xs" href="#">
+                                    View Report
+                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Analysis Item 2 -->
+<div class="audit-row flex items-center gap-lg p-md border border-outline-variant rounded-xl transition-all duration-200 cursor-pointer group">
+<div class="h-16 w-24 bg-surface-container-highest rounded-lg overflow-hidden shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="A minimalist architectural blueprint representing a software flow diagram. The aesthetic is extremely clean with a dark slate background and glowing neon white lines. The composition is asymmetrical and modern, evoking a sense of precise engineering and high-end design consulting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf47Bu46JvJncwTPaLoeOVKzhCNZV9OFlmYYgJ66CFUFUANF5rrUSernET1PDxsWruMRA4TeqgSxk1lXlC75JqlIq3YabhXEkpGj5sRyqoj23cBqtUfaWD4zAiKnmn4s6GsggzHSpEaJLUEO_amK7pdMzHD_ywl8PgcFBKrqGfm3zKb6qAqa82I-z5SOGWwS2iV4INbcsD4NcXkZvgYMX-jPBLYKKoO96AVwtX21dbBF4ITxmwhUng2dumJ6bRsPF3wSV0z0N2aE4"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-lg font-body-lg text-on-surface truncate">Landing Page Hero Optimization</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">May 08, 2024 • A/B Variant Analysis</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="hidden sm:flex flex-col items-end">
+<span class="text-body-md font-body-md text-on-surface">Score: 64</span>
+<div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-error h-full w-[64%]"></div>
+</div>
+</div>
+<span class="bg-error/10 text-error px-md py-xs rounded-full font-label-sm text-label-sm border border-error/20">FAIL</span>
+<a class="text-primary font-label-md text-label-md group-hover:underline flex items-center gap-xs" href="#">
+                                    View Report
+                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Analysis Item 3 -->
+<div class="audit-row flex items-center gap-lg p-md border border-outline-variant rounded-xl transition-all duration-200 cursor-pointer group">
+<div class="h-16 w-24 bg-surface-container-highest rounded-lg overflow-hidden shrink-0 border border-outline-variant">
+<img class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300" data-alt="Close-up of a digital lens or eye symbolizing AI observation, rendered in a sophisticated dark monochromatic style. Deep navy and black textures with subtle metallic sheen. The focus is sharp on the iris which glows with a soft, intelligent light. Highly professional and tech-forward." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGSSUbKmuMlFneGUHEAg6mrua38oB-KtPmDssLOcKBQVIWCZls5KVZ7MKq1g2T2DKFWYbhj-SIx7NMBTHPaIVh5NsM5Y8ErUqUAnTYd3hdxtjD5a0LmnaAj5jgdzi_O3QNoVsotuKk9_FqG6Q4jDNkWtibEgwgpCsB3WGc2rPmRwg6N7Comr9cuK_5qXJogWrHsLzcGfgE7orzmwgFafLz8MhxefF0BzKWEmgD_eXk7pFTKTbD3fdpE5JqkaEeEZ2sSqADWO2jjiU"/>
+</div>
+<div class="flex-1 min-w-0">
+<h4 class="text-body-lg font-body-lg text-on-surface truncate">Onboarding Accessibility Check</h4>
+<p class="text-label-sm font-label-sm text-on-surface-variant">May 01, 2024 • Accessibility Audit</p>
+</div>
+<div class="flex items-center gap-xl">
+<div class="hidden sm:flex flex-col items-end">
+<span class="text-body-md font-body-md text-on-surface">Score: 78</span>
+<div class="w-16 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="bg-tertiary h-full w-[78%]"></div>
+</div>
+</div>
+<span class="bg-tertiary/10 text-tertiary px-md py-xs rounded-full font-label-sm text-label-sm border border-tertiary/20">WARNING</span>
+<a class="text-primary font-label-md text-label-md group-hover:underline flex items-center gap-xs" href="#">
+                                    View Report
+                                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 right-0 md:left-64 left-0 h-20 bg-surface-container-low border-t border-outline-variant px-lg flex items-center justify-between z-40">
+<div class="hidden sm:block">
+<p class="text-label-sm font-label-sm text-on-surface-variant">Active Project: <span class="text-on-surface">Alpha-UX-2024</span></p>
+</div>
+<div class="flex gap-md w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-xl py-md border border-outline text-on-surface font-label-md text-label-md rounded-xl hover:bg-surface-container-high transition-colors active:scale-95 duration-200">
+                        Compare
+                    </button>
+<button class="flex-1 sm:flex-none px-xl py-md bg-primary-container text-on-primary-container font-label-md text-label-md rounded-xl hover:opacity-90 transition-all active:scale-95 duration-200 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                        New Analysis
+                    </button>
+</div>
+</footer>
+<!-- Floating Action Button - Mobile (Suppressed according to Shell Visibility Rule as this is a Details/Project screen) -->
+</main>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('.audit-row').forEach(row => {
+            row.addEventListener('mouseenter', () => {
+                row.style.transform = 'translateY(-2px)';
+                row.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.3)';
+            });
+            row.addEventListener('mouseleave', () => {
+                row.style.transform = 'translateY(0)';
+                row.style.boxShadow = 'none';
+            });
+        });
+
+        // Simple mock ripple effect on primary buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mousedown', function(e) {
+                let ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                this.appendChild(ripple);
+                let d = Math.max(this.clientWidth, this.clientHeight);
+                ripple.style.width = ripple.style.height = d + 'px';
+                ripple.style.left = e.clientX - this.offsetLeft - d / 2 + 'px';
+                ripple.style.top = e.clientY - this.offsetTop - d / 2 + 'px';
+                ripple.classList.add('active');
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+<style>
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background-color: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+        }
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body></html>

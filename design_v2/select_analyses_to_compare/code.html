@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik Audit Console - Compare Picker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Use Tailwind Config from Brand Anchors -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#b98b1d",
+                    "on-background": "#dee2ed",
+                    "on-error": "#690005",
+                    "on-secondary-fixed": "#141c29",
+                    "on-primary": "#00315f",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "on-primary-container": "#002b56",
+                    "inverse-primary": "#275fa2",
+                    "surface-container-highest": "#30353d",
+                    "surface": "#0f141b",
+                    "surface-dim": "#0f141b",
+                    "surface-bright": "#353942",
+                    "on-tertiary": "#402d00",
+                    "inverse-surface": "#dee2ed",
+                    "tertiary-fixed": "#ffdea2",
+                    "on-surface-variant": "#c2c6d2",
+                    "secondary-container": "#3f4756",
+                    "on-tertiary-container": "#3a2800",
+                    "on-primary-fixed": "#001c3b",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "outline-variant": "#1d2b3f", // Updated per luxe border guideline
+                    "inverse-on-surface": "#2c3139",
+                    "on-error-container": "#ffdad6",
+                    "on-secondary-container": "#adb5c7",
+                    "background": "#0f141b",
+                    "primary-container": "#6294da",
+                    "error": "#ffb4ab",
+                    "surface-container-lowest": "#090e15",
+                    "tertiary": "#f3bf4f",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "on-primary-fixed-variant": "#004786",
+                    "outline": "#8c919c",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "surface-variant": "#30353d",
+                    "surface-container-high": "#252a32",
+                    "surface-container": "#1b2027",
+                    "error-container": "#93000a",
+                    "on-tertiary-fixed": "#261900",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "primary-fixed": "#d4e3ff",
+                    "primary": "#a6c8ff",
+                    "surface-tint": "#a6c8ff",
+                    "on-surface": "#dee2ed",
+                    "secondary-fixed": "#dbe3f5",
+                    "on-secondary": "#29313f",
+                    "secondary": "#bfc7d9",
+                    "surface-container-low": "#171c23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "xs": "4px",
+                    "sm": "8px",
+                    "xl": "48px",
+                    "md": "16px",
+                    "margin": "32px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "base": "4px",
+                    "xxl": "80px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f141b;
+            color: #dee2ed;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        .luxe-border {
+            border: 1px solid #1d2b3f;
+        }
+
+        .luxe-card-hover:hover {
+            background-color: #162131;
+            border-color: #263954;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Hide Scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .checkbox-overlay {
+            background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 50%);
+        }
+
+        .selection-active {
+            border-color: #6294da !important;
+            box-shadow: inset 0 0 0 1px #6294da;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant flex flex-col h-full py-lg px-md z-40">
+<div class="mb-xxl px-sm">
+<h1 class="font-headline-md text-headline-md text-on-surface">Poisik</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Audit Console</p>
+</div>
+<nav class="flex-1 space-y-sm">
+<!-- Projects is Active per the prompt context -->
+<div class="flex items-center gap-md px-md py-sm cursor-pointer transition-colors hover:bg-surface-container-highest text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm cursor-pointer transition-all duration-200 bg-secondary-container text-on-secondary-container rounded-xl">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</div>
+</nav>
+<div class="mt-auto space-y-sm">
+<div class="flex items-center gap-md px-md py-sm cursor-pointer transition-colors hover:bg-surface-container-highest text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-label-md text-label-md">Pro Plan</span>
+</div>
+<div class="flex items-center gap-md px-md py-sm cursor-pointer transition-colors hover:bg-surface-container-highest text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas (Project Detail View) -->
+<main class="ml-64 flex-1 relative min-h-screen overflow-y-auto px-margin pt-xl">
+<!-- Background Atmosphere -->
+<div class="absolute top-0 right-0 w-1/2 h-1/2 opacity-20 pointer-events-none">
+
+</div>
+<!-- Header Area -->
+<header class="max-w-[1280px] mx-auto mb-xl">
+<div class="flex items-center gap-sm text-primary mb-sm">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Back to Dashboard</span>
+</div>
+<div class="flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Nova Mobile Framework</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">Comprehensive UX audit of the core design system components and interaction patterns for the Q3 release.</p>
+</div>
+<button class="px-lg py-md bg-surface-container-highest border border-outline-variant font-label-md text-label-md text-on-surface rounded-xl luxe-card-hover flex items-center gap-sm" onclick="toggleModal()">
+<span class="material-symbols-outlined">compare_arrows</span>
+                    Compare Analyses
+                </button>
+</div>
+</header>
+<!-- Dummy Content: Bento Grid of Stats -->
+<section class="max-w-[1280px] mx-auto grid grid-cols-12 gap-gutter mb-xl">
+<div class="col-span-8 h-80 luxe-border bg-surface-container rounded-xl p-lg flex flex-col justify-between">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-sm">UX Health Score</h3>
+<div class="text-[64px] font-bold text-primary">84<span class="text-headline-md opacity-40">/100</span></div>
+</div>
+<div class="flex gap-xl border-t border-outline-variant pt-lg">
+<div>
+<div class="text-label-sm text-on-surface-variant">HEURISTIC EVALUATION</div>
+<div class="text-headline-md text-on-surface">9.2</div>
+</div>
+<div>
+<div class="text-label-sm text-on-surface-variant">USER SENTIMENT</div>
+<div class="text-headline-md text-tertiary">7.8</div>
+</div>
+<div>
+<div class="text-label-sm text-on-surface-variant">ACCESSIBILITY</div>
+<div class="text-headline-md text-error">6.4</div>
+</div>
+</div>
+</div>
+<div class="col-span-4 luxe-border bg-surface-container rounded-xl p-lg">
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-md">Key Insight</h3>
+<div class="p-md rounded-xl bg-tertiary/10 border border-tertiary/20 text-tertiary font-body-md italic">
+                    "Navigation friction in the checkout flow is causing a 12% drop-off compared to the previous sprint analysis."
+                </div>
+</div>
+</section>
+<!-- MODAL OVERLAY: Compare Picker -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-xl bg-background/80 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none" id="compareModal">
+<div class="bg-surface-container-low luxe-border rounded-xl w-full max-w-4xl max-h-[819px] flex flex-col shadow-2xl scale-95 transition-transform duration-300 transform" id="modalContent">
+<!-- Modal Header -->
+<div class="px-lg py-md border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Select Analyses to Compare</h3>
+<p class="font-label-md text-label-md text-on-surface-variant">Choose exactly 2 versions to see visual and structural diffs.</p>
+</div>
+<button class="p-sm rounded-full luxe-card-hover text-on-surface-variant" onclick="toggleModal()">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Modal Body: Grid of Thumbnails -->
+<div class="flex-1 overflow-y-auto p-lg no-scrollbar">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-lg" id="pickerGrid">
+<!-- Analysis Item 1 -->
+<div class="analysis-card relative group cursor-pointer luxe-border bg-surface-container rounded-xl overflow-hidden luxe-card-hover" data-id="1" onclick="toggleSelection(this)">
+<div class="aspect-video w-full bg-surface-bright relative">
+<img class="w-full h-full object-cover opacity-60" data-alt="A professional dark UI dashboard screenshot showing intricate data visualizations, sleek dark navy tones, and highlighted data points in soft blue. The aesthetic is clean and high-fidelity, typical of a senior-level audit tool with refined spacing and sharp contrast borders." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFewOWnMmp6fhYE_cWDJwQsLxdP8UYVtk2cqSSoF4DJMzsVdkOjw3w9VlbIwW40O3Zr8SVjAaxpV12I1ltWiLFSRSf0dJVIo6P0hjHAwpPyiRoqDLK5xqZYw1RKS-xSfjuZ9Lvxi56OcuS5Bwneax4wY9nnkEWJ9yA1fPGG36iLJsGgaVKaL2064siA7S_N5ggJz-E6kfhA-IQsdf7zOKiTP2uguG2DjSjo0wGbYioH86KpiilgV0IJ3lPRc75T7rSNdTcw0u8h8c"/>
+<div class="absolute top-sm right-sm w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center bg-surface-container selection-indicator">
+<span class="material-symbols-outlined text-[16px] text-primary hidden">check</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-md text-label-md text-on-surface">V1.4: Core Flow</h4>
+<span class="text-[10px] px-sm py-0.5 rounded bg-surface-container-highest text-on-surface-variant">AUG 12</span>
+</div>
+<p class="text-[12px] text-on-surface-variant line-clamp-1">84% UX Score • Critical Fixes Applied</p>
+</div>
+</div>
+<!-- Analysis Item 2 -->
+<div class="analysis-card relative group cursor-pointer luxe-border bg-surface-container rounded-xl overflow-hidden luxe-card-hover" data-id="2" onclick="toggleSelection(this)">
+<div class="aspect-video w-full bg-surface-bright relative">
+<img class="w-full h-full object-cover opacity-60" data-alt="A high-contrast wireframe and UI audit layout on a deep navy background. The visual represents a mobile app's navigation structure with red audit circles indicating friction points and green checkmarks indicating successful patterns. Sophisticated and authoritative aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB1Hdq9_SF10oMH8UMyo5K1fyTGNmO-Z7hHynIb6KAtumIKFDB6dB_mOxWfkeqaSbLYMdbGjN2iktcPvW3VgA_pk6DCVmRZ5n6oMhCRdIFEO3YkaQ0MCIhQfvF_69gK9gimdmbYLaDAjemFpQf1xA4BteM2o4qv8Etm284aUFmCNb5Hu9gdf_a-uu2jVE6k02jjMd_XVdHwUKuJ6GbLH9bUTAUKnfmiUXUDEhAzWI7ATJF2y_dfKq0NJLo4XwZpT8GipMiLe2cPVtI"/>
+<div class="absolute top-sm right-sm w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center bg-surface-container selection-indicator">
+<span class="material-symbols-outlined text-[16px] text-primary hidden">check</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-md text-label-md text-on-surface">V1.3: Interaction Pass</h4>
+<span class="text-[10px] px-sm py-0.5 rounded bg-surface-container-highest text-on-surface-variant">JUL 28</span>
+</div>
+<p class="text-[12px] text-on-surface-variant line-clamp-1">79% UX Score • Animation focus</p>
+</div>
+</div>
+<!-- Analysis Item 3 -->
+<div class="analysis-card relative group cursor-pointer luxe-border bg-surface-container rounded-xl overflow-hidden luxe-card-hover" data-id="3" onclick="toggleSelection(this)">
+<div class="aspect-video w-full bg-surface-bright relative">
+<img class="w-full h-full object-cover opacity-60" data-alt="A detailed design audit view showing color palette accessibility checks and typography scales in a dark luxe minimalist environment. The interface uses subtle drop shadows and 1px borders to separate content sections, featuring navy and charcoal grey tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBokyxTNFfx7VcK6j23_ennhHACXsW7uQMBQGLSnkG4ll1FmSlPxnv5l5_ujx-S6iSKwdZawJ0sw6KI9C6jGdJqqyK4BoGtN0PP5--FNvF-1ASozvDuTV_g-FQG7_IeFtdefWnW-kGiG2WK24crpv24lu0o1epGJYJE5enoWjmQOXrBaa-Ry1Rd4VpULddUXPAfScTr3x2a2gGZzNhcGkSBtALu5xiAxoov1w0sBIuVdCgX2R9Ujq-JiTMNvUTZuVYOXFwEiXhjloc"/>
+<div class="absolute top-sm right-sm w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center bg-surface-container selection-indicator">
+<span class="material-symbols-outlined text-[16px] text-primary hidden">check</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-md text-label-md text-on-surface">V1.2: Style Alignment</h4>
+<span class="text-[10px] px-sm py-0.5 rounded bg-surface-container-highest text-on-surface-variant">JUL 15</span>
+</div>
+<p class="text-[12px] text-on-surface-variant line-clamp-1">72% UX Score • Branding overhaul</p>
+</div>
+</div>
+<!-- Analysis Item 4 -->
+<div class="analysis-card relative group cursor-pointer luxe-border bg-surface-container rounded-xl overflow-hidden luxe-card-hover" data-id="4" onclick="toggleSelection(this)">
+<div class="aspect-video w-full bg-surface-bright relative">
+<img class="w-full h-full object-cover opacity-60" data-alt="A futuristic UI interface for AI-driven auditing with glowing blue highlights and dark slate surfaces. It shows a series of system-generated insights and performance metrics in a grid layout, maintaining a calm but technologically advanced atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKbxyk0V-q9j6PaxXwI-IDFkSkD45-DXTHDYztubi7c02b5Jp14rg7GkS12JJp2nvs8dxPImpq-EaWtkPgkQVAnDp-qakhSkt0YsoExOTf3YPjHj_iSU7Kc4gMeZniV2ltAzx-0dDS0OPeDQcGYcKBOTY9ukL179p64RV6ysfsqO8DGFulhhvSyWCPQdL_OBbGD4egEyRqCHmo8BV9xS4hpi6lF9XSFbR_iVsAq2yS4aKiHuWOVuIa2ScES8DfLoUerNZcGcSZuds"/>
+<div class="absolute top-sm right-sm w-6 h-6 rounded-full border-2 border-outline flex items-center justify-center bg-surface-container selection-indicator">
+<span class="material-symbols-outlined text-[16px] text-primary hidden">check</span>
+</div>
+</div>
+<div class="p-md">
+<div class="flex justify-between items-start mb-xs">
+<h4 class="font-label-md text-label-md text-on-surface">V1.1: Initial Audit</h4>
+<span class="text-[10px] px-sm py-0.5 rounded bg-surface-container-highest text-on-surface-variant">JUN 30</span>
+</div>
+<p class="text-[12px] text-on-surface-variant line-clamp-1">64% UX Score • Baseline metrics</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="px-lg py-lg bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<div class="text-on-surface-variant font-label-md">
+<span id="selectionCount">0</span> of 2 selected
+                    </div>
+<div class="flex gap-md">
+<button class="px-lg py-sm text-on-surface font-label-md luxe-card-hover rounded-xl" onclick="toggleModal()">Cancel</button>
+<button class="px-xl py-sm bg-surface-container-highest text-on-surface-variant opacity-50 cursor-not-allowed font-label-md rounded-xl transition-all duration-300" disabled="" id="compareBtn">
+                            Compare
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<script>
+        let selectedIds = [];
+
+        function toggleModal() {
+            const modal = document.getElementById('compareModal');
+            const content = document.getElementById('modalContent');
+            const isVisible = !modal.classList.contains('pointer-events-none');
+
+            if (isVisible) {
+                modal.classList.add('pointer-events-none');
+                modal.classList.remove('opacity-100');
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95');
+                content.classList.remove('scale-100');
+            } else {
+                modal.classList.remove('pointer-events-none');
+                modal.classList.remove('opacity-0');
+                modal.classList.add('opacity-100');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }
+        }
+
+        function toggleSelection(element) {
+            const id = element.getAttribute('data-id');
+            const index = selectedIds.indexOf(id);
+            const indicator = element.querySelector('.selection-indicator');
+            const checkIcon = indicator.querySelector('.material-symbols-outlined');
+
+            if (index > -1) {
+                // Remove selection
+                selectedIds.splice(index, 1);
+                element.classList.remove('selection-active');
+                indicator.classList.remove('bg-primary-container', 'border-primary');
+                checkIcon.classList.add('hidden');
+            } else {
+                // Add selection if less than 2
+                if (selectedIds.length < 2) {
+                    selectedIds.push(id);
+                    element.classList.add('selection-active');
+                    indicator.classList.add('bg-primary-container', 'border-primary');
+                    checkIcon.classList.remove('hidden');
+                } else {
+                    // Feedback: pulse red or something subtle? 
+                    element.classList.add('border-error');
+                    setTimeout(() => element.classList.remove('border-error'), 300);
+                }
+            }
+
+            updateUI();
+        }
+
+        function updateUI() {
+            const countLabel = document.getElementById('selectionCount');
+            const compareBtn = document.getElementById('compareBtn');
+            const count = selectedIds.length;
+
+            countLabel.innerText = count;
+
+            if (count === 2) {
+                compareBtn.disabled = false;
+                compareBtn.classList.remove('bg-surface-container-highest', 'text-on-surface-variant', 'opacity-50', 'cursor-not-allowed');
+                compareBtn.classList.add('bg-primary-container', 'text-on-primary-container', 'opacity-100', 'cursor-pointer');
+            } else {
+                compareBtn.disabled = true;
+                compareBtn.classList.add('bg-surface-container-highest', 'text-on-surface-variant', 'opacity-50', 'cursor-not-allowed');
+                compareBtn.classList.remove('bg-primary-container', 'text-on-primary-container', 'opacity-100', 'cursor-pointer');
+            }
+        }
+
+        // Close on escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('compareModal');
+                if (!modal.classList.contains('pointer-events-none')) toggleModal();
+            }
+        });
+    </script>
+</body></html>
