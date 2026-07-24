@@ -66,7 +66,7 @@ export default function NotFound() {
           <GlitchText text="404" />
 
           <div className="mb-xl space-y-4">
-            <h2 className="text-headline-md font-medium text-text-primary">Resource Not Found</h2>
+            <h2 className="text-3xl font-bold text-text-primary">Resource Not Found</h2>
             <p className="text-base leading-relaxed text-text-secondary">{t.notFound}</p>
           </div>
 
