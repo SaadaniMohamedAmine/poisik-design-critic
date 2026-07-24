@@ -1,5 +1,10 @@
 # Poisik — Progress Log
 
+## Phase 6 — Differentiateurs prioritaires
+- Fix In Code: code_fix schema, AI prompt, UI with Copy button on issue cards
+- Live URL Analysis: upload/URL toggle on `/upload`, screenshot capture API with Playwright
+- **TODO**: Install `@sparticuz/chromium` for Vercel serverless compatibility, OR switch to a managed screenshot API (urlbox.io, screenshotone.com, etc.)
+
 ## Phase 5 — Quality & Deployment
 - Unit tests for WCAG contrast, AI schema validation
 - PROGRESS.md created

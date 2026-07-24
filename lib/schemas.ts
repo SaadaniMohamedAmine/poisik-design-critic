@@ -11,6 +11,13 @@ export const CategoryEnum = z.enum([
   'consistency',
 ]);
 
+export const CodeFixSchema = z.object({
+  language: z.enum(['css', 'tailwind', 'hex']),
+  snippet: z.string(),
+  before: z.string().optional(),
+  after: z.string().optional(),
+});
+
 export const IssueSchema = z.object({
   id: z.string(),
   category: CategoryEnum,
@@ -18,6 +25,7 @@ export const IssueSchema = z.object({
   title: z.string(),
   description: z.string(),
   recommendation: z.string(),
+  code_fix: CodeFixSchema,
   location: z.object({
     x: z.number().min(0).max(100),
     y: z.number().min(0).max(100),
@@ -33,5 +41,6 @@ export const AnalysisResultSchema = z.object({
 
 export type Severity = z.infer<typeof SeverityEnum>;
 export type Category = z.infer<typeof CategoryEnum>;
+export type CodeFix = z.infer<typeof CodeFixSchema>;
 export type Issue = z.infer<typeof IssueSchema>;
 export type AnalysisResult = z.infer<typeof AnalysisResultSchema>;

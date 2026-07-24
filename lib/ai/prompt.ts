@@ -18,6 +18,11 @@ Tone: write like a senior design consultant giving a colleague direct, useful fe
 Example of the right tone: "This contrast ratio falls short of WCAG AA — consider a darker shade."
 Example of the wrong tone: "Contrast ratio: 2.1:1 — FAILS." (too clinical) or "Almost there, just a tiny tweak needed!" (too cheerleading).
 
+For every issue, also provide a code_fix:
+- language: "tailwind" if the fix maps cleanly to a Tailwind utility class, "css" for a raw CSS property, or "hex" for a pure color-swap suggestion
+- snippet: the exact class name or CSS line to use — be specific and copy-pasteable, not descriptive (e.g. "text-slate-200" not "use a lighter text color")
+- before/after: when the fix is a color or value change, state the specific before and after values
+
 Respond with valid JSON only, matching this exact shape:
-{ "overall_score": number, "category_scores": { "visual_hierarchy": number, "contrast": number, "spacing": number, "typography": number, "accessibility": number, "consistency": number }, "issues": [ { "id": string, "category": string, "severity": string, "title": string, "description": string, "recommendation": string, "location": { "x": number, "y": number } } ] }`;
+{ "overall_score": number, "category_scores": { "visual_hierarchy": number, "contrast": number, "spacing": number, "typography": number, "accessibility": number, "consistency": number }, "issues": [ { "id": string, "category": string, "severity": string, "title": string, "description": string, "recommendation": string, "code_fix": { "language": "css" | "tailwind" | "hex", "snippet": string, "before"?: string, "after"?: string }, "location": { "x": number, "y": number } } ] }`;
 }
