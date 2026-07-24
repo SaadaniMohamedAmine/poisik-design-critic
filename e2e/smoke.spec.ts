@@ -3,23 +3,28 @@ import { test, expect } from '@playwright/test';
 test.describe('Poisik E2E', () => {
   test('landing page loads', async ({ page }) => {
     await page.goto('/en/');
-    await expect(page.locator('text=Design and Passion')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('heading', { name: /Design and Passion/i })).toBeVisible();
   });
 
   test('upload page loads', async ({ page }) => {
     await page.goto('/en/upload');
-    await expect(page.locator('text=Analyze Interface')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('heading', { name: /Analyze Interface/i })).toBeVisible();
   });
 
   test('demo page loads', async ({ page }) => {
     await page.goto('/en/demo');
-    await expect(page.locator('text=Overall Design Score')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText(/Overall Design Score/i)).toBeVisible();
   });
 
   test('pricing page shows plans', async ({ page }) => {
     await page.goto('/en/pricing');
-    await expect(page.locator('text=Pro')).toBeVisible();
-    await expect(page.locator('text=Team')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByRole('heading', { name: 'Free' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Pro' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Team' })).toBeVisible();
   });
 
   test('404 page shows not found', async ({ page }) => {
@@ -29,13 +34,15 @@ test.describe('Poisik E2E', () => {
 
   test('i18n switching to French', async ({ page }) => {
     await page.goto('/en/');
-    await page.click('text=FR');
-    await expect(page).toHaveURL(/\/fr\//);
-    await expect(page.locator('text=Design et passion')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'FR' }).click();
+    await page.waitForFunction(() => window.location.pathname.startsWith('/fr'));
+    await expect(page.getByRole('heading', { name: /Design et passion/i })).toBeVisible();
   });
 
   test('history page empty state', async ({ page }) => {
     await page.goto('/en/history');
-    await expect(page.locator('text=No analyses yet')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.getByText(/No analyses yet/i)).toBeVisible();
   });
 });
