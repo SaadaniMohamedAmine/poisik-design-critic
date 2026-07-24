@@ -62,7 +62,7 @@ export default function NotFound() {
           />
         </div>
 
-        <div className="z-10 flex w-full flex-col items-center text-center">
+        <div className="z-10 flex w-full max-w-3xl flex-col items-center text-center">
           <GlitchText text="404" />
 
           <div className="mb-xl space-y-4">
