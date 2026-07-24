@@ -9,7 +9,11 @@
     "history": "History",
     "freePlan": "Free Plan",
     "features": "Features",
-    "demo": "Demo"
+    "demo": "Demo",
+    "pricing": "Pricing",
+    "beyondCritique": "Beyond Critique",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
   },
   "Landing": {
     "tagline": "Design and Passion, with poise.",

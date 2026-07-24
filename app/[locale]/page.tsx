@@ -53,6 +53,18 @@ export default function LandingPage() {
               >
                 {n('features')}
               </a>
+              <a
+                href="#beyond-critique"
+                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
+              >
+                {n('beyondCritique')}
+              </a>
+              <Link
+                href="/pricing"
+                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
+              >
+                {n('pricing')}
+              </Link>
               <Link
                 href="/demo"
                 className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
@@ -62,15 +74,18 @@ export default function LandingPage() {
             </nav>
           </div>
           <div className="flex items-center gap-md">
-            <span className="hidden rounded-full border border-border px-md py-xs text-label-sm font-medium text-text-secondary md:inline">
-              {n('freePlan')}
-            </span>
             <LanguageSwitcher />
             <Link
-              href="/upload"
+              href="/sign-in"
+              className="hidden text-label-md font-medium text-text-secondary transition-colors hover:text-text-primary md:inline"
+            >
+              {n('signIn')}
+            </Link>
+            <Link
+              href="/sign-up"
               className="rounded-full bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
             >
-              {t('cta')}
+              {n('signUp')}
             </Link>
           </div>
         </div>
@@ -213,7 +228,7 @@ export default function LandingPage() {
         </section>
 
         {/* Differentiators */}
-        <section className="bg-bg-elevated py-xxl">
+        <section id="beyond-critique" className="bg-bg-elevated py-xxl">
           <div className="mx-auto max-w-7xl px-margin">
             <div className="mb-xl text-center">
               <span className="mb-sm block text-label-sm font-bold uppercase tracking-[0.2em] text-accent-signal">
