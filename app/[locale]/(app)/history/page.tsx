@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { History, ExternalLink } from 'lucide-react';
 import { PoisikLogo } from '@/components/poisik';
 import type { AnalysisResult } from '@/lib/schemas';
@@ -14,6 +15,7 @@ interface Analysis {
 }
 
 export default function HistoryPage() {
+  const t = useTranslations('History');
   const [analyses, setAnalyses] = useState<Analysis[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,25 +51,13 @@ export default function HistoryPage() {
             <div className="mb-lg flex size-24 items-center justify-center rounded-full bg-surface">
               <History className="size-12 text-accent-signal" />
             </div>
-            <h2 className="mb-md text-headline-lg font-semibold text-text-primary">
-              No analyses yet
-            </h2>
-            <p className="mb-xl max-w-md text-body-md text-text-secondary">
-              Upload your first screenshot to get started with an automated design audit and AI
-              insights.
-            </p>
-            <a
-              href="/upload"
-              className="rounded-xl bg-accent-signal px-xl py-md text-label-md font-bold text-white transition-transform hover:scale-95"
-            >
-              Run First Audit
-            </a>
+            <h2 className="mb-md text-headline-lg font-semibold text-text-primary">{t('emptyTitle')}</h2>
+            <p className="mb-xl max-w-md text-body-md text-text-secondary">{t('emptyDesc')}</p>
+            <a href="/upload" className="rounded-xl bg-accent-signal px-xl py-md text-label-md font-bold text-white transition-transform hover:scale-95">{t('runFirstAudit')}</a>
           </div>
         ) : (
           <>
-            <h1 className="mb-xl text-headline-lg font-semibold text-text-primary">
-              Audit History
-            </h1>
+            <h1 className="mb-xl text-headline-lg font-semibold text-text-primary">{t('title')}</h1>
             <div className="grid gap-lg sm:grid-cols-2 lg:grid-cols-3">
               {analyses.map((analysis) => (
                 <a

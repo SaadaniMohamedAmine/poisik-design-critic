@@ -1,1 +1,123 @@
-{}
+{
+  "Navigation": {
+    "dashboard": "Tableau de bord",
+    "auditLogs": "Journal d'audit",
+    "knowledgeBase": "Base de connaissances",
+    "settings": "Paramètres",
+    "runNewAudit": "Nouvel audit",
+    "analyze": "Analyser",
+    "history": "Historique",
+    "freePlan": "Gratuit"
+  },
+  "Landing": {
+    "tagline": "Design et passion, avec poise.",
+    "subtitle": "Obtenez un audit UX/UI de niveau expert en quelques secondes — sans consultant. Propulsé par une IA formée aux standards d'accessibilité et aux patterns de design les plus exigeants.",
+    "cta": "Analyser votre design",
+    "viewSample": "Voir un exemple",
+    "capabilities": "Fonctionnalités",
+    "sectionTitle": "Une supervision complète du design",
+    "featureHierarchyTitle": "Hiérarchie visuelle",
+    "featureHierarchyDesc": "L'analyse thermique révèle où l'attention des utilisateurs se porte réellement. Nous détectons le bruit visuel et suggérons des ajustements structurels.",
+    "featureContrastTitle": "Contraste WCAG",
+    "featureContrastDesc": "Vérifications d'accessibilité en temps réel pour les normes AA et AAA. Des suggestions de couleurs automatisées pour une expérience inclusive.",
+    "featureRecommendationsTitle": "Recommandations actionnables",
+    "featureRecommendationsDesc": "Pas seulement des problèmes — des solutions. Obtenez des ajustements CSS précis pour résoudre instantanément les points de friction.",
+    "ctaSectionTitle": "Prêt pour une clarté professionnelle ?",
+    "ctaSectionDesc": "Rejoignez plus de 450 responsables design qui utilisent Poisik pour valider leurs décisions d'interface avant de coder.",
+    "ctaSectionButton": "Commencez votre premier audit",
+    "ctaSectionTrial": "Essai gratuit de 7 jours. Sans carte bancaire.",
+    "footerName": "Poisik AI",
+    "footerRights": "© 2024 Poisik AI. Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "terms": "Conditions d'utilisation",
+    "security": "Sécurité",
+    "status": "Statut"
+  },
+  "Upload": {
+    "title": "Analyser une interface",
+    "subtitle": "Importez un design pour recevoir une analyse IA approfondie sur l'accessibilité, la hiérarchie visuelle et l'utilisabilité.",
+    "dropzoneText": "Glissez-déposez votre capture d'écran, ou cliquez pour parcourir",
+    "dropzoneFormats": "Formats acceptés : JPG, PNG, WebP — max 10Mo",
+    "securityScan": "Analyse de sécurité effectuée",
+    "changeFile": "Changer de fichier",
+    "analyze": "Analyser",
+    "uploading": "Téléchargement...",
+    "errorType": "Ce type de fichier n'est pas pris en charge — utilisez JPG, PNG ou WebP.",
+    "errorSize": "Ce fichier dépasse la limite de 10Mo — essayez de le compresser d'abord.",
+    "errorUpload": "Le téléchargement a échoué — vérifiez votre connexion et réessayez.",
+    "proTip": "Astuce : Les exports haute résolution (2x) permettent des audits typographiques plus précis."
+  },
+  "Report": {
+    "overallScore": "Score global de design",
+    "all": "Tout",
+    "visualHierarchy": "Hiérarchie visuelle",
+    "contrast": "Contraste",
+    "spacing": "Espacement",
+    "typography": "Typographie",
+    "accessibility": "Accessibilité",
+    "consistency": "Cohérence",
+    "critical": "Critique",
+    "warning": "Attention",
+    "suggestion": "Suggestion",
+    "showRecommendation": "Voir la recommandation",
+    "hideRecommendation": "Masquer la recommandation",
+    "recommendation": "Recommandation",
+    "exportPdf": "Exporter PDF",
+    "shareReport": "Partager le rapport",
+    "locateOnImage": "Localiser sur l'image",
+    "aiAuditActive": "Audit IA actif : Analyse à {score}%"
+  },
+  "History": {
+    "title": "Historique des audits",
+    "emptyTitle": "Aucune analyse pour le moment",
+    "emptyDesc": "Importez votre première capture d'écran pour recevoir un audit design automatisé et des insights IA.",
+    "runFirstAudit": "Lancer le premier audit"
+  },
+  "Compare": {
+    "title": "Comparer des designs",
+    "uploadDesign": "Importer le design {number}",
+    "formats": "JPG, PNG, WebP — max 10Mo",
+    "change": "Modifier",
+    "score": "Score",
+    "comparisonSummary": "Récapitulatif de la comparaison",
+    "visualHierarchy": "Hiérarchie visuelle",
+    "contrast": "Contraste",
+    "spacing": "Espacement",
+    "typography": "Typographie",
+    "accessibility": "Accessibilité",
+    "consistency": "Cohérence"
+  },
+  "Loading": {
+    "scanning": "Analyse de la hiérarchie visuelle...",
+    "calculating": "Calcul des ratios de contraste...",
+    "checking": "Vérification de la cohérence des espacements..."
+  },
+  "Error": {
+    "notFound": "Cette page n'existe pas — mais votre design, lui, existe probablement. Et si on l'analysait ?",
+    "goHome": "Retour à l'accueil",
+    "analysisNotFound": "Analyse introuvable"
+  },
+  "Pricing": {
+    "title": "Tarifs",
+    "free": "Gratuit",
+    "pro": "Pro",
+    "perMonth": "/mois",
+    "freeDesc": "Pour des vérifications rapides",
+    "proDesc": "Pour les équipes design sérieuses",
+    "analyses": "{count} analyses/mois",
+    "unlimitedAnalyses": "Analyses illimitées",
+    "pdfExport": "Export PDF",
+    "watermark": "Filigrane sur le PDF",
+    "noWatermark": "Sans filigrane",
+    "comparison": "Mode comparaison",
+    "priorityAi": "Routage IA prioritaire",
+    "getStarted": "Commencer",
+    "upgrade": "Passer à Pro",
+    "currentPlan": "Formule actuelle",
+    "manageSubscription": "Gérer l'abonnement"
+  },
+  "Common": {
+    "madeWith": "Créé avec {name}",
+    "duplicateAnalysis": "Dupliquer cette analyse"
+  }
+}

@@ -1,1 +1,123 @@
-{}
+{
+  "Navigation": {
+    "dashboard": "Dashboard",
+    "auditLogs": "Audit Logs",
+    "knowledgeBase": "Knowledge Base",
+    "settings": "Settings",
+    "runNewAudit": "Run New Audit",
+    "analyze": "Analyze",
+    "history": "History",
+    "freePlan": "Free Plan"
+  },
+  "Landing": {
+    "tagline": "Design and Passion, with poise.",
+    "subtitle": "Get an expert-level UX/UI audit in seconds — no consultant required. Powered by AI trained on elite design patterns and accessibility standards.",
+    "cta": "Analyze your design",
+    "viewSample": "View Sample Audit",
+    "capabilities": "Capabilities",
+    "sectionTitle": "Comprehensive design oversight",
+    "featureHierarchyTitle": "Visual Hierarchy",
+    "featureHierarchyDesc": "Heatmap analysis reveals where user attention actually flows. We detect noise and suggest structural shifts for better conversion.",
+    "featureContrastTitle": "WCAG Contrast",
+    "featureContrastDesc": "Real-time accessibility checks for AA and AAA compliance. Automated color suggestions ensure every user can experience your vision.",
+    "featureRecommendationsTitle": "Actionable Recommendations",
+    "featureRecommendationsDesc": "Not just problems — solutions. Get specific CSS tweaks and layout adjustments to resolve friction points instantly.",
+    "ctaSectionTitle": "Ready for professional clarity?",
+    "ctaSectionDesc": "Join over 450+ senior design leads who use Poisik to validate their interface decisions before going to code.",
+    "ctaSectionButton": "Start Your First Audit",
+    "ctaSectionTrial": "Free 7-day trial. No credit card required.",
+    "footerName": "Poisik AI",
+    "footerRights": "© 2024 Poisik AI. All rights reserved.",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "security": "Security",
+    "status": "Status"
+  },
+  "Upload": {
+    "title": "Analyze Interface",
+    "subtitle": "Upload a design to receive deep AI insights on accessibility, visual hierarchy, and usability.",
+    "dropzoneText": "Drag & drop your UI screenshot, or click to browse",
+    "dropzoneFormats": "Accepted formats: JPG, PNG, WebP — max 10MB",
+    "securityScan": "Security scan passed",
+    "changeFile": "Change File",
+    "analyze": "Analyze",
+    "uploading": "Uploading...",
+    "errorType": "This file type isn't supported — please use JPG, PNG, or WebP.",
+    "errorSize": "This file exceeds the 10MB limit — try compressing it first.",
+    "errorUpload": "Upload failed — check your connection and try again.",
+    "proTip": "Pro tip: High-resolution exports (2x) yield more accurate typography audits."
+  },
+  "Report": {
+    "overallScore": "Overall Design Score",
+    "all": "All",
+    "visualHierarchy": "Visual Hierarchy",
+    "contrast": "Contrast",
+    "spacing": "Spacing",
+    "typography": "Typography",
+    "accessibility": "Accessibility",
+    "consistency": "Consistency",
+    "critical": "Critical",
+    "warning": "Warning",
+    "suggestion": "Suggestion",
+    "showRecommendation": "Show recommendation",
+    "hideRecommendation": "Hide recommendation",
+    "recommendation": "Recommendation",
+    "exportPdf": "Export PDF",
+    "shareReport": "Share Report",
+    "locateOnImage": "Locate on image",
+    "aiAuditActive": "AI Audit Active: Analysis {score}% Complete"
+  },
+  "History": {
+    "title": "Audit History",
+    "emptyTitle": "No analyses yet",
+    "emptyDesc": "Upload your first screenshot to get started with an automated design audit and AI insights.",
+    "runFirstAudit": "Run First Audit"
+  },
+  "Compare": {
+    "title": "Compare Designs",
+    "uploadDesign": "Upload design {number}",
+    "formats": "JPG, PNG, WebP — max 10MB",
+    "change": "Change",
+    "score": "Score",
+    "comparisonSummary": "Comparison Summary",
+    "visualHierarchy": "Visual Hierarchy",
+    "contrast": "Contrast",
+    "spacing": "Spacing",
+    "typography": "Typography",
+    "accessibility": "Accessibility",
+    "consistency": "Consistency"
+  },
+  "Loading": {
+    "scanning": "Scanning visual hierarchy...",
+    "calculating": "Calculating contrast ratios...",
+    "checking": "Checking spacing consistency..."
+  },
+  "Error": {
+    "notFound": "This page doesn't exist — but your design probably does. Let's take a look at it instead.",
+    "goHome": "Go Home",
+    "analysisNotFound": "Analysis not found"
+  },
+  "Pricing": {
+    "title": "Pricing",
+    "free": "Free",
+    "pro": "Pro",
+    "perMonth": "/month",
+    "freeDesc": "For quick design checks",
+    "proDesc": "For serious design teams",
+    "analyses": "{count} analyses/month",
+    "unlimitedAnalyses": "Unlimited analyses",
+    "pdfExport": "PDF Export",
+    "watermark": "Watermark on PDF",
+    "noWatermark": "No watermark",
+    "comparison": "Comparison mode",
+    "priorityAi": "Priority AI routing",
+    "getStarted": "Get Started",
+    "upgrade": "Upgrade",
+    "currentPlan": "Current plan",
+    "manageSubscription": "Manage subscription"
+  },
+  "Common": {
+    "madeWith": "Made with {name}",
+    "duplicateAnalysis": "Duplicate this analysis"
+  }
+}

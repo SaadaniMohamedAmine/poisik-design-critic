@@ -6,3 +6,4 @@ export { UploadDropzone } from './UploadDropzone';
 export { JsonLd } from './JsonLd';
 export { ReportView } from './ReportView';
 export { AnalysisLoading } from './AnalysisLoading';
+export { LanguageSwitcher } from './LanguageSwitcher';
