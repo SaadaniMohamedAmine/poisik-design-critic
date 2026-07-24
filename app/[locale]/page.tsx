@@ -42,7 +42,10 @@ export default function LandingPage() {
       <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center border-b border-border bg-bg-base/80 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-margin">
           <div className="flex items-center gap-xl">
-            <PoisikLogo size="md" className="text-headline-lg font-black text-accent-signal" />
+            <PoisikLogo
+              size="md"
+              className="text-display-lg font-black capitalize text-accent-signal"
+            />
             <nav className="hidden items-center gap-lg md:flex">
               <a
                 href="#features"
