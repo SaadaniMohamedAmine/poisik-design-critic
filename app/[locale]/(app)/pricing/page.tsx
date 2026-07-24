@@ -31,18 +31,33 @@ const PLANS = [
     cta: 'Upgrade',
     popular: true,
   },
+  {
+    name: 'Team',
+    price: '39',
+    description: 'For growing design orgs',
+    features: [
+      'Unlimited analyses',
+      'PDF Export without watermark',
+      'Comparison mode',
+      'Priority AI routing',
+      'Team workspace',
+      'Advanced analytics',
+    ],
+    cta: 'Upgrade',
+    team: true,
+  },
 ];
 
 export default function PricingPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
 
-  const handleCheckout = async () => {
-    setLoading(true);
+  const handleCheckout = async (plan: string) => {
+    setLoading(plan);
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'checkout' }),
+        body: JSON.stringify({ action: 'checkout', plan }),
       });
       const data = await res.json();
       if (data.url) {
@@ -51,7 +66,7 @@ export default function PricingPage() {
     } catch {
       console.error('Checkout failed');
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   };
 
@@ -61,7 +76,7 @@ export default function PricingPage() {
         <PoisikLogo size="md" />
       </header>
 
-      <main className="mx-auto max-w-5xl px-margin pt-32 pb-xxl">
+      <main className="mx-auto max-w-6xl px-margin pt-32 pb-xxl">
         <div className="mb-xl text-center">
           <h1 className="mb-md text-headline-lg font-semibold text-text-primary">
             Pricing
@@ -71,7 +86,7 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="grid gap-lg md:grid-cols-2">
+        <div className="grid gap-lg md:grid-cols-3">
           {PLANS.map((plan) => (
             <div
               key={plan.name}
@@ -103,21 +118,21 @@ export default function PricingPage() {
               <ul className="mb-lg space-y-md">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-md">
-                    <Check className="size-4 text-accent-signal" />
+                    <Check className="size-4 flex-shrink-0 text-accent-signal" />
                     <span className="text-body-md text-text-secondary">
                       {feature}
                     </span>
                   </li>
                 ))}
               </ul>
-              {plan.popular ? (
+              {(plan.popular || plan.team) ? (
                 <Button
                   className="w-full"
-                  variant="default"
-                  onClick={handleCheckout}
-                  disabled={loading}
+                  variant={plan.popular ? 'default' : 'secondary'}
+                  onClick={() => handleCheckout(plan.name.toLowerCase())}
+                  disabled={loading === plan.name.toLowerCase()}
                 >
-                  {loading ? 'Loading...' : plan.cta}
+                  {loading === plan.name.toLowerCase() ? 'Loading...' : plan.cta}
                 </Button>
               ) : (
                 <a

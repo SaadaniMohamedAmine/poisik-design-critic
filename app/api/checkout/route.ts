@@ -3,14 +3,14 @@ import { createCheckoutSession, createCustomerPortalUrl } from '@/lib/stripe';
 
 export async function POST(req: Request) {
   try {
-    const { action, customerId, email } = await req.json();
+    const { action, customerId, email, plan } = await req.json();
 
     if (action === 'portal' && customerId) {
       const portal = await createCustomerPortalUrl(customerId);
       return NextResponse.json({ url: portal.url });
     }
 
-    const session = await createCheckoutSession(email);
+    const session = await createCheckoutSession(plan, email);
     return NextResponse.json({ url: session.url });
   } catch {
     return NextResponse.json(

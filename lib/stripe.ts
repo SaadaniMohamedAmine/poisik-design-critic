@@ -8,16 +8,29 @@ export function getStripe() {
   return new Stripe(key);
 }
 
-export const PRO_PRICE_ID = process.env.STRIPE_PRO_PRICE_ID || 'price_placeholder';
+const PRICE_IDS: Record<string, string | undefined> = {
+  pro: process.env.STRIPE_PRO_PRICE_ID,
+  team: process.env.STRIPE_TEAM_PRICE_ID,
+};
 
-export async function createCheckoutSession(customerEmail?: string) {
+export async function createCheckoutSession(
+  plan?: string,
+  customerEmail?: string
+) {
   const stripe = getStripe();
+  const priceId =
+    (plan && PRICE_IDS[plan]) || process.env.STRIPE_PRO_PRICE_ID;
+
+  if (!priceId) {
+    throw new Error('Price ID not found for plan: ' + plan);
+  }
+
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
     line_items: [
       {
-        price: PRO_PRICE_ID,
+        price: priceId,
         quantity: 1,
       },
     ],
