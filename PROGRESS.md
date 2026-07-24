@@ -1,5 +1,11 @@
 # Poisik — Progress Log
 
+## TODO — Lighthouse Manual Audit
+- Ouvrir Chrome DevTools → onglet Lighthouse → "Analyze page load"
+- Tester chaque route : `/en/`, `/en/upload`, `/en/demo`, `/en/pricing`, `/en/history`, `/en/compare`
+- Viser 100/100 sur Performance, Accessibility, Best Practices, SEO
+- Si un score < 100, documenter la raison ici
+
 ## Phase 7 — Differentiateurs secondaires
 - Benchmark Comparison: hardcoded reference dataset, caption near score gauge
 - Command Palette: Cmd+K with cmdk, navigation actions + language switch
