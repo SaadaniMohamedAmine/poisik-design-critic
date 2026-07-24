@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik Audit Console - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f141b;
+            color: #dee2ed;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for Luxe feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090e15;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1d2b3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #263954;
+        }
+        /* Subtle glow for AI elements */
+        .ai-glow {
+            box-shadow: inset 0 0 12px rgba(98, 148, 218, 0.05);
+            border: 1px solid rgba(98, 148, 218, 0.2);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#b98b1d",
+                      "on-background": "#dee2ed",
+                      "on-error": "#690005",
+                      "on-secondary-fixed": "#141c29",
+                      "on-primary": "#00315f",
+                      "on-secondary-fixed-variant": "#3f4756",
+                      "on-primary-container": "#002b56",
+                      "inverse-primary": "#275fa2",
+                      "surface-container-highest": "#30353d",
+                      "surface": "#0f141b",
+                      "surface-dim": "#0f141b",
+                      "surface-bright": "#353942",
+                      "on-tertiary": "#402d00",
+                      "inverse-surface": "#dee2ed",
+                      "tertiary-fixed": "#ffdea2",
+                      "on-surface-variant": "#c2c6d2",
+                      "secondary-container": "#3f4756",
+                      "on-tertiary-container": "#3a2800",
+                      "on-primary-fixed": "#001c3b",
+                      "primary-fixed-dim": "#a6c8ff",
+                      "outline-variant": "#424750",
+                      "inverse-on-surface": "#2c3139",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-container": "#adb5c7",
+                      "background": "#0f141b",
+                      "primary-container": "#6294da",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#090e15",
+                      "tertiary": "#f3bf4f",
+                      "on-tertiary-fixed-variant": "#5c4200",
+                      "on-primary-fixed-variant": "#004786",
+                      "outline": "#8c919c",
+                      "tertiary-fixed-dim": "#f3bf4f",
+                      "surface-variant": "#30353d",
+                      "surface-container-high": "#252a32",
+                      "surface-container": "#1b2027",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed": "#261900",
+                      "secondary-fixed-dim": "#bfc7d9",
+                      "primary-fixed": "#d4e3ff",
+                      "primary": "#a6c8ff",
+                      "surface-tint": "#a6c8ff",
+                      "on-surface": "#dee2ed",
+                      "secondary-fixed": "#dbe3f5",
+                      "on-secondary": "#29313f",
+                      "secondary": "#bfc7d9",
+                      "surface-container-low": "#171c23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "margin": "32px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "xxl": "80px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant flex flex-col h-full py-lg px-md z-40">
+<div class="mb-xxl">
+<div class="flex items-center gap-md px-sm">
+<div class="w-10 h-10 bg-primary-container rounded-lg flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface leading-none">Audit Console</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">Expert Analysis</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-sm">
+<div class="bg-secondary-container text-on-secondary-container rounded-xl flex items-center gap-md px-md py-sm cursor-pointer transition-transform scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</div>
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl flex items-center gap-md px-md py-sm cursor-pointer scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">Projects</span>
+</div>
+</nav>
+<div class="mt-auto space-y-md">
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-md rounded-xl hover:opacity-90 transition-all">
+                New Analysis
+            </button>
+<div class="border-t border-outline-variant pt-lg space-y-sm">
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl flex items-center gap-md px-md py-sm cursor-pointer scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+<span class="font-label-md text-label-md">Pro Plan</span>
+</div>
+<div class="text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl flex items-center gap-md px-md py-sm cursor-pointer scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 min-h-screen relative overflow-hidden flex flex-col">
+<!-- TopAppBar (Shared Component) -->
+<header class="fixed top-0 right-0 left-64 h-16 bg-surface border-b border-outline-variant flex justify-between items-center px-lg z-50">
+<div class="flex items-center">
+<span class="font-body-md text-body-md text-on-surface-variant">Home / Dashboard</span>
+</div>
+<div class="flex items-center gap-lg">
+<div class="p-sm text-on-surface-variant hover:bg-surface-container-high transition-colors cursor-pointer rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</div>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden cursor-pointer hover:scale-105 transition-transform">
+<img class="w-full h-full object-cover" data-alt="A professional close-up portrait of a senior UX designer in a sleek, dimly lit studio. Soft directional lighting highlights their features, creating a sophisticated and authoritative atmosphere. The image uses a monochromatic navy and charcoal color palette to align with the Dark Luxe Minimalism aesthetic of the auditing platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLFOczECxf8AqjCsKVxBgb5tqlZYMb3Ks9jswZHJcJoKxsTSIfsEO_KAWVjdNSrlI1wJILg9Nx13W19Al_jBY46SXkRWyzvrCyFBpl1BKkqVRnmSqCNHOibKR-1ZjTuma8XwrkrPC4k4dB1H28OR-bNl9f6S3sY6oUfTawwaeDeDjILj8Hbqy_BTMtUv791FS7sBywtuOllxOWyyCBFMGRcuzYKBj6MPP2On7gjs7YctG_TpW1pkmf97e8s1DM4jf_EcOlGLpXtNA"/>
+</div>
+</div>
+</header>
+<!-- Centered Empty State Area -->
+<section class="flex-1 flex items-center justify-center p-margin pt-24">
+<div class="max-w-md w-full animate-in fade-in slide-in-from-bottom-4 duration-700">
+<!-- Bento-style Central Card -->
+<div class="bg-surface-container-low border border-outline-variant rounded-xl p-xl shadow-2xl relative overflow-hidden">
+<!-- Subtle AI Glow Effect Background -->
+<div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 blur-[80px] rounded-full"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<!-- Icon Container -->
+<div class="w-20 h-20 bg-surface-container-lowest border border-outline-variant rounded-2xl flex items-center justify-center mb-lg ai-glow">
+<span class="material-symbols-outlined text-primary text-[40px]" data-icon="folder_plus">stethoscope_arrow</span>
+</div>
+<!-- Headlines -->
+<h2 class="font-headline-lg text-headline-lg text-primary mb-md">Create your first project</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mb-xl leading-relaxed">
+                            Start by naming your first project to organize your design audits. Our AI engine will be ready to scan your first upload.
+                        </p>
+<!-- Interaction Area -->
+<div class="w-full space-y-lg">
+<div class="space-y-sm text-left">
+<label class="font-label-md text-label-md text-on-surface-variant block ml-1" for="project-name">Project name</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary-container focus:ring-0 rounded-lg py-md px-lg text-on-surface placeholder:text-outline font-body-md transition-all duration-300" id="project-name" placeholder="e.g. Fintech App Audit Q4" type="text"/>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-md text-label-md py-md rounded-xl hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-sm" id="create-btn">
+<span>Create project</span>
+<span class="material-symbols-outlined text-[18px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<!-- Metadata/Muted Footer -->
+<div class="mt-xl flex items-center gap-xs text-outline font-label-sm text-label-sm uppercase tracking-widest">
+<span class="material-symbols-outlined text-[14px]" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                            Secure &amp; Private Workspace
+                        </div>
+</div>
+</div>
+<!-- Quick Tips Asymmetric Floating Elements -->
+<div class="mt-lg grid grid-cols-2 gap-md opacity-60">
+<div class="border border-outline-variant bg-surface-container-lowest rounded-lg p-md flex items-start gap-md">
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="auto_awesome">auto_awesome</span>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">AI Powered</p>
+<p class="text-[12px] text-outline">Real-time heuristics</p>
+</div>
+</div>
+<div class="border border-outline-variant bg-surface-container-lowest rounded-lg p-md flex items-start gap-md">
+<span class="material-symbols-outlined text-tertiary text-[20px]" data-icon="verified">verified</span>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Standardized</p>
+<p class="text-[12px] text-outline">WCAG &amp; ISO Ready</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Background Decorative Elements -->
+<div class="fixed bottom-0 right-0 w-1/2 h-1/2 opacity-20 pointer-events-none z-0">
+<div class="absolute inset-0 bg-gradient-to-tl from-primary/10 to-transparent blur-[120px]"></div>
+</div>
+</main>
+<script>
+        // Micro-interaction for the Create Button
+        const createBtn = document.getElementById('create-btn');
+        const projectNameInput = document.getElementById('project-name');
+
+        createBtn.addEventListener('click', () => {
+            const name = projectNameInput.value.trim();
+            if (name) {
+                createBtn.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-on-primary-container" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>Initializing Project...</span>
+                `;
+                createBtn.classList.add('opacity-80', 'cursor-not-allowed');
+                
+                // Simulate backend call
+                setTimeout(() => {
+                    createBtn.innerHTML = `
+                        <span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                        <span>Project Created</span>
+                    `;
+                    createBtn.classList.remove('bg-primary-container');
+                    createBtn.classList.add('bg-tertiary-container');
+                }, 1500);
+            } else {
+                projectNameInput.classList.add('border-error');
+                setTimeout(() => projectNameInput.classList.remove('border-error'), 2000);
+            }
+        });
+
+        // Typing focus effect
+        projectNameInput.addEventListener('focus', () => {
+            projectNameInput.closest('.space-y-sm').classList.add('scale-[1.01]');
+        });
+        projectNameInput.addEventListener('blur', () => {
+            projectNameInput.closest('.space-y-sm').classList.remove('scale-[1.01]');
+        });
+    </script>
+</body></html>

@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik - Projects Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        :root {
+            --surface: #0f141b;
+            --outline-variant: #1d2b3f;
+            --accent-glow: #6294da;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--surface);
+            color: #dee2ed;
+            margin: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f141b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1d2b3f;
+            border-radius: 10px;
+        }
+        .project-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #1d2b3f;
+        }
+        .project-card:hover {
+            background-color: #162131;
+            border-color: #263954;
+            transform: translateY(-2px);
+        }
+        .ai-glow {
+            box-shadow: inset 0 0 12px rgba(98, 148, 218, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#b98b1d",
+                        "on-background": "#dee2ed",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#141c29",
+                        "on-primary": "#00315f",
+                        "on-secondary-fixed-variant": "#3f4756",
+                        "on-primary-container": "#002b56",
+                        "inverse-primary": "#275fa2",
+                        "surface-container-highest": "#30353d",
+                        "surface": "#0f141b",
+                        "surface-dim": "#0f141b",
+                        "surface-bright": "#353942",
+                        "on-tertiary": "#402d00",
+                        "inverse-surface": "#dee2ed",
+                        "tertiary-fixed": "#ffdea2",
+                        "on-surface-variant": "#c2c6d2",
+                        "secondary-container": "#3f4756",
+                        "on-tertiary-container": "#3a2800",
+                        "on-primary-fixed": "#001c3b",
+                        "primary-fixed-dim": "#a6c8ff",
+                        "outline-variant": "#424750",
+                        "inverse-on-surface": "#2c3139",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-container": "#adb5c7",
+                        "background": "#0f141b",
+                        "primary-container": "#6294da",
+                        "error": "#ffb4ab",
+                        "surface-container-lowest": "#090e15",
+                        "tertiary": "#f3bf4f",
+                        "on-tertiary-fixed-variant": "#5c4200",
+                        "on-primary-fixed-variant": "#004786",
+                        "outline": "#8c919c",
+                        "tertiary-fixed-dim": "#f3bf4f",
+                        "surface-variant": "#30353d",
+                        "surface-container-high": "#252a32",
+                        "surface-container": "#1b2027",
+                        "error-container": "#93000a",
+                        "on-tertiary-fixed": "#261900",
+                        "secondary-fixed-dim": "#bfc7d9",
+                        "primary-fixed": "#d4e3ff",
+                        "primary": "#a6c8ff",
+                        "surface-tint": "#a6c8ff",
+                        "on-surface": "#dee2ed",
+                        "secondary-fixed": "#dbe3f5",
+                        "on-secondary": "#29313f",
+                        "secondary": "#bfc7d9",
+                        "surface-container-low": "#171c23"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "sm": "8px",
+                        "xl": "48px",
+                        "md": "16px",
+                        "margin": "32px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "base": "4px",
+                        "xxl": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 right-0 left-0 h-16 bg-surface border-b border-outline-variant z-50 flex justify-between items-center px-lg w-full">
+<div class="flex items-center gap-md">
+<span class="font-headline-md text-headline-md font-bold text-on-surface">Poisik</span>
+</div>
+<div class="flex items-center gap-lg">
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-colors p-sm rounded-full cursor-pointer">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional, close-up studio portrait of a senior design executive with a confident, neutral expression. The background is a sophisticated deep navy with soft, cinematic lighting that highlights facial details. The overall aesthetic is dark luxe minimalism, consistent with a high-end AI auditing platform's branding." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7NyzltibGc14F1YV2EYPl6N5OTgr3nm6yD4aIVGB7DHnBgSMqUYXwg5BMrp5UbAsQstcsAT_kk6uiprCKmZbHepuebf4H3QLMxNucp1ZKTDESZpwZCVSVBINevPM5sVmbLwxmpZpUHGDEp79qZvjx9wyhWaakyc8Zsvxa7-_5-hP9bRdkJHWYgZ8bk6nIngAVSUMJaJiqpHguAn2ylid8lfRvU_46zznS1DzOBsH8Zt5mluktEMbj7zmCh6CXXPPBG3ZN_gpD7fU"/>
+</div>
+</div>
+</header>
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant flex flex-col h-full py-lg px-md z-40">
+<div class="mt-16 mb-xl">
+<div class="flex flex-col gap-xs px-md">
+<span class="font-headline-md text-headline-md text-on-surface">Audit Console</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Expert Analysis</span>
+</div>
+<div class="mt-lg px-md">
+<button class="w-full bg-primary-container text-on-primary-container py-md rounded-xl font-label-md text-label-md font-bold flex items-center justify-center gap-sm cursor-pointer scale-98 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+                    New Analysis
+                </button>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-sm">
+<a class="flex items-center gap-md px-md py-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md px-md py-md bg-secondary-container text-on-secondary-container rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="folder_open">folder_open</span>
+                Projects
+            </a>
+</nav>
+<div class="mt-auto flex flex-col gap-sm">
+<a class="flex items-center gap-md px-md py-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="bolt">bolt</span>
+                Pro Plan
+            </a>
+<a class="flex items-center gap-md px-md py-md text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors rounded-xl font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-margin h-[calc(100vh-64px)] overflow-y-auto custom-scrollbar">
+<div class="max-w-[1280px] mx-auto">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Projects</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage and review your AI UX audit sessions.</p>
+</div>
+<div class="flex gap-md">
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+<input class="bg-surface-container border border-outline-variant rounded-full pl-xl pr-lg py-sm text-label-md focus:border-primary-container focus:ring-0 w-64" placeholder="Search projects..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Project Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Project Card 1: Project Alpha -->
+<div class="project-card bg-surface-container-low rounded-xl p-lg flex flex-col ai-glow cursor-pointer group">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-outline-variant mb-md">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A highly detailed 3D abstract visualization of a complex neural network interface. The aesthetic is clean and corporate, featuring translucent glass layers, glowing blue nodes, and sharp white geometric lines. The lighting is low-key and professional, set against a dark navy background to evoke a sense of advanced artificial intelligence auditing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBQs5JSPq0aPHIHJewQVPDQm-Y9BcFH11l5apBJfEvfJYh2UD4QzEcXdxEx_6irusBvRZgv_a2FTPpY_wH8Edd4uxR_DNDUL-QKf5M23vvhWAGctIICykc5t2TBFDGxmvP-Ca8kFHeLvFtMEC8Nuy0SfwPIJxrkDPo82_sf4Otf6Ydmcnot5L4ve7O-Qv3OnZm30j7A78p_Dk7YWV3oq5q_s2kAFdJV6JHAfx3mHuAwVpmqEd6XXc21IdU2Sh62HzpQnAupr4kDho"/>
+<div class="absolute top-md right-md bg-surface/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="font-label-sm text-label-sm text-primary">88</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Project Alpha</h3>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-label-sm text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last updated 2 days ago</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-primary-container text-[10px] flex items-center justify-center font-bold">JD</div>
+<div class="w-6 h-6 rounded-full border border-surface bg-secondary-container text-[10px] flex items-center justify-center font-bold">AL</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="project-card bg-surface-container-low rounded-xl p-lg flex flex-col ai-glow cursor-pointer group">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-outline-variant mb-md">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="An elegant, minimalist UI dashboard mock-up featuring dark mode aesthetics. The image highlights clean typography, thin dividing lines, and subtle data visualizations like line charts and circular progress indicators. The primary color palette is navy and charcoal with vibrant sky-blue accents, reflecting a sophisticated AI-driven audit environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBIuoVPk4Sq3yJM2Zyk86jQAzNba6Dz3_Iu28fUQUM-J2LSy1CySVmPw4wHHLcdYR8yrnDAGA1W1h2snS1sRo-mOlSLjZnyTSkYO9uvteHDie05aMy6gN_1mGA8HH-oCVFkCfWYVufQiiX7g2n9tRLUcNm-FCF5dDmVcOUgb4toQOmlB5jQT3R3FGiZrxsvQFFuQegNudbndgyPB8Vj9AFQyYjqZVo4noyP3dLNLkKrb0O9DRXpygQjDzKpQP52Jn7fTag5E5dI4YA"/>
+<div class="absolute top-md right-md bg-surface/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="font-label-sm text-label-sm text-tertiary">74</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">E-Commerce Audit</h3>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-label-sm text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last updated 5 days ago</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container-highest text-[10px] flex items-center justify-center font-bold">MK</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Project Card 3 -->
+<div class="project-card bg-surface-container-low rounded-xl p-lg flex flex-col ai-glow cursor-pointer group">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-outline-variant mb-md">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A macro shot of architectural glass and steel structures at dusk. The surfaces reflect a deep indigo sky with soft, diffuse highlights of cool white. The composition is geometric and balanced, symbolizing structural integrity and expert analysis. The mood is calm and authoritative, matching a luxe professional audit tool's aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcyi6i3_wjyeW-VnuTYnNR5k7vbg1r_p4gr3yMCP-tpcIUgFK-3p8MlHWVEic3a_HnTPoDhlqsg2NEYQogZvw-YqbYqm_1nwPHvMlyrsq1tDb3bMEb5miOTe871u-TzrssnnidBgH0g1gJwjqyJdjygcn83KN5VDqJbb3NirSJFq2yVz_R96D0usITb3vjqWxba_OFYJfxK3PhrVreusVqiNDc_LAUmotQ0XHK0gde5bfms9ITyJSbiBWUxzN5X01s7Xsxcdwh6uI"/>
+<div class="absolute top-md right-md bg-surface/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="font-label-sm text-label-sm text-primary">92</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">SaaS Redesign</h3>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-label-sm text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last updated 1 week ago</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-primary-container text-[10px] flex items-center justify-center font-bold">JD</div>
+<div class="w-6 h-6 rounded-full border border-surface bg-tertiary-container text-[10px] flex items-center justify-center font-bold">PS</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Project Card 4 -->
+<div class="project-card bg-surface-container-low rounded-xl p-lg flex flex-col ai-glow cursor-pointer group">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-outline-variant mb-md">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="A stylized digital representation of data streams and algorithmic patterns. Thin, glowing lines of light travel across a dark, matte surface, creating a sense of motion and intelligence. The palette is strictly dark navy, black, and ethereal light blue. This visualization represents the backend processing of an AI audit in a high-end designer tool." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgo2TjltdDs3lT3LATp8pG2sTkoabsEzwaORcxjZRWUKbsX7RfVM_8uBSa82r_qr-09HKq9oG4xDRSfKLRiDL8HmT4Hw4abLm6qZ24fXj7RjwFR8wf0xUNzAOA1NnL5HrWCnhwudQeUL4vTXkfmcL7SNIfdhVwdDDBiM3u3DLvRjwBt_LvjDyG281_RHVnVNUB1hQvVUGUrKUr9lLYDH55mGDFk8j5ar5GIembc4EUeX8nDkVhUIAIk5OOw_XIN2Lmje57PL_qOdY"/>
+<div class="absolute top-md right-md bg-surface/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="font-label-sm text-label-sm text-error">45</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Banking App v2</h3>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-label-sm text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last updated 2 weeks ago</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-secondary-container text-[10px] flex items-center justify-center font-bold">AL</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Project Card 5 -->
+<div class="project-card bg-surface-container-low rounded-xl p-lg flex flex-col ai-glow cursor-pointer group">
+<div class="relative w-full aspect-video rounded-lg overflow-hidden border border-outline-variant mb-md">
+<img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="An atmospheric, close-up shot of a high-resolution dark monitor screen displaying code and structural wireframes. The reflection of soft blue light on the screen creates depth. The focus is sharp on one section of the UI, emphasizing precision and technical expertise. The style is sophisticated and professional, set in a dimly lit, high-end studio environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnBaA9vFjArp3qNe8XOx_5kqmkxK5klCCx8Io432rYRigN61vYa-ATiLCltp1sewM5gNVgLVwWzZr77DHuaqAFfcwql8QXoAAHzle1pQRrWViRf0sqIQ7b113i50TpaAFOTpY78Dg1b2kNl9G7lMpzYzeznL7iciKBsKvHYu_cGOzR3bIqLAnPv-jTL9kXbPLF5gt2bYwAiJNJdR0vZS54rGnMtELbLAw6i_3TL55X6soGIKG6jZHxSBaP-egSWPbnCmbWEBGKP84"/>
+<div class="absolute top-md right-md bg-surface/80 backdrop-blur-md px-sm py-xs rounded border border-outline-variant flex items-center gap-xs">
+<span class="font-label-sm text-label-sm text-primary">82</span>
+</div>
+</div>
+<div class="flex flex-col gap-xs">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-headline-md text-on-surface">Design System V4</h3>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity" data-icon="more_vert">more_vert</span>
+</div>
+<div class="flex items-center justify-between mt-sm">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-label-sm text-on-surface-variant" data-icon="schedule">schedule</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Last updated 3 weeks ago</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container-highest text-[10px] flex items-center justify-center font-bold">MK</div>
+<div class="w-6 h-6 rounded-full border border-surface bg-primary-container text-[10px] flex items-center justify-center font-bold">JD</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Empty State / Add New Card -->
+<div class="group border-2 border-dashed border-outline-variant rounded-xl p-lg flex flex-col items-center justify-center min-h-[320px] cursor-pointer hover:bg-surface-container-high transition-all">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-headline-lg text-on-surface-variant" data-icon="add_circle">add_circle</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface-variant group-hover:text-on-surface transition-colors">Start New Project</span>
+<p class="font-body-md text-body-md text-outline mt-xs text-center px-lg">Initiate a fresh AI-driven audit for your product.</p>
+</div>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interaction for project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Potential for adding dynamic glow effect via JS if needed
+            });
+            card.addEventListener('click', () => {
+                // Simulate navigation or selection
+                const title = card.querySelector('h3').innerText;
+                console.log(`Opening project: ${title}`);
+            });
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-105');
+            searchInput.parentElement.style.transition = 'transform 0.2s ease';
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-105');
+        });
+    </script>
+</body></html>

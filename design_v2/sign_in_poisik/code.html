@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign In | Poisik AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#3f4756",
+                    "on-tertiary": "#402d00",
+                    "tertiary-fixed": "#ffdea2",
+                    "on-surface": "#dee2ed",
+                    "on-primary-fixed-variant": "#004786",
+                    "outline-variant": "#424750",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "surface-bright": "#353942",
+                    "on-primary-container": "#002b56",
+                    "tertiary-container": "#b98b1d",
+                    "primary-container": "#6294da",
+                    "inverse-primary": "#275fa2",
+                    "on-secondary-container": "#adb5c7",
+                    "surface-container-highest": "#30353d",
+                    "on-surface-variant": "#c2c6d2",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "on-tertiary-container": "#3a2800",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "on-secondary": "#29313f",
+                    "on-primary": "#00315f",
+                    "secondary": "#bfc7d9",
+                    "on-error-container": "#ffdad6",
+                    "outline": "#8c919c",
+                    "surface-variant": "#30353d",
+                    "on-tertiary-fixed": "#261900",
+                    "surface-container-high": "#252a32",
+                    "primary-fixed": "#d4e3ff",
+                    "secondary-fixed": "#dbe3f5",
+                    "on-primary-fixed": "#001c3b",
+                    "primary": "#a6c8ff",
+                    "error": "#ffb4ab",
+                    "surface-tint": "#a6c8ff",
+                    "surface-dim": "#0f141b",
+                    "on-error": "#690005",
+                    "surface": "#0f141b",
+                    "on-secondary-fixed": "#141c29",
+                    "surface-container-low": "#171c23",
+                    "surface-container": "#1b2027",
+                    "inverse-on-surface": "#2c3139",
+                    "surface-container-lowest": "#090e15",
+                    "inverse-surface": "#dee2ed",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "error-container": "#93000a",
+                    "on-background": "#dee2ed",
+                    "tertiary": "#f3bf4f",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "background": "#0f141b"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "xs": "4px",
+                    "xxl": "80px",
+                    "xl": "48px",
+                    "base": "4px",
+                    "gutter": "24px",
+                    "md": "16px",
+                    "lg": "24px",
+                    "margin": "32px"
+            },
+            "fontFamily": {
+                    "display-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0a0f16;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        .glass-glow {
+            position: relative;
+        }
+        .glass-glow::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(98, 148, 218, 0.2), transparent, rgba(98, 148, 218, 0.05));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col justify-center items-center overflow-x-hidden">
+<!-- Ambient Background Element -->
+<div class="fixed inset-0 pointer-events-none opacity-20 z-0">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-container rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary-container rounded-full blur-[120px]"></div>
+</div>
+<!-- Main Content Shell -->
+<main class="relative z-10 w-full max-w-[1280px] px-margin flex flex-col items-center">
+<!-- Wordmark Anchor -->
+<div class="mb-xl animate-fade-in">
+<h1 class="text-headline-lg font-headline-lg tracking-tight text-on-background flex items-center gap-xs">
+                Poisik<span class="text-primary-container">.</span>
+</h1>
+</div>
+<!-- Authentication Card -->
+<div class="w-full max-w-[440px] bg-surface-container-low border border-outline-variant rounded-xl p-xl glass-glow shadow-2xl">
+<header class="mb-lg">
+<h2 class="text-headline-md font-headline-md text-on-surface mb-xs">Welcome back</h2>
+<p class="text-body-md font-body-md text-on-surface-variant">Expert AI auditing for your design systems.</p>
+</header>
+<!-- Form -->
+<form class="space-y-md" onsubmit="return false;">
+<!-- Email Field -->
+<div class="space-y-xs">
+<label class="text-label-md font-label-md text-on-surface-variant block" for="email">Work Email</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px] transition-colors group-focus-within:text-primary">mail</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-lg py-md pl-[48px] pr-md text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container transition-all" id="email" placeholder="name@company.com" type="email"/>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-xs">
+<div class="flex justify-between items-center">
+<label class="text-label-md font-label-md text-on-surface-variant block" for="password">Password</label>
+<a class="text-label-sm font-label-sm text-primary hover:underline transition-all" href="#">Forgot password?</a>
+</div>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px] transition-colors group-focus-within:text-primary">lock</span>
+<input class="w-full bg-surface-container border border-outline-variant rounded-lg py-md pl-[48px] pr-md text-body-md font-body-md text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none focus:border-primary-container transition-all" id="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<!-- Primary Action -->
+<button class="w-full bg-primary-container hover:bg-[#72a4ea] active:scale-[0.98] text-on-primary-container font-semibold py-md rounded-lg transition-all shadow-lg shadow-primary-container/10 mt-md" type="submit">
+                    Sign In
+                </button>
+</form>
+<!-- Divider -->
+<div class="relative flex items-center my-xl">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink mx-md text-label-sm font-label-sm text-on-surface-variant/50">OR CONTINUE WITH</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<!-- Social Logins -->
+<div class="space-y-md">
+<!-- Google Login -->
+<button class="w-full flex items-center justify-center gap-md bg-surface-container border border-outline-variant hover:bg-surface-container-highest text-on-surface font-medium py-md rounded-lg transition-all active:scale-[0.98]">
+<svg height="18" viewbox="0 0 18 18" width="18">
+<path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"></path>
+<path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"></path>
+<path d="M3.964 10.711c-.18-.54-.282-1.117-.282-1.711 0-.594.102-1.17.282-1.711V4.957H.957C.347 6.173 0 7.548 0 9s.347 2.827.957 4.043l3.007-2.332z" fill="#FBBC05"></path>
+<path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.957l3.007 2.332c.708-2.127 2.692-3.71 5.036-3.71z" fill="#EA4335"></path>
+</svg>
+                    Continue with Google
+                </button>
+<!-- Facebook (Disabled) -->
+<div class="relative group cursor-not-allowed">
+<button class="w-full flex items-center justify-center gap-md bg-surface-container/50 border border-outline-variant text-on-surface-variant opacity-50 py-md rounded-lg font-medium cursor-not-allowed" disabled="">
+<svg fill="currentColor" height="18" viewbox="0 0 24 24" width="18">
+<path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.324v-21.35c0-.732-.593-1.325-1.325-1.325z"></path>
+</svg>
+                        Continue with Facebook
+                    </button>
+<span class="absolute top-1/2 -translate-y-1/2 right-md bg-surface-container-highest px-xs py-[2px] rounded text-[10px] font-bold text-on-surface-variant border border-outline-variant tracking-wider">COMING SOON</span>
+</div>
+</div>
+<footer class="mt-xl text-center">
+<p class="text-label-md font-label-md text-on-surface-variant">
+                    Don't have an account? 
+                    <a class="text-primary font-bold hover:underline ml-xs transition-all" href="#">Sign Up</a>
+</p>
+</footer>
+</div>
+<!-- Micro-footer -->
+<div class="mt-xl flex flex-col md:flex-row items-center gap-md text-label-sm font-label-sm text-on-surface-variant/40">
+<p>© 2024 Poisik AI. All rights reserved.</p>
+<div class="hidden md:block w-1 h-1 bg-outline-variant rounded-full"></div>
+<div class="flex gap-md">
+<a class="hover:text-on-surface transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-on-surface transition-colors" href="#">Terms</a>
+<a class="hover:text-on-surface transition-colors" href="#">Status</a>
+</div>
+</div>
+</main>
+<script>
+        // Micro-interactions: Input focusing
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.classList.add('active-field');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.classList.remove('active-field');
+            });
+        });
+
+        // Simple Fade In Animation for the card
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.glass-glow');
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body></html>

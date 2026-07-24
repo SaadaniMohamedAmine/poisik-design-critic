@@ -124,16 +124,16 @@ The style is **Dark Luxe Minimalism**. It leverages a monochromatic navy-based p
 
 ## Colors
 
-The palette is a curated spectrum of deep navy and slate greys, ensuring high legibility while maintaining a premium dark-mode aesthetic. 
+The palette is a curated spectrum of deep navy and slate greys, ensuring high legibility while maintaining a premium dark-mode aesthetic.
 
 - **Backgrounds:** Use `#0a0f16` for the main canvas to ground the experience. Layered panels use `#0d131c` to create subtle structural separation.
-- **Accents:** The "Signal Blue" (`#6294da`) is reserved strictly for interactive elements and primary actions. 
+- **Accents:** The "Signal Blue" (`#6294da`) is reserved strictly for interactive elements and primary actions.
 - **AI Influence:** A subtle glow (`#5f9cf2`) is used exclusively for AI-generated highlights or "suggested" changes, differentiating automated insights from static system data.
 - **Contrast:** Maintain a high contrast ratio for primary text (`#e3e9f2`) against the dark base to ensure accessibility in professional environments.
 
 ## Typography
 
-This design system utilizes **Inter** exclusively to maintain a systematic, utilitarian aesthetic. 
+This design system utilizes **Inter** exclusively to maintain a systematic, utilitarian aesthetic.
 
 - **Headings:** Use tight tracking (letter-spacing) and a slightly heavier weight to create a "locked-in" professional look. Large displays should feel architectural.
 - **Body:** Prioritize readability with a generous 1.6x line height. This creates the "airy" feel necessary for long-form audit reports.
@@ -141,7 +141,7 @@ This design system utilizes **Inter** exclusively to maintain a systematic, util
 
 ## Layout & Spacing
 
-The layout philosophy follows a **Fixed Grid** for internal content (1280px max-width) while utilizing fluid sidebars for navigation. 
+The layout philosophy follows a **Fixed Grid** for internal content (1280px max-width) while utilizing fluid sidebars for navigation.
 
 - **Rhythm:** An 8px linear scale is used for all layout decisions, but "Luxe" is achieved by opting for the higher end of the scale (e.g., using 48px or 80px gaps between major sections).
 - **Safe Margins:** Use a minimum of 32px external padding on desktop to prevent content from feeling "cramped" against the viewport edges.
@@ -149,16 +149,16 @@ The layout philosophy follows a **Fixed Grid** for internal content (1280px max-
 
 ## Elevation & Depth
 
-In this design system, depth is conveyed through **Tonal Layering** and **Low-Contrast Outlines**. 
+In this design system, depth is conveyed through **Tonal Layering** and **Low-Contrast Outlines**.
 
-- **Tiers:** Content should feel like it is "sunk" or "resting" rather than floating. The background base is the lowest tier. Use the `background_elevated` for secondary panels. 
+- **Tiers:** Content should feel like it is "sunk" or "resting" rather than floating. The background base is the lowest tier. Use the `background_elevated` for secondary panels.
 - **Borders:** Instead of shadows, use 1px solid borders (`#1d2b3f`). This defines structure without the "muddiness" of dark-mode shadows.
 - **Hover States:** Interactive surfaces should lift slightly by transitioning to a lighter surface hex (`#162131`) and a stronger border (`#263954`).
 - **Inner Glow:** For AI-specific components, a subtle 1px inner stroke using the `accent_glow` at 20% opacity can be used to suggest "active intelligence."
 
 ## Shapes
 
-The shape language is **Soft** but disciplined. 
+The shape language is **Soft** but disciplined.
 
 - **Standard Radius:** 0.25rem (4px) is the default for most components (inputs, small buttons) to maintain a precise, technical feel.
 - **Large Components:** Cards and audit panels use a 0.75rem (12px) radius to soften the overall interface and provide a more modern, "app-like" container.

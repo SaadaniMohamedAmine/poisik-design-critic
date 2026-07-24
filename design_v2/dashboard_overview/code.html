@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik - Audit Console Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background: rgba(23, 28, 35, 0.8);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f141b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1d2b3f;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #263954;
+        }
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-float {
+            animation: subtle-float 4s ease-in-out infinite;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-container": "#b98b1d",
+                      "on-background": "#dee2ed",
+                      "on-error": "#690005",
+                      "on-secondary-fixed": "#141c29",
+                      "on-primary": "#00315f",
+                      "on-secondary-fixed-variant": "#3f4756",
+                      "on-primary-container": "#002b56",
+                      "inverse-primary": "#275fa2",
+                      "surface-container-highest": "#30353d",
+                      "surface": "#0f141b",
+                      "surface-dim": "#0f141b",
+                      "surface-bright": "#353942",
+                      "on-tertiary": "#402d00",
+                      "inverse-surface": "#dee2ed",
+                      "tertiary-fixed": "#ffdea2",
+                      "on-surface-variant": "#c2c6d2",
+                      "secondary-container": "#3f4756",
+                      "on-tertiary-container": "#3a2800",
+                      "on-primary-fixed": "#001c3b",
+                      "primary-fixed-dim": "#a6c8ff",
+                      "outline-variant": "#424750",
+                      "inverse-on-surface": "#2c3139",
+                      "on-error-container": "#ffdad6",
+                      "on-secondary-container": "#adb5c7",
+                      "background": "#0f141b",
+                      "primary-container": "#6294da",
+                      "error": "#ffb4ab",
+                      "surface-container-lowest": "#090e15",
+                      "tertiary": "#f3bf4f",
+                      "on-tertiary-fixed-variant": "#5c4200",
+                      "on-primary-fixed-variant": "#004786",
+                      "outline": "#8c919c",
+                      "tertiary-fixed-dim": "#f3bf4f",
+                      "surface-variant": "#30353d",
+                      "surface-container-high": "#252a32",
+                      "surface-container": "#1b2027",
+                      "error-container": "#93000a",
+                      "on-tertiary-fixed": "#261900",
+                      "secondary-fixed-dim": "#bfc7d9",
+                      "primary-fixed": "#d4e3ff",
+                      "primary": "#a6c8ff",
+                      "surface-tint": "#a6c8ff",
+                      "on-surface": "#dee2ed",
+                      "secondary-fixed": "#dbe3f5",
+                      "on-secondary": "#29313f",
+                      "secondary": "#bfc7d9",
+                      "surface-container-low": "#171c23"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "sm": "8px",
+                      "xl": "48px",
+                      "md": "16px",
+                      "margin": "32px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "base": "4px",
+                      "xxl": "80px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 left-0 h-16 bg-surface z-50 border-b border-outline-variant flex justify-between items-center px-lg w-full">
+<div class="flex items-center gap-md">
+<span class="text-headline-md font-headline-md font-bold text-on-surface">Poisik</span>
+<div class="hidden md:flex gap-md ml-xl">
+<a class="text-primary font-bold border-b-2 border-primary py-xs transition-all duration-200 cursor-pointer" href="#">Dashboard</a>
+<a class="text-on-surface-variant hover:bg-surface-container-high transition-colors py-xs px-sm rounded-lg cursor-pointer" href="#">Projects</a>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="material-symbols-outlined text-on-surface-variant hover:text-on-surface transition-colors">notifications</button>
+<div class="w-8 h-8 rounded-full bg-secondary-container overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional close-up headshot of a senior tech executive with a confident expression, set against a blurred, moody architectural background of a modern tech office in dark navy and slate tones. The lighting is soft and cinematic, emphasizing high-end professionalism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLF4pPQuY5_YdSLMDs-IV8Dkw7w-WhCZFmBauIACV11YOp4q-aKxm6ZKCL9es0_UCHwyj3zDugaxHnOMzqY_NEQjlvE2eeqosCwqOyh-cUbFSRJTbTdScYqtRjMguvrDMLxZckz5Leo7KoIUIpAYjtuwBFK-k7cGsJQmiAqp-cm_qbLolmU8ylfLbD4vQdJzlxv9trg5XxWjoOyDxPwHrWcdW9kJ4QnKDYfKgAIWjfKPRhIeFyyqNuqjBH7B-BvqT5G196N1W4N4Y"/>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 bottom-0 w-64 bg-surface-container-low border-r border-outline-variant flex flex-col h-full py-lg px-md z-40 hidden md:flex">
+<div class="mt-16 mb-xl">
+<div class="flex items-center gap-md px-sm py-md">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary">analytics</span>
+</div>
+<div>
+<h2 class="font-headline-md text-on-surface text-[18px]">Audit Console</h2>
+<p class="text-[12px] text-on-surface-variant">Expert Analysis</p>
+</div>
+</div>
+<button class="mt-lg w-full bg-primary-container text-on-primary-container py-md rounded-xl font-label-md flex items-center justify-center gap-sm hover:opacity-90 transition-all scale-98 active:scale-95">
+<span class="material-symbols-outlined">add</span>
+                New Analysis
+            </button>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md px-md py-md bg-secondary-container text-on-secondary-container rounded-xl font-label-md transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-md px-md py-md text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface rounded-xl font-label-md transition-transform" href="#">
+<span class="material-symbols-outlined">folder_open</span>
+                Projects
+            </a>
+</nav>
+<div class="pt-lg border-t border-outline-variant space-y-sm">
+<div class="p-md bg-surface-container-high rounded-xl mb-md">
+<div class="flex items-center justify-between mb-xs">
+<span class="text-label-sm text-tertiary font-bold flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+                        Pro Plan
+                    </span>
+<span class="text-label-sm text-on-surface-variant">Active</span>
+</div>
+<div class="w-full h-1 bg-surface rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+</div>
+<a class="flex items-center gap-md px-md py-md text-on-surface-variant hover:text-on-surface transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 mt-16 p-margin h-[calc(100vh-64px)] overflow-y-auto">
+<div class="max-w-[1280px] mx-auto pb-xxl">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Executive Overview</h1>
+<p class="text-on-surface-variant mt-xs">Real-time AI auditing performance and project health.</p>
+</div>
+<div class="flex gap-md">
+<button class="px-lg py-md border border-outline-variant rounded-xl text-label-md hover:bg-surface-container-high transition-colors">
+                        Export Report
+                    </button>
+<button class="px-lg py-md bg-primary-container text-on-primary-container rounded-xl text-label-md font-bold hover:opacity-90 transition-opacity">
+                        Share Dashboard
+                    </button>
+</div>
+</div>
+<!-- Top Row: Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-xl">
+<div class="bg-surface border border-outline-variant p-lg rounded-xl hover:bg-[#162131] transition-all duration-200 group">
+<div class="flex justify-between items-start mb-md">
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Total projects</p>
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">folder</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-[32px] font-bold text-on-surface">12</span>
+<span class="text-label-sm text-primary">+2 this month</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-lg rounded-xl hover:bg-[#162131] transition-all duration-200 group">
+<div class="flex justify-between items-start mb-md">
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Total analyses</p>
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">analytics</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-[32px] font-bold text-on-surface">48</span>
+<span class="text-label-sm text-primary">+12% vs last period</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-lg rounded-xl hover:bg-[#162131] transition-all duration-200 group">
+<div class="flex justify-between items-start mb-md">
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Average score</p>
+<span class="material-symbols-outlined text-tertiary group-hover:scale-110 transition-transform">grade</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-[32px] font-bold text-on-surface">84</span>
+<span class="text-label-sm text-on-surface-variant">/ 100</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-lg rounded-xl hover:bg-[#162131] transition-all duration-200 group">
+<div class="flex justify-between items-start mb-md">
+<p class="text-label-md text-on-surface-variant uppercase tracking-wider">Analyses left</p>
+<span class="material-symbols-outlined text-error group-hover:scale-110 transition-transform">speed</span>
+</div>
+<div class="flex items-baseline gap-sm">
+<span class="text-[32px] font-bold text-on-surface">2/3</span>
+<span class="text-label-sm text-on-surface-variant">Plan usage</span>
+</div>
+<div class="mt-md w-full h-1 bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[66%]"></div>
+</div>
+</div>
+</div>
+<!-- Middle Row: Charts & Activity -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-xl">
+<!-- Score Trend Widget -->
+<div class="lg:col-span-8 bg-surface border border-outline-variant rounded-xl p-lg">
+<div class="flex justify-between items-center mb-xl">
+<div>
+<h3 class="font-headline-md text-[20px] text-on-surface">Score Trend</h3>
+<p class="text-label-md text-on-surface-variant">Performance progression across all projects</p>
+</div>
+<div class="flex items-center gap-xs text-primary bg-primary/10 px-md py-sm rounded-lg">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+<span class="text-label-md font-bold">+5.2%</span>
+</div>
+</div>
+<!-- Sparkline Chart Mock -->
+<div class="h-64 relative w-full overflow-hidden">
+<div class="absolute inset-0 flex items-end justify-between px-md">
+<div class="w-12 bg-primary/20 rounded-t-lg h-[40%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[55%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[45%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[70%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[65%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[85%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[80%] transition-all hover:bg-primary/40"></div>
+<div class="w-12 bg-primary/20 rounded-t-lg h-[90%] transition-all hover:bg-primary/40"></div>
+</div>
+<!-- Line Overlay -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none" viewbox="0 0 1000 200">
+<path d="M0,150 Q125,120 250,130 T500,80 T750,90 T1000,40" fill="none" stroke="#a6c8ff" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+<!-- Plan/Usage Widget -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<div class="bg-surface border border-outline-variant p-lg rounded-xl relative overflow-hidden flex-1 flex flex-col justify-between">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+<div>
+<div class="flex justify-between items-start mb-lg">
+<span class="px-md py-xs bg-surface-container-highest text-on-surface border border-outline-variant rounded-full text-label-sm font-bold tracking-widest">FREE</span>
+<span class="material-symbols-outlined text-primary-container animate-float">verified</span>
+</div>
+<h3 class="font-headline-md text-on-surface mb-xs">Growth & Precision</h3>
+<p class="text-on-surface-variant text-label-md">You've reached 66% of your monthly analysis quota.</p>
+</div>
+<div class="mt-xl">
+<div class="flex justify-between text-label-sm mb-xs">
+<span>Analysis Credits</span>
+<span class="text-on-surface">2 / 3 used</span>
+</div>
+<div class="w-full h-2 bg-surface-container rounded-full mb-lg overflow-hidden border border-outline-variant">
+<div class="h-full bg-primary-container w-[66%]"></div>
+</div>
+<button class="w-full py-md bg-on-background text-background font-bold rounded-xl hover:opacity-90 transition-opacity flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">upgrade</span>
+                                Upgrade to Pro
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Recent Activity & Project Overview -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Recent Activity -->
+<div class="lg:col-span-7 bg-surface border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-md text-[18px] text-on-surface">Recent Activity</h3>
+<button class="text-primary text-label-md hover:underline">See timeline</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Activity Item 1 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container transition-colors group cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A clean architectural photograph of a minimalist luxury hotel lobby with dramatic lighting and deep navy accents. High-end materials like marble and dark wood are visible. The atmosphere is sophisticated and ultra-modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe-VfjNoEF22_Ia5Px4lbIi0cNKicYNU0b4Rv4zG91jSJ8PcOb9qJ1YbRtcEbhxv7iBguV-STLj8IvfUKD62BRBq-duBKq4EuYdYnTyg7CSCSKB25JZgvK-IB3g-DUxOAEia9N2gRZX8MTjEG857t9SaSX0GJG2epPuQ2obMdn3_IAF1rAVxpeTmV_Ew62w_SpepMaiEND7Gr4s3IYSaDOhbrGjpydq3Axf8Hjnd-Cey0WbpyWbxc5WK4oal-bLFxC3UDOSQzQYLM"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">NeoBank Landing Audit</h4>
+<p class="text-label-sm text-on-surface-variant">Full Accessibility Analysis</p>
+</div>
+</div>
+<div class="flex items-center gap-xl">
+<div class="text-right hidden sm:block">
+<p class="text-label-sm text-on-surface-variant">Oct 24, 2023</p>
+</div>
+<div class="px-md py-xs bg-primary/10 text-primary border border-primary/20 rounded-full text-label-sm font-bold">92</div>
+</div>
+</div>
+<!-- Activity Item 2 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container transition-colors group cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A high-tech digital dashboard displayed on a sleek glass tablet, showing complex data visualizations in a futuristic deep navy and electric blue palette. The environment is a professional, dark studio." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpl9frBQuW_3aXZAjBy4O_cZcONiiYHGFKYBMMiAFsQqZyurn2Jny8NEZTOwM9XuXFARs_z_7RfGiGRpMgJ_ODJAtr8cQ1t_BfRIz4LspDBaMsUBxOsaMmVKKy0kxqbJv271wEoARKTs226U3BlH244nW3l7L4g_3P4DSUxXpS9TZVx2EzuuUR8yUPRdWkHCPzjxIhgppS38XSFW3I5cfG3t5aGPStH4IMo2K703S7QoFzECHl9LelMtfN2KNYRl9TXMp0Kk2ebX4"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">CryptoWallet V2 UI</h4>
+<p class="text-label-sm text-on-surface-variant">UX Flow Optimization</p>
+</div>
+</div>
+<div class="flex items-center gap-xl">
+<div class="text-right hidden sm:block">
+<p class="text-label-sm text-on-surface-variant">Oct 22, 2023</p>
+</div>
+<div class="px-md py-xs bg-tertiary/10 text-tertiary border border-tertiary/20 rounded-full text-label-sm font-bold">78</div>
+</div>
+</div>
+<!-- Activity Item 3 -->
+<div class="p-lg flex items-center justify-between hover:bg-surface-container transition-colors group cursor-pointer">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-lg bg-surface-container-highest overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A stunning macro shot of a sleek automotive dashboard from a luxury electric vehicle. The design is fluid, featuring carbon fiber textures and sophisticated interface lighting in muted navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoWdV5rVFafB4DzsV4WRhH6A7XQoQoBE2yPOUpmNa-J0nPggr_eehpoM_HHTEs-_fvOJ7z0tTQ0iAs-MLkDGjw6MId8Xtt0kaQQFniM11fryF7YMCFOE9fHJGakVF-LlLQGMdB8xJVnxCRmBXwRUM8Gy0DVtoD3geZ4hmTzx91b7_Tmr3vOZPMDV1aKXBInRrisdP1TWL8yuSOs3MR86a6t_mwOZHgswf8pzqNm-XAN9Go6f60Q8C2268-8thyR04hvncwhifQ37Q"/>
+</div>
+<div>
+<h4 class="font-label-md text-on-surface group-hover:text-primary transition-colors">Tesla S-Series Configurator</h4>
+<p class="text-label-sm text-on-surface-variant">Visual Consistency Audit</p>
+</div>
+</div>
+<div class="flex items-center gap-xl">
+<div class="text-right hidden sm:block">
+<p class="text-label-sm text-on-surface-variant">Oct 19, 2023</p>
+</div>
+<div class="px-md py-xs bg-primary/10 text-primary border border-primary/20 rounded-full text-label-sm font-bold">88</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Projects Overview -->
+<div class="lg:col-span-5 flex flex-col gap-gutter">
+<div class="bg-surface border border-outline-variant rounded-xl flex-1 flex flex-col">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface-container-low">
+<h3 class="font-headline-md text-[18px] text-on-surface">Top Projects</h3>
+<a class="text-primary text-label-md hover:underline flex items-center gap-xs" href="#">
+                                View all
+                                <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<div class="p-lg grid grid-cols-1 gap-md">
+<!-- Project Card 1 -->
+<div class="flex items-center p-md bg-surface-container-high rounded-xl border border-outline-variant hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-16 h-12 rounded-lg overflow-hidden mr-md border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="Abstract 3D digital art piece with flowing iridescent ribbons in deep navy and silver. The composition is sleek and professional, suggesting data flow and connectivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLtMxI0PkAFszyACiBc6GBH9mr6jG7VzHqK1MoHe8vf55TfHgbXV-GAhcQb1uMxG8p-9gGIHqiEEzsE5583SuwIz_I_YCMaVeX5x6zLp8fkBWiAhabvUu2CEBDFRY2NJ7bVpmNs8OLUlaG0pG-Hj9iiwKcG6qxicXSiqGSWNAPr8Zr4sJjSpxwHBEylMHZRGdbf0bELB-dYM-rjBl3Q1fPAbDBf3dp543fw_oN9YyfHh6hQlspqJaqc6kIWPKFgJ2pozp_sGEF13I"/>
+</div>
+<div class="flex-1">
+<h5 class="text-label-md font-bold text-on-surface">Main Dashboard</h5>
+<p class="text-label-sm text-on-surface-variant">4 analyses</p>
+</div>
+<div class="text-primary font-bold">89</div>
+</div>
+<!-- Project Card 2 -->
+<div class="flex items-center p-md bg-surface-container-high rounded-xl border border-outline-variant hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-16 h-12 rounded-lg overflow-hidden mr-md border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A close-up of a high-end smartphone screen displaying a sophisticated weather app with glassmorphism elements. The color palette is dark navy and translucent gray." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrIji3YSlao7VS6hJ9AhACWtHBIBTwT1DsXxvPKgt9Lp1OHsIjM0Gva_vC2a94j6PyXV-An_fPcFmsowFF6FJ3xzitOO3H_zlR9fo0fLuWb-Be0a6PwkUpG2eLNk3Kha_4HuGNGlcAnA0U42-9_wlT6SdoSpATk1ijLOei2s3j8-vKXH2SLDqdQMeToUFb_aWXuzZU0PX6qEaMZAAld5Nc99MZwl3McfCAd_EeSGxX5-_qQvFFx9eBkPLWFGNnJIwKA2hN7YBvogs"/>
+</div>
+<div class="flex-1">
+<h5 class="text-label-md font-bold text-on-surface">Mobile App V3</h5>
+<p class="text-label-sm text-on-surface-variant">12 analyses</p>
+</div>
+<div class="text-primary font-bold">94</div>
+</div>
+<!-- Project Card 3 -->
+<div class="flex items-center p-md bg-surface-container-high rounded-xl border border-outline-variant hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-16 h-12 rounded-lg overflow-hidden mr-md border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A minimalist architectural render of a glass-walled office building at twilight. The interior lights cast a warm glow against the cool navy blue exterior. The aesthetic is clean and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQbMwrXiqe12GD7nDSb8Fp_cSKNWM-9Jn-Si60CW2EdIoE2i6j6fowL5vKrq-2noIRag273ldlLhmdyBjA6xcp-tbwDgZtqCl6bB5ak4UFXkAlC3NGnlf584j6OhHAoW_XYHeHCLgUEe6d-CBP3URdFmS_GRfZEj8VSJET40pb_scBImza9pITCmlD5H2CxyhLNKxVcs7HmY-5GMEmv_0mO3PsjnVrrWG2Zi6EDbYjf-giZZ-ZdksMqwjHPP00iu_c-TMExspgYkg"/>
+</div>
+<div class="flex-1">
+<h5 class="text-label-md font-bold text-on-surface">Portfolio Site</h5>
+<p class="text-label-sm text-on-surface-variant">2 analyses</p>
+</div>
+<div class="text-tertiary font-bold">72</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating AI Prompt (Contextual) -->
+<div class="fixed bottom-lg right-lg z-50">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group relative" id="ai-assistant-btn">
+<span class="material-symbols-outlined text-[28px]">auto_awesome</span>
+<div class="absolute -top-12 right-0 bg-surface-container-highest text-on-surface px-md py-sm rounded-xl text-label-sm border border-outline-variant opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+                Analyze current view
+            </div>
+</button>
+</div>
+<!-- Interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Hover effect for cards to simulate "lift"
+            const cards = document.querySelectorAll('.bg-surface.border');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    card.style.borderColor = '#263954';
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.borderColor = '#424750';
+                });
+            });
+
+            // Mobile menu toggle logic could go here
+            // Currently using desktop-first hidden/md:flex logic
+        });
+    </script>
+</body></html>
