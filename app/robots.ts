@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: '*',
-        allow: ['/', '/upload', '/demo'],
+        allow: ['/', '/demo'],
         disallow: ['/report/', '/design-system', '/api/'],
       },
     ],

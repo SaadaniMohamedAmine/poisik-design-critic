@@ -14,6 +14,7 @@ const intlMiddleware = createMiddleware({
 });
 
 const PROTECTED_PATH_RE = /^\/(en|fr)\/(dashboard|settings|projects)(\/|$)/;
+const RETIRED_PATH_RE = /^\/(en|fr)\/(upload|history)(\/|$)/;
 
 export default async function middleware(request: NextRequest) {
   if (PROTECTED_PATH_RE.test(request.nextUrl.pathname)) {
@@ -23,6 +24,11 @@ export default async function middleware(request: NextRequest) {
       const signInUrl = new URL(`/${locale}/sign-in`, request.url);
       return NextResponse.redirect(signInUrl);
     }
+  }
+
+  if (RETIRED_PATH_RE.test(request.nextUrl.pathname)) {
+    const locale = request.nextUrl.pathname.startsWith('/fr') ? 'fr' : 'en';
+    return NextResponse.redirect(new URL(`/${locale}/dashboard`, request.url));
   }
 
   const sessionId = request.cookies.get(SESSION_COOKIE)?.value;

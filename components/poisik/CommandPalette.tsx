@@ -7,8 +7,8 @@ import { Search, Upload, History, DollarSign, Eye, Languages } from 'lucide-reac
 import { cn } from '@/lib/utils';
 
 const ACTIONS = [
-  { id: 'upload', label: 'New analysis', icon: Upload, href: '/upload' },
-  { id: 'history', label: 'Go to History', icon: History, href: '/history' },
+  { id: 'upload', label: 'New analysis', icon: Upload, href: '/projects/new-analysis' },
+  { id: 'history', label: 'Go to Projects', icon: History, href: '/projects' },
   { id: 'pricing', label: 'Go to Pricing', icon: DollarSign, href: '/pricing' },
   { id: 'demo', label: 'Go to Demo', icon: Eye, href: '/demo' },
 ];

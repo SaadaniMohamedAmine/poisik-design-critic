@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { PoisikLogo } from '@/components/poisik';
 import { Button } from '@/components/ui/button';
@@ -10,13 +11,9 @@ const PLANS = [
     name: 'Free',
     price: '0',
     description: 'For quick design checks',
-    features: [
-      '5 analyses/month',
-      'PDF Export with watermark',
-      'Basic analysis',
-    ],
+    features: ['5 analyses/month', 'PDF Export with watermark', 'Basic analysis'],
     cta: 'Get Started',
-    href: '/upload',
+    href: '/sign-up',
   },
   {
     name: 'Pro',
@@ -61,7 +58,7 @@ export default function PricingPage() {
       });
       const data = await res.json();
       if (data.url) {
-        window.location.href = data.url;
+        window.location.assign(data.url);
       }
     } catch {
       console.error('Checkout failed');
@@ -78,9 +75,7 @@ export default function PricingPage() {
 
       <main className="mx-auto max-w-6xl px-margin pt-32 pb-xxl">
         <div className="mb-xl text-center">
-          <h1 className="mb-md text-headline-lg font-semibold text-text-primary">
-            Pricing
-          </h1>
+          <h1 className="mb-md text-headline-lg font-semibold text-text-primary">Pricing</h1>
           <p className="text-body-md text-text-secondary">
             Choose the plan that fits your workflow
           </p>
@@ -91,9 +86,7 @@ export default function PricingPage() {
             <div
               key={plan.name}
               className={`relative rounded-xl border p-xl ${
-                plan.popular
-                  ? 'border-accent-signal bg-surface'
-                  : 'border-border bg-surface'
+                plan.popular ? 'border-accent-signal bg-surface' : 'border-border bg-surface'
               }`}
             >
               {plan.popular && (
@@ -102,16 +95,10 @@ export default function PricingPage() {
                 </span>
               )}
               <div className="mb-lg">
-                <h2 className="text-headline-md font-semibold text-text-primary">
-                  {plan.name}
-                </h2>
-                <p className="mt-1 text-label-md text-text-secondary">
-                  {plan.description}
-                </p>
+                <h2 className="text-headline-md font-semibold text-text-primary">{plan.name}</h2>
+                <p className="mt-1 text-label-md text-text-secondary">{plan.description}</p>
                 <div className="mt-md flex items-baseline gap-1">
-                  <span className="text-[48px] font-bold text-text-primary">
-                    ${plan.price}
-                  </span>
+                  <span className="text-[48px] font-bold text-text-primary">${plan.price}</span>
                   <span className="text-label-md text-text-muted">/month</span>
                 </div>
               </div>
@@ -119,13 +106,11 @@ export default function PricingPage() {
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-center gap-md">
                     <Check className="size-4 flex-shrink-0 text-accent-signal" />
-                    <span className="text-body-md text-text-secondary">
-                      {feature}
-                    </span>
+                    <span className="text-body-md text-text-secondary">{feature}</span>
                   </li>
                 ))}
               </ul>
-              {(plan.popular || plan.team) ? (
+              {plan.popular || plan.team ? (
                 <Button
                   className="w-full"
                   variant={plan.popular ? 'default' : 'secondary'}
@@ -135,12 +120,12 @@ export default function PricingPage() {
                   {loading === plan.name.toLowerCase() ? 'Loading...' : plan.cta}
                 </Button>
               ) : (
-                <a
-                  href={plan.href}
+                <Link
+                  href={plan.href ?? '/sign-up'}
                   className="inline-flex w-full items-center justify-center rounded-lg border border-border bg-background px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-all hover:bg-muted hover:text-foreground"
                 >
                   {plan.cta}
-                </a>
+                </Link>
               )}
             </div>
           ))}

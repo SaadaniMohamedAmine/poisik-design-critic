@@ -58,18 +58,18 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
         <div className="flex items-center gap-xl">
           <PoisikLogo size="md" />
           <div className="hidden items-center gap-lg md:flex">
-            <a
-              href="/upload"
+            <Link
+              href="/projects/new-analysis"
               className="border-b-2 border-accent-signal pb-1 text-label-md font-medium text-accent-signal"
             >
               Analyze
-            </a>
-            <a
-              href="/history"
+            </Link>
+            <Link
+              href="/projects"
               className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
             >
-              History
-            </a>
+              Projects
+            </Link>
           </div>
         </div>
         <div className="flex items-center gap-md">
@@ -129,9 +129,7 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
                 } else {
                   text = `${result.overall_score} — ${benchmark.name} (${benchmark.score}) is ${diff} pts ahead`;
                 }
-                return (
-                  <p className="mt-2 text-label-sm text-text-muted">{text}</p>
-                );
+                return <p className="mt-2 text-label-sm text-text-muted">{text}</p>;
               })()}
             </div>
 
@@ -210,19 +208,31 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
                             <div className="flex items-center gap-lg">
                               <div className="flex items-center gap-md">
                                 <span className="text-label-sm text-text-muted">Before</span>
-                                <div className="size-8 rounded border border-border" style={{ backgroundColor: issue.code_fix.before }} />
-                                <code className="text-label-sm text-text-secondary">{issue.code_fix.before}</code>
+                                <div
+                                  className="size-8 rounded border border-border"
+                                  style={{ backgroundColor: issue.code_fix.before }}
+                                />
+                                <code className="text-label-sm text-text-secondary">
+                                  {issue.code_fix.before}
+                                </code>
                               </div>
                               <span className="text-text-muted">&rarr;</span>
                               <div className="flex items-center gap-md">
                                 <span className="text-label-sm text-text-muted">After</span>
-                                <div className="size-8 rounded border border-border" style={{ backgroundColor: issue.code_fix.after }} />
-                                <code className="text-label-sm text-accent-signal">{issue.code_fix.after}</code>
+                                <div
+                                  className="size-8 rounded border border-border"
+                                  style={{ backgroundColor: issue.code_fix.after }}
+                                />
+                                <code className="text-label-sm text-accent-signal">
+                                  {issue.code_fix.after}
+                                </code>
                               </div>
                             </div>
                           )}
                           <div className="relative rounded-lg border border-border bg-bg-base p-md">
-                            <pre className="overflow-x-auto text-label-sm text-text-primary"><code>{issue.code_fix.snippet}</code></pre>
+                            <pre className="overflow-x-auto text-label-sm text-text-primary">
+                              <code>{issue.code_fix.snippet}</code>
+                            </pre>
                             <button
                               onClick={async () => {
                                 await navigator.clipboard.writeText(issue.code_fix.snippet);
@@ -231,7 +241,11 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
                               }}
                               className="absolute top-md right-md rounded bg-surface px-2 py-1 text-label-sm text-text-secondary transition-colors hover:text-accent-signal"
                             >
-                              {copiedFix === issue.id ? <Check className="size-4 text-accent-signal" /> : <Copy className="size-4" />}
+                              {copiedFix === issue.id ? (
+                                <Check className="size-4 text-accent-signal" />
+                              ) : (
+                                <Copy className="size-4" />
+                              )}
                             </button>
                           </div>
                         </div>
@@ -264,12 +278,12 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
                   Poisik
                 </Link>
               </p>
-              <a
-                href="/upload"
+              <Link
+                href="/projects/new-analysis"
                 className="text-label-md font-medium text-accent-signal hover:underline"
               >
                 Duplicate this analysis
-              </a>
+              </Link>
             </footer>
           )}
         </aside>

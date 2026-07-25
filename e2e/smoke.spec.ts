@@ -7,10 +7,10 @@ test.describe('Poisik E2E', () => {
     await expect(page.getByRole('heading', { name: /Design and Passion/i })).toBeVisible();
   });
 
-  test('upload page loads', async ({ page }) => {
+  test('retired /upload path redirects away', async ({ page }) => {
     await page.goto('/en/upload');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByRole('heading', { name: /Analyze Interface/i })).toBeVisible();
+    await expect(page).not.toHaveURL(/\/en\/upload$/);
   });
 
   test('demo page loads', async ({ page }) => {
@@ -40,9 +40,9 @@ test.describe('Poisik E2E', () => {
     await expect(page.getByRole('heading', { name: /Design et passion/i })).toBeVisible();
   });
 
-  test('history page empty state', async ({ page }) => {
+  test('retired /history path redirects away', async ({ page }) => {
     await page.goto('/en/history');
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText(/No analyses yet/i)).toBeVisible();
+    await expect(page).not.toHaveURL(/\/en\/history$/);
   });
 });

@@ -107,7 +107,7 @@ export default function LandingPage() {
               </p>
               <div className="mb-xxl flex flex-col items-center justify-center gap-md sm:flex-row">
                 <Link
-                  href="/upload"
+                  href="/sign-up"
                   className="rounded bg-accent-signal px-xl py-md text-body-md font-bold text-white transition-transform hover:scale-105"
                 >
                   {t('cta')}
