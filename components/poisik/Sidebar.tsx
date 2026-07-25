@@ -19,7 +19,7 @@ export function Sidebar({ usage }: SidebarProps) {
     <aside className="fixed top-20 bottom-0 left-0 hidden w-64 flex-col justify-between border-r border-border bg-surface px-md py-lg lg:flex">
       <div>
         <Link
-          href="/projects"
+          href="/projects/new-analysis"
           className="mb-lg flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal px-md py-md font-bold text-white transition-opacity hover:opacity-90"
         >
           <Plus className="size-4" strokeWidth={1.5} />

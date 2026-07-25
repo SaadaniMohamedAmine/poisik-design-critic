@@ -13,7 +13,7 @@ const intlMiddleware = createMiddleware({
   localePrefix: 'always',
 });
 
-const PROTECTED_PATH_RE = /^\/(en|fr)\/(dashboard|settings)(\/|$)/;
+const PROTECTED_PATH_RE = /^\/(en|fr)\/(dashboard|settings|projects)(\/|$)/;
 
 export default async function middleware(request: NextRequest) {
   if (PROTECTED_PATH_RE.test(request.nextUrl.pathname)) {
