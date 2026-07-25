@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { JsonLd } from '@/components/poisik/JsonLd';
 import { CommandPalette } from '@/components/poisik/CommandPalette';
@@ -59,7 +60,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <JsonLd />
         <CommandPalette />
-        <TooltipProvider>{children}</TooltipProvider>
+        {/* Bare (no pre-fetched session prop) so any page can call useSession() without
+            crashing — AppShell nests its own SessionProvider with a server-fetched
+            session for authenticated pages, avoiding a redundant client-side fetch there. */}
+        <SessionProvider>
+          <TooltipProvider>{children}</TooltipProvider>
+        </SessionProvider>
       </body>
     </html>
   );
