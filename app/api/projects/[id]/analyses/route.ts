@@ -20,12 +20,9 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
   const project = await prisma.project.findFirst({ where: { id, userId } });
   if (!project) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  const plan = (session.user as { plan?: string }).plan ?? 'FREE';
-  const usage = await checkAndIncrementUsage(userId, plan);
-  if (!usage.allowed) {
-    return NextResponse.json({ error: 'MONTHLY_LIMIT_REACHED' }, { status: 402 });
-  }
-
+  // Validate the request BEFORE spending a usage credit — once Phase C makes
+  // checkAndIncrementUsage a real increment, a malformed request must never
+  // consume a monthly credit for work that was never going to happen.
   const { imageUrl, locale, model } = await req.json();
   if (!imageUrl || typeof imageUrl !== 'string') {
     return NextResponse.json({ error: 'Missing imageUrl' }, { status: 400 });
@@ -38,13 +35,27 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
     }
   }
 
-  const result = await runAnalysisPipeline({ imageUrl, locale, model });
+  const plan = (session.user as { plan?: string }).plan ?? 'FREE';
+  const usage = await checkAndIncrementUsage(userId, plan);
+  if (!usage.allowed) {
+    return NextResponse.json({ error: 'MONTHLY_LIMIT_REACHED' }, { status: 402 });
+  }
 
-  const analysis = await prisma.analysis.create({
-    data: { projectId: project.id, imageUrl, result: result as object },
-  });
+  try {
+    const result = await runAnalysisPipeline({ imageUrl, locale, model });
 
-  await prisma.project.update({ where: { id: project.id }, data: { updatedAt: new Date() } });
+    const analysis = await prisma.analysis.create({
+      data: { projectId: project.id, imageUrl, result: result as object },
+    });
 
-  return NextResponse.json(analysis, { status: 201 });
+    await prisma.project.update({ where: { id: project.id }, data: { updatedAt: new Date() } });
+
+    return NextResponse.json(analysis, { status: 201 });
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message
+        : "The analysis didn't come back as expected — try again.";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
