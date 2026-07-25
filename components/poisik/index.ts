@@ -15,3 +15,6 @@ export { Sidebar } from './Sidebar';
 export { UserDropdown } from './UserDropdown';
 export { CreateProjectForm } from './CreateProjectForm';
 export { ComparePicker } from './ComparePicker';
+export { ScoreTrendWidget } from './ScoreTrendWidget';
+export { RecentActivityWidget } from './RecentActivityWidget';
+export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
