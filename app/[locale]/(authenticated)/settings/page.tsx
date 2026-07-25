@@ -46,6 +46,23 @@ export default function SettingsPage() {
         <p className="text-label-sm text-text-muted">
           Plan: {(session?.user as { plan?: string })?.plan ?? 'FREE'}
         </p>
+        {(session?.user as { plan?: string })?.plan &&
+          (session?.user as { plan?: string })?.plan !== 'FREE' && (
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/checkout', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'portal' }),
+                });
+                const data = await res.json();
+                if (data.url) window.location.assign(data.url);
+              }}
+              className="mt-sm rounded-lg border border-border-strong px-lg py-sm text-label-md text-text-primary transition-colors hover:bg-surface-hover"
+            >
+              Manage subscription
+            </button>
+          )}
       </section>
 
       <section className="space-y-md rounded-xl border border-border bg-surface p-lg">
