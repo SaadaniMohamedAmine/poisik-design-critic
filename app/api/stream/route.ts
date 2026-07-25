@@ -1,9 +1,17 @@
 import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
 import { buildSystemPrompt } from '@/lib/ai/prompt';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
+// No current callers (superseded by the project-scoped analyses flow) —
+// auth-gated so it can't be used to burn AI credits for free.
 export async function POST(req: NextRequest) {
+  const session = await auth();
+  if (!session?.user) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  }
+
   try {
     const { imageBase64, mimeType } = await req.json();
 
