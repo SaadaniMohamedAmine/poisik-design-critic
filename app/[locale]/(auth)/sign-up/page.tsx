@@ -90,7 +90,7 @@ export default function SignUpPage() {
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
+                    className="h-12 w-full rounded-lg border border-border-strong bg-bg-elevated px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                   />
                 </div>
               </div>
@@ -107,7 +107,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
+                    className="h-12 w-full rounded-lg border border-border-strong bg-bg-elevated px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                   />
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function SignUpPage() {
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="h-12 w-full rounded-lg border border-border-strong bg-surface-container-low px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
+                    className="h-12 w-full rounded-lg border border-border-strong bg-bg-elevated px-md pl-12 text-base text-text-primary placeholder:text-text-muted transition-all focus:border-accent-signal focus:outline-none focus:ring-1 focus:ring-accent-signal"
                   />
                 </div>
               </div>
@@ -155,7 +155,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard` })}
-                className="btn-secondary flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent px-md py-sm transition-colors hover:bg-surface-container-low"
+                className="flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 transition-colors hover:bg-surface-hover"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                   <path
@@ -181,7 +181,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   onClick={() => signIn('facebook', { callbackUrl: '/dashboard' })}
-                  className="btn-secondary flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent px-md py-sm transition-colors hover:bg-surface-container-low"
+                  className="flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 transition-colors hover:bg-surface-hover"
                 >
                   <svg className="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
@@ -192,7 +192,7 @@ export default function SignUpPage() {
                 <button
                   type="button"
                   disabled
-                  className="btn-secondary relative flex flex-1 cursor-not-allowed items-center justify-center gap-sm rounded-lg border border-border-strong bg-transparent px-md py-sm opacity-50 transition-colors hover:bg-surface-container-low"
+                  className="relative flex flex-1 cursor-not-allowed items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 opacity-50 transition-colors hover:bg-surface-hover"
                 >
                   <svg
                     className="w-4 h-4 shrink-0 text-[#1877F2]"
