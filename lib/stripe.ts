@@ -22,7 +22,12 @@ export function planForPriceId(priceId: string | null | undefined): 'PRO' | 'ENT
   return null;
 }
 
-export async function createCheckoutSession(plan: string, userId: string, email?: string | null) {
+export async function createCheckoutSession(
+  plan: string,
+  userId: string,
+  email?: string | null,
+  existingCustomerId?: string | null
+) {
   const stripe = getStripe();
   const priceId = PRICE_IDS[plan];
 
@@ -35,7 +40,12 @@ export async function createCheckoutSession(plan: string, userId: string, email?
     payment_method_types: ['card'],
     line_items: [{ price: priceId, quantity: 1 }],
     client_reference_id: userId,
-    customer_email: email ?? undefined,
+    // Reuse the existing Stripe customer if this user already has one — passing
+    // `customer_email` instead would make Stripe mint a second customer record,
+    // orphaning any existing subscription rather than replacing/updating it.
+    ...(existingCustomerId
+      ? { customer: existingCustomerId }
+      : { customer_email: email ?? undefined }),
     success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/dashboard?upgraded=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/pricing?canceled=true`,
   });

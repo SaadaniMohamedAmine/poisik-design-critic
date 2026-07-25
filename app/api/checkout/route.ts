@@ -12,9 +12,9 @@ export async function POST(req: Request) {
 
   try {
     const { action, plan } = await req.json();
+    const user = await prisma.user.findUnique({ where: { id: userId } });
 
     if (action === 'portal') {
-      const user = await prisma.user.findUnique({ where: { id: userId } });
       if (!user?.stripeCustomerId) {
         return NextResponse.json({ error: 'No billing account found.' }, { status: 400 });
       }
@@ -22,7 +22,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ url: portal.url });
     }
 
-    const checkoutSession = await createCheckoutSession(plan, userId, session.user.email);
+    const checkoutSession = await createCheckoutSession(
+      plan,
+      userId,
+      session.user.email,
+      user?.stripeCustomerId
+    );
     return NextResponse.json({ url: checkoutSession.url });
   } catch {
     return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
