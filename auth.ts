@@ -34,6 +34,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.plan = (user as { plan?: string }).plan ?? 'FREE';
+        token.planRefreshedAt = Date.now();
+        return token;
+      }
+
+      // The JWT's `plan` claim is only set at sign-in above — without this,
+      // it would never reflect a plan change a Stripe webhook makes later
+      // (checkout, cancellation, etc.), so a paying user would see no change
+      // anywhere until they signed out and back in. Re-read from the DB at
+      // most once a minute rather than on every request, to bound the cost.
+      const refreshedAt = (token.planRefreshedAt as number | undefined) ?? 0;
+      if (Date.now() - refreshedAt > 60_000 && token.id) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { plan: true },
+        });
+        if (dbUser) {
+          token.plan = dbUser.plan;
+          token.planRefreshedAt = Date.now();
+        }
       }
       return token;
     },

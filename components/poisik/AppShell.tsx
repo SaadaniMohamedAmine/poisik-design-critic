@@ -1,5 +1,4 @@
 import { getLocale } from 'next-intl/server';
-import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
 import { getCurrentUsage } from '@/lib/usage';
@@ -19,14 +18,12 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
   const usage = { ...(await getCurrentUsage(session.user.id as string, plan)), plan };
 
   return (
-    <SessionProvider session={session}>
-      <div className="min-h-screen bg-bg-base">
-        <TopBarAuth userName={session.user.name} userImage={session.user.image} />
-        <div className="flex pt-20">
-          <Sidebar usage={usage} />
-          <main className="flex-1 p-xl lg:ml-64">{children}</main>
-        </div>
+    <div className="min-h-screen bg-bg-base">
+      <TopBarAuth userName={session.user.name} userImage={session.user.image} />
+      <div className="flex pt-20">
+        <Sidebar usage={usage} />
+        <main className="flex-1 p-xl lg:ml-64">{children}</main>
       </div>
-    </SessionProvider>
+    </div>
   );
 }

@@ -6,11 +6,19 @@ function currentPeriodStart(): Date {
   return new Date(now.getFullYear(), now.getMonth(), 1);
 }
 
+// `PLAN_LIMITS.PRO`/`.ENTERPRISE` are `null` (meaning "unlimited"), not absent —
+// a `??` fallback would treat that `null` as "missing" and collapse it to the
+// FREE limit, which is exactly backwards. Only fall back to FREE when the plan
+// string itself isn't a recognized key.
+function resolvePlanLimit(plan: string): number | null {
+  return plan in PLAN_LIMITS ? PLAN_LIMITS[plan as keyof typeof PLAN_LIMITS] : PLAN_LIMITS.FREE;
+}
+
 export async function checkAndIncrementUsage(
   userId: string,
   plan: string
 ): Promise<{ allowed: boolean; remaining: number | null }> {
-  const limit = PLAN_LIMITS[(plan as keyof typeof PLAN_LIMITS) ?? 'FREE'] ?? PLAN_LIMITS.FREE;
+  const limit = resolvePlanLimit(plan);
   const periodStart = currentPeriodStart();
 
   if (limit === null) {
@@ -44,7 +52,7 @@ export async function getCurrentUsage(
   userId: string,
   plan: string
 ): Promise<{ remaining: number | null; limit: number | null }> {
-  const limit = PLAN_LIMITS[(plan as keyof typeof PLAN_LIMITS) ?? 'FREE'] ?? PLAN_LIMITS.FREE;
+  const limit = resolvePlanLimit(plan);
   if (limit === null) return { remaining: null, limit: null };
 
   const record = await prisma.usageRecord.findUnique({
