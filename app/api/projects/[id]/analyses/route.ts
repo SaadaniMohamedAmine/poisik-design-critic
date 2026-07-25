@@ -23,7 +23,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
   // Validate the request BEFORE spending a usage credit — once Phase C makes
   // checkAndIncrementUsage a real increment, a malformed request must never
   // consume a monthly credit for work that was never going to happen.
-  const { imageUrl, locale, model } = await req.json();
+  const { imageUrl, model } = await req.json();
   if (!imageUrl || typeof imageUrl !== 'string') {
     return NextResponse.json({ error: 'Missing imageUrl' }, { status: 400 });
   }
@@ -42,7 +42,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
   }
 
   try {
-    const result = await runAnalysisPipeline({ imageUrl, locale, model });
+    const result = await runAnalysisPipeline({ imageUrl, model });
 
     const analysis = await prisma.analysis.create({
       data: { projectId: project.id, imageUrl, result: result as object },

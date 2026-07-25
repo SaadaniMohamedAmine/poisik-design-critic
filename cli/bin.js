@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import fs from 'fs';
+import { execSync } from 'child_process';
+
 const API_BASE = process.env.POISIK_API_URL || 'https://poisik-design-critic.vercel.app';
 const API_KEY = process.env.POISIK_API_KEY;
 
@@ -20,7 +23,7 @@ async function main() {
   }
 
   const isUrl = target.startsWith('http://') || target.startsWith('https://');
-  const body = isUrl ? { imageUrl: target } : { imageBase64: require('fs').readFileSync(target, 'base64') };
+  const body = isUrl ? { imageUrl: target } : { imageBase64: fs.readFileSync(target, 'base64') };
 
   try {
     const response = await fetch(`${API_BASE}/api/v1/analyze`, {
@@ -53,12 +56,11 @@ async function main() {
     }
 
     if (flags.includes('--open')) {
-      const open = require('child_process').execSync;
       const platform = process.platform;
       const url = `${API_BASE}/en/report/demo`;
-      if (platform === 'darwin') open(`open ${url}`);
-      else if (platform === 'win32') open(`start ${url}`);
-      else open(`xdg-open ${url}`);
+      if (platform === 'darwin') execSync(`open ${url}`);
+      else if (platform === 'win32') execSync(`start ${url}`);
+      else execSync(`xdg-open ${url}`);
     }
   } catch (err) {
     console.error('Error:', err.message);

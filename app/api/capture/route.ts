@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { chromium } from 'playwright';
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,13 +16,12 @@ export async function POST(req: NextRequest) {
     } catch {
       return NextResponse.json({ error: 'Invalid URL format' }, { status: 400 });
     }
-
-    const { chromium } = require('playwright');
     const browser = await chromium.launch({ headless: true });
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
     await page.goto(url, { waitUntil: 'networkidle', timeout: 15000 });
-    const base64 = await page.screenshot({ encoding: 'base64', type: 'png' });
+    const buffer = await page.screenshot({ type: 'png' });
+    const base64 = buffer.toString('base64');
     await browser.close();
 
     return NextResponse.json({ base64, mimeType: 'image/png' });

@@ -5,11 +5,10 @@ import { checkContrast } from '@/lib/ai/wcag';
 
 interface RunAnalysisParams {
   imageUrl: string;
-  locale?: string;
   model?: string;
 }
 
-export async function runAnalysisPipeline({ imageUrl, locale, model }: RunAnalysisParams) {
+export async function runAnalysisPipeline({ imageUrl, model }: RunAnalysisParams) {
   const response = await fetch(imageUrl);
   if (!response.ok) {
     throw new Error('Failed to fetch image from URL');
@@ -27,7 +26,6 @@ export async function runAnalysisPipeline({ imageUrl, locale, model }: RunAnalys
   const analysis = await analyzeImage({
     imageBase64: base64,
     mimeType,
-    locale,
     model: model as Parameters<typeof analyzeImage>[0]['model'],
   });
 

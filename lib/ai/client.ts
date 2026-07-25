@@ -10,15 +10,10 @@ type AiProvider = 'groq' | 'gemini';
 interface AnalyzeOptions {
   imageBase64: string;
   mimeType: string;
-  locale?: string;
   model?: AiProvider;
 }
 
-async function analyzeWithGroq(
-  imageBase64: string,
-  mimeType: string,
-  locale: string
-): Promise<unknown> {
+async function analyzeWithGroq(imageBase64: string, mimeType: string): Promise<unknown> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error('GROQ_API_KEY is not set');
 
@@ -33,7 +28,7 @@ async function analyzeWithGroq(
       messages: [
         {
           role: 'system',
-          content: buildSystemPrompt(locale),
+          content: buildSystemPrompt(),
         },
         {
           role: 'user',
@@ -66,11 +61,7 @@ async function analyzeWithGroq(
   return JSON.parse(data.choices?.[0]?.message?.content || '{}');
 }
 
-async function analyzeWithGemini(
-  imageBase64: string,
-  mimeType: string,
-  locale: string
-): Promise<unknown> {
+async function analyzeWithGemini(imageBase64: string, mimeType: string): Promise<unknown> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 
@@ -89,7 +80,7 @@ async function analyzeWithGemini(
               },
             },
             {
-              text: buildSystemPrompt(locale),
+              text: buildSystemPrompt(),
             },
             {
               text: 'Analyze this UI screenshot and provide a detailed design critique. Respond with valid JSON only.',
@@ -116,16 +107,16 @@ async function analyzeWithGemini(
 }
 
 export async function analyzeImage(options: AnalyzeOptions): Promise<AnalysisResult> {
-  const { imageBase64, mimeType, locale = 'en', model = 'groq' } = options;
+  const { imageBase64, mimeType, model = 'groq' } = options;
 
   const providers: { name: AiProvider; fn: () => Promise<unknown> }[] = [
     {
       name: 'groq',
-      fn: () => analyzeWithGroq(imageBase64, mimeType, locale),
+      fn: () => analyzeWithGroq(imageBase64, mimeType),
     },
     {
       name: 'gemini',
-      fn: () => analyzeWithGemini(imageBase64, mimeType, locale),
+      fn: () => analyzeWithGemini(imageBase64, mimeType),
     },
   ];
 

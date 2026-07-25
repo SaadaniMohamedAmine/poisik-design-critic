@@ -3,13 +3,13 @@ import { runAnalysisPipeline } from '@/lib/ai/run-analysis';
 
 export async function POST(req: NextRequest) {
   try {
-    const { imageUrl, locale, model } = await req.json();
+    const { imageUrl, model } = await req.json();
 
     if (!imageUrl || typeof imageUrl !== 'string') {
       return NextResponse.json({ error: 'Missing imageUrl' }, { status: 400 });
     }
 
-    const result = await runAnalysisPipeline({ imageUrl, locale, model });
+    const result = await runAnalysisPipeline({ imageUrl, model });
     return NextResponse.json(result);
   } catch (error) {
     const message =

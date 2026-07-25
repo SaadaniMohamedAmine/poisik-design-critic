@@ -5,7 +5,7 @@ const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 export async function POST(req: NextRequest) {
   try {
-    const { imageBase64, mimeType, locale } = await req.json();
+    const { imageBase64, mimeType } = await req.json();
 
     const apiKey = process.env.GROQ_API_KEY;
     if (!apiKey) {
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const systemPrompt = buildSystemPrompt(locale || 'en');
+    const systemPrompt = buildSystemPrompt();
 
     const narrationPrompt = `Analyze this UI screenshot. First, provide a short running commentary (2-3 sentences) of what you're observing as you scan the design. Then provide the full structured JSON analysis.`;
 
@@ -73,7 +73,9 @@ export async function POST(req: NextRequest) {
                 const parsed = JSON.parse(data);
                 const content = parsed.choices?.[0]?.delta?.content;
                 if (content) {
-                  controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: content })}\n\n`));
+                  controller.enqueue(
+                    encoder.encode(`data: ${JSON.stringify({ text: content })}\n\n`)
+                  );
                 }
               } catch {
                 // skip unparseable chunks

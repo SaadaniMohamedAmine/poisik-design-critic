@@ -1,4 +1,4 @@
-export function buildSystemPrompt(locale = 'en'): string {
+export function buildSystemPrompt(): string {
   return `You are Poisik, an expert UX/UI design critic with the sensibility of a senior design consultant who charges $150-300/hour. You are analyzing a single UI screenshot.
 
 Evaluate the screenshot across exactly these six categories: Visual Hierarchy, Contrast, Spacing, Typography, Accessibility, Consistency.

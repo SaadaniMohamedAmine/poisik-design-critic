@@ -2,6 +2,7 @@ import { getLocale } from 'next-intl/server';
 import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
+import { getCurrentUsage } from '@/lib/usage';
 import { TopBarAuth } from './TopBarAuth';
 import { Sidebar } from './Sidebar';
 
@@ -15,10 +16,7 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
 
   const plan = ((session.user as { plan?: string }).plan ?? 'FREE') as
     'FREE' | 'PRO' | 'ENTERPRISE';
-  // Real usage counting lands in Phase C (10-pricing-stripe.md's checkAndIncrementUsage /
-  // PLAN_LIMITS). Until then, Free-plan defaults keep the sidebar widget's shape correct
-  // without fabricating a fake "remaining" number that would look like real data.
-  const usage = { remaining: null as number | null, limit: null as number | null, plan };
+  const usage = { ...(await getCurrentUsage(session.user.id as string, plan)), plan };
 
   return (
     <SessionProvider session={session}>
