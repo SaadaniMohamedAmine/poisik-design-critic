@@ -1,21 +1,30 @@
 import { NextResponse } from 'next/server';
+import { auth } from '@/auth';
+import { prisma } from '@/lib/prisma';
 import { createCheckoutSession, createCustomerPortalUrl } from '@/lib/stripe';
 
 export async function POST(req: Request) {
-  try {
-    const { action, customerId, email, plan } = await req.json();
+  const session = await auth();
+  if (!session?.user) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const userId = (session.user as { id: string }).id;
 
-    if (action === 'portal' && customerId) {
-      const portal = await createCustomerPortalUrl(customerId);
+  try {
+    const { action, plan } = await req.json();
+
+    if (action === 'portal') {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      if (!user?.stripeCustomerId) {
+        return NextResponse.json({ error: 'No billing account found.' }, { status: 400 });
+      }
+      const portal = await createCustomerPortalUrl(user.stripeCustomerId);
       return NextResponse.json({ url: portal.url });
     }
 
-    const session = await createCheckoutSession(plan, email);
-    return NextResponse.json({ url: session.url });
+    const checkoutSession = await createCheckoutSession(plan, userId, session.user.email);
+    return NextResponse.json({ url: checkoutSession.url });
   } catch {
-    return NextResponse.json(
-      { error: 'Something went wrong' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Something went wrong' }, { status: 500 });
   }
 }
