@@ -1,7 +1,14 @@
 #!/usr/bin/env node
 
-import fs from 'fs';
-import { execSync } from 'child_process';
+// This file runs on end users' own machines via the `poisik` bin entry point
+// (cli/package.json), on whatever Node version they happen to have — no
+// "type": "module" is declared anywhere, so top-level `import` isn't safe here
+// (it depends on Node's auto-detection, default-on only from Node 20.19/22.7+).
+// Use require() so this works on any Node version the shebang can run.
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- see note above
+const fs = require('fs');
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- see note above
+const { execSync } = require('child_process');
 
 const API_BASE = process.env.POISIK_API_URL || 'https://poisik-design-critic.vercel.app';
 const API_KEY = process.env.POISIK_API_KEY;
