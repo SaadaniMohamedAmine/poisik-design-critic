@@ -32,7 +32,12 @@ const DEMO_RESULT: AnalysisResult = {
       description:
         "The 'Submit' button has insufficient internal spacing, leading to a low tap target quality for mobile users.",
       recommendation: 'Add minimum 16px horizontal and 12px vertical padding.',
-      code_fix: { language: 'css', snippet: 'padding: 12px 16px;', before: 'padding: 4px 8px', after: 'padding: 12px 16px' },
+      code_fix: {
+        language: 'css',
+        snippet: 'padding: 12px 16px;',
+        before: 'padding: 4px 8px',
+        after: 'padding: 12px 16px',
+      },
       location: { x: 25, y: 35 },
     },
     {
@@ -43,7 +48,12 @@ const DEMO_RESULT: AnalysisResult = {
       description:
         'Icons in the navigation bar use varying stroke widths, breaking visual consistency.',
       recommendation: 'Standardize all icons to a 1.5px stroke weight across the interface.',
-      code_fix: { language: 'tailwind', snippet: 'stroke-[1.5px]', before: 'mixed stroke widths', after: '1.5px stroke' },
+      code_fix: {
+        language: 'tailwind',
+        snippet: 'stroke-[1.5px]',
+        before: 'mixed stroke widths',
+        after: '1.5px stroke',
+      },
       location: { x: 20, y: 15 },
     },
   ],
@@ -51,8 +61,8 @@ const DEMO_RESULT: AnalysisResult = {
 
 export default function DemoPage() {
   return (
-    <div className="min-h-screen bg-bg-base">
+    <main className="pt-20">
       <ReportView result={DEMO_RESULT} isReadOnly />
-    </div>
+    </main>
   );
 }

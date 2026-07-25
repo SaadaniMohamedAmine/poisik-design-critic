@@ -24,7 +24,7 @@ async function analyzeWithGroq(imageBase64: string, mimeType: string): Promise<u
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.2-90b-vision-preview',
+      model: 'qwen/qwen3.6-27b',
       messages: [
         {
           role: 'system',

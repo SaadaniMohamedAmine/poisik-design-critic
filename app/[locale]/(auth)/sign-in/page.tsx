@@ -1,11 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
 import { useLocale } from 'next-intl';
-import { HelpCircle, Mail, Lock } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
 
@@ -44,7 +43,7 @@ export default function SignInPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-bg-base text-text-primary antialiased">
+    <>
       <div className="pointer-events-none fixed inset-0">
         <div
           ref={glowRef}
@@ -52,15 +51,6 @@ export default function SignInPage() {
           style={{ animation: 'pulse-glow 4s ease-in-out infinite' }}
         />
       </div>
-
-      <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center justify-between border-b border-border bg-bg-base px-margin">
-        <Link href="/" className="text-headline-md font-bold tracking-tighter text-text-primary">
-          poisik
-        </Link>
-        <button className="p-sm text-text-secondary transition-colors hover:text-accent-signal">
-          <HelpCircle className="size-5" />
-        </button>
-      </header>
 
       <main className="relative flex min-h-screen items-center justify-center px-margin pt-20">
         <div className="w-full max-w-[440px] rounded-xl border border-border bg-surface p-xl shadow-2xl transition-colors hover:border-border-strong">
@@ -182,43 +172,6 @@ export default function SignInPage() {
         </div>
       </main>
 
-      <footer className="w-full mt-xxl border-t border-border bg-surface-container-low py-xl px-margin">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-lg md:flex-row">
-          <Link href="/" className="text-headline-md font-bold lowercase text-text-primary">
-            poisik
-          </Link>
-          <div className="flex flex-wrap justify-center gap-lg">
-            <a
-              href="#"
-              className="text-label-md text-text-secondary hover:text-accent-signal transition-colors duration-200"
-            >
-              Privacy Policy
-            </a>
-            <a
-              href="#"
-              className="text-label-md text-text-secondary hover:text-accent-signal transition-colors duration-200"
-            >
-              Terms of Service
-            </a>
-            <a
-              href="#"
-              className="text-label-md text-text-secondary hover:text-accent-signal transition-colors duration-200"
-            >
-              Documentation
-            </a>
-            <a
-              href="#"
-              className="text-label-md text-text-secondary hover:text-accent-signal transition-colors duration-200"
-            >
-              Support
-            </a>
-          </div>
-          <p className="text-label-md text-text-secondary opacity-80">
-            © 2024 Poisik AI. All rights reserved.
-          </p>
-        </div>
-      </footer>
-
       <style jsx>{`
         @keyframes pulse-glow {
           0%,
@@ -230,6 +183,6 @@ export default function SignInPage() {
           }
         }
       `}</style>
-    </div>
+    </>
   );
 }

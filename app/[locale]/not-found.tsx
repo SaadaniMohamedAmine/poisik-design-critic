@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { Home, HelpCircle, History, BookOpen, Search } from 'lucide-react';
-import { PoisikLogo, GlitchText } from '@/components/poisik';
+import { GlitchText, MarketingHeader, MarketingFooter } from '@/components/poisik';
 
 export default function LocaleNotFound() {
   const glowRef = useRef<HTMLDivElement>(null);
@@ -22,12 +22,7 @@ export default function LocaleNotFound() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-bg-base text-text-primary antialiased selection:bg-accent-signal/30">
-      <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center justify-between border-b border-border bg-bg-base px-margin">
-        <PoisikLogo size="md" />
-        <button className="p-sm text-text-secondary transition-colors hover:text-accent-signal">
-          <HelpCircle className="size-5" />
-        </button>
-      </header>
+      <MarketingHeader />
 
       <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-margin pt-20">
         <div className="pointer-events-none absolute inset-0">
@@ -95,34 +90,7 @@ export default function LocaleNotFound() {
         </div>
       </main>
 
-      <footer className="mx-auto mt-xxl flex w-full max-w-7xl flex-col items-center justify-between gap-md border-t border-border px-margin py-xl md:flex-row">
-        <div className="flex flex-col items-center gap-xs md:items-start">
-          <span className="text-label-md font-bold text-text-primary">Poisik AI</span>
-          <span className="text-label-sm text-text-secondary">
-            © 2024 Poisik AI. All rights reserved.
-          </span>
-        </div>
-        <div className="flex gap-lg">
-          <a
-            href="#"
-            className="text-label-sm text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Privacy Policy
-          </a>
-          <a
-            href="#"
-            className="text-label-sm text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Terms of Service
-          </a>
-          <a
-            href="#"
-            className="text-label-sm text-text-secondary transition-colors hover:text-text-primary"
-          >
-            Security
-          </a>
-        </div>
-      </footer>
+      <MarketingFooter />
 
       <style jsx>{`
         @keyframes pulse-glow {

@@ -52,7 +52,7 @@ export function CommandPalette() {
       {open && <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />}
       <div
         className={cn(
-          'relative z-10 w-full max-w-lg rounded-xl border border-border-strong bg-surface shadow-2xl transition-all',
+          'relative z-10 w-full max-w-128 rounded-xl border border-border-strong bg-surface shadow-2xl transition-all',
           open ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
         )}
       >

@@ -87,7 +87,7 @@ export function AnalysisLoading({
       </header>
 
       <main className="flex flex-1 items-center justify-center pt-20">
-        <div className="relative w-full max-w-lg px-margin">
+        <div className="relative w-full max-w-128 px-margin">
           <div className="relative overflow-hidden rounded-xl border border-border blur-sm">
             <div className="aspect-[9/16] w-full bg-surface" />
             <div className="absolute inset-0 overflow-hidden">
@@ -98,13 +98,11 @@ export function AnalysisLoading({
           <div className="mt-xl flex flex-col items-center gap-md text-center">
             <div className="size-8 animate-spin rounded-full border-2 border-accent-signal border-t-transparent" />
             {hasStreamed && narration ? (
-              <p className="max-w-md text-body-md text-text-secondary leading-relaxed">
+              <p className="max-w-112 text-body-md text-text-secondary leading-relaxed">
                 {narration}
               </p>
             ) : (
-              <p className="text-body-md text-text-secondary">
-                {FALLBACK_TEXTS[fallbackIndex]}
-              </p>
+              <p className="text-body-md text-text-secondary">{FALLBACK_TEXTS[fallbackIndex]}</p>
             )}
           </div>
         </div>
@@ -112,8 +110,13 @@ export function AnalysisLoading({
 
       <style jsx>{`
         @keyframes scan {
-          0%, 100% { top: 0; }
-          50% { top: 100%; }
+          0%,
+          100% {
+            top: 0;
+          }
+          50% {
+            top: 100%;
+          }
         }
       `}</style>
     </div>

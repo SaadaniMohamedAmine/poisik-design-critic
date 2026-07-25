@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { PoisikLogo, LanguageSwitcher } from '@/components/poisik';
+import { ScrollReveal, ScrollToTopButton } from '@/components/poisik';
 import {
   ArrowRight,
   Upload,
@@ -35,62 +35,9 @@ const FEATURES = [
 
 export default function LandingPage() {
   const t = useTranslations('Landing');
-  const n = useTranslations('Navigation');
 
   return (
-    <div className="min-h-screen bg-bg-base text-text-primary antialiased">
-      <header className="fixed top-0 left-0 z-50 flex h-20 w-full items-center border-b border-border bg-bg-base/80 backdrop-blur-md">
-        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-margin">
-          <div className="flex items-center gap-xl">
-            <PoisikLogo
-              size="md"
-              className="text-display-lg font-black capitalize text-accent-signal"
-            />
-            <nav className="hidden items-center gap-lg md:flex">
-              <a
-                href="#features"
-                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-              >
-                {n('features')}
-              </a>
-              <a
-                href="#beyond-critique"
-                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-              >
-                {n('beyondCritique')}
-              </a>
-              <Link
-                href="/pricing"
-                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-              >
-                {n('pricing')}
-              </Link>
-              <Link
-                href="/demo"
-                className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-              >
-                {n('demo')}
-              </Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-md">
-            <LanguageSwitcher />
-            <Link
-              href="/sign-in"
-              className="hidden text-label-md font-medium text-text-secondary transition-colors hover:text-text-primary md:inline"
-            >
-              {n('signIn')}
-            </Link>
-            <Link
-              href="/sign-up"
-              className="rounded-full bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
-            >
-              {n('signUp')}
-            </Link>
-          </div>
-        </div>
-      </header>
-
+    <>
       <main className="relative pt-20">
         {/* Hero */}
         <section className="relative overflow-hidden pt-xxl pb-xxl text-center">
@@ -108,7 +55,7 @@ export default function LandingPage() {
               <div className="mb-xxl flex flex-col items-center justify-center gap-md sm:flex-row">
                 <Link
                   href="/sign-up"
-                  className="rounded bg-accent-signal px-xl py-md text-body-md font-bold text-white transition-transform hover:scale-105"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded bg-accent-signal px-xl py-md text-body-md font-bold text-white transition-transform hover:scale-105"
                 >
                   {t('cta')}
                 </Link>
@@ -182,18 +129,24 @@ export default function LandingPage() {
             </span>
             <div className="grid grid-cols-1 gap-xxl md:grid-cols-3">
               {PROCESS_STEPS.map((step, index) => (
-                <div key={step.titleKey} className="flex flex-col gap-md">
+                <ScrollReveal
+                  key={step.titleKey}
+                  delay={index * 0.1}
+                  className="flex flex-col gap-md"
+                >
                   <div className="flex items-center gap-md">
                     <span className="text-headline-lg font-bold text-text-primary/20">
                       {String(index + 1).padStart(2, '0')}
                     </span>
-                    <step.icon className="size-6 text-accent-signal" strokeWidth={1.5} />
+                    <div className="flex size-11 items-center justify-center rounded-xl bg-accent-soft-bg shadow-[0_0_20px_-4px_var(--color-accent-glow)]">
+                      <step.icon className="size-5 text-accent-signal" strokeWidth={2} />
+                    </div>
                   </div>
                   <h3 className="text-headline-md font-medium text-text-primary">
                     {t(step.titleKey)}
                   </h3>
                   <p className="text-body-md text-text-secondary">{t(step.descKey)}</p>
-                </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -211,17 +164,18 @@ export default function LandingPage() {
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-gutter md:grid-cols-3">
-              {FEATURES.map((feature) => (
-                <div
-                  key={feature.titleKey}
-                  className="flex flex-col gap-sm rounded-xl border border-border p-lg transition-colors hover:border-border-strong hover:bg-surface-hover"
-                >
-                  <feature.icon className="size-5 text-accent-signal" strokeWidth={1.5} />
-                  <h4 className="text-headline-md font-medium text-text-primary">
-                    {t(feature.titleKey)}
-                  </h4>
-                  <p className="text-body-md text-text-secondary">{t(feature.descKey)}</p>
-                </div>
+              {FEATURES.map((feature, index) => (
+                <ScrollReveal key={feature.titleKey} delay={(index % 3) * 0.1}>
+                  <div className="flex h-full cursor-pointer flex-col gap-sm rounded-xl border border-border p-lg transition-colors hover:border-border-strong hover:bg-surface-hover">
+                    <div className="mb-xs flex size-11 items-center justify-center rounded-xl bg-accent-soft-bg shadow-[0_0_20px_-4px_var(--color-accent-glow)]">
+                      <feature.icon className="size-5 text-accent-signal" strokeWidth={2} />
+                    </div>
+                    <h4 className="text-headline-md font-medium text-text-primary">
+                      {t(feature.titleKey)}
+                    </h4>
+                    <p className="text-body-md text-text-secondary">{t(feature.descKey)}</p>
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -240,7 +194,10 @@ export default function LandingPage() {
             </div>
             <div className="grid grid-cols-1 gap-gutter lg:grid-cols-3">
               {/* Fix it in code */}
-              <div className="overflow-hidden rounded-xl border border-border bg-surface">
+              <ScrollReveal
+                delay={0}
+                className="cursor-pointer overflow-hidden rounded-xl border border-border bg-surface"
+              >
                 <div className="p-lg">
                   <h5 className="mb-sm text-headline-md font-medium text-text-primary">
                     {t('diffCodeTitle')}
@@ -264,10 +221,13 @@ export default function LandingPage() {
 }`}</code>
                   </pre>
                 </div>
-              </div>
+              </ScrollReveal>
 
               {/* Analyze any live URL */}
-              <div className="overflow-hidden rounded-xl border border-border bg-surface">
+              <ScrollReveal
+                delay={0.1}
+                className="cursor-pointer overflow-hidden rounded-xl border border-border bg-surface"
+              >
                 <div className="p-lg">
                   <h5 className="mb-sm text-headline-md font-medium text-text-primary">
                     {t('diffUrlTitle')}
@@ -290,10 +250,13 @@ export default function LandingPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
               {/* See how you compare */}
-              <div className="flex flex-col rounded-xl border border-border bg-surface p-lg">
+              <ScrollReveal
+                delay={0.2}
+                className="flex cursor-pointer flex-col rounded-xl border border-border bg-surface p-lg"
+              >
                 <h5 className="mb-sm text-headline-md font-medium text-text-primary">
                   {t('diffCompareTitle')}
                 </h5>
@@ -320,7 +283,7 @@ export default function LandingPage() {
                     />
                   </div>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </section>
@@ -328,110 +291,25 @@ export default function LandingPage() {
         {/* Final CTA */}
         <section className="relative overflow-hidden py-xxl">
           <div className="mx-auto max-w-7xl px-margin text-center">
-            <div className="relative overflow-hidden rounded-3xl border border-border bg-surface p-xxl">
+            <ScrollReveal className="relative overflow-hidden rounded-3xl border border-border bg-surface p-xxl">
               <h2 className="mb-md text-display-lg font-semibold text-text-primary">
                 {t('finalCtaTitle')}
               </h2>
-              <p className="mx-auto mb-xl max-w-xl text-body-lg text-text-secondary">
+              <p className="mx-auto mb-xl max-w-144 text-body-lg text-text-secondary">
                 {t('finalCtaDesc')}
               </p>
               <Link
                 href="/demo"
-                className="rounded-full bg-accent-signal px-xxl py-md text-body-md font-bold text-white transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md bg-accent-signal px-lg py-md text-body-md font-bold text-white transition-opacity hover:opacity-90 sm:px-xxl"
               >
                 {t('finalCtaButton')}
               </Link>
-            </div>
+            </ScrollReveal>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border bg-bg-elevated py-xl">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-xl px-margin md:grid-cols-4">
-          <div>
-            <span className="mb-sm block text-headline-md font-bold lowercase tracking-tight text-text-primary">
-              poisik
-            </span>
-            <p className="max-w-[220px] text-label-md text-text-secondary">{t('footerTagline')}</p>
-          </div>
-          <div>
-            <h6 className="mb-lg text-label-sm font-bold uppercase tracking-widest text-text-primary">
-              {t('footerProductHeading')}
-            </h6>
-            <ul className="space-y-md text-label-md text-text-secondary">
-              <li>
-                <a href="#features" className="transition-colors hover:text-accent-signal">
-                  {n('features')}
-                </a>
-              </li>
-              <li>
-                <Link href="/demo" className="transition-colors hover:text-accent-signal">
-                  {n('demo')}
-                </Link>
-              </li>
-              <li>
-                <Link href="/pricing" className="transition-colors hover:text-accent-signal">
-                  {t('footerPricingLink')}
-                </Link>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('footerApiDocsLink')}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h6 className="mb-lg text-label-sm font-bold uppercase tracking-widest text-text-primary">
-              {t('footerCompanyHeading')}
-            </h6>
-            <ul className="space-y-md text-label-md text-text-secondary">
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('footerAboutLink')}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('footerBlogLink')}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('footerCareersLink')}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h6 className="mb-lg text-label-sm font-bold uppercase tracking-widest text-text-primary">
-              {t('footerLegalHeading')}
-            </h6>
-            <ul className="space-y-md text-label-md text-text-secondary">
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('privacy')}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('terms')}
-                </a>
-              </li>
-              <li>
-                <a href="#" className="transition-colors hover:text-accent-signal">
-                  {t('footerCookiePolicyLink')}
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="mx-auto mt-xl max-w-7xl border-t border-border px-margin pt-lg">
-          <span className="text-label-sm text-text-secondary opacity-60">
-            {t('footerCopyright')}
-          </span>
-        </div>
-      </footer>
-    </div>
+      <ScrollToTopButton />
+    </>
   );
 }

@@ -13,7 +13,7 @@ export default async function ProjectsPage() {
 
   if (projects.length === 0) {
     return (
-      <div className="mx-auto mt-24 max-w-md text-center">
+      <div className="mx-auto mt-24 max-w-112 text-center">
         <h1 className="mb-sm text-headline-md font-semibold text-text-primary">
           Create your first project
         </h1>
