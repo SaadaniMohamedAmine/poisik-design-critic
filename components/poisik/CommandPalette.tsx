@@ -3,13 +3,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
-import { Search, Upload, History, GitCompare, DollarSign, Eye, Languages } from 'lucide-react';
+import { Search, Upload, History, DollarSign, Eye, Languages } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ACTIONS = [
   { id: 'upload', label: 'New analysis', icon: Upload, href: '/upload' },
   { id: 'history', label: 'Go to History', icon: History, href: '/history' },
-  { id: 'compare', label: 'Go to Compare', icon: GitCompare, href: '/compare' },
   { id: 'pricing', label: 'Go to Pricing', icon: DollarSign, href: '/pricing' },
   { id: 'demo', label: 'Go to Demo', icon: Eye, href: '/demo' },
 ];
@@ -50,9 +49,7 @@ export function CommandPalette() {
         open ? 'visible' : 'invisible'
       )}
     >
-      {open && (
-        <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />
-      )}
+      {open && <div className="fixed inset-0 bg-black/50" onClick={() => setOpen(false)} />}
       <div
         className={cn(
           'relative z-10 w-full max-w-lg rounded-xl border border-border-strong bg-surface shadow-2xl transition-all',

@@ -14,3 +14,4 @@ export { TopBarAuth } from './TopBarAuth';
 export { Sidebar } from './Sidebar';
 export { UserDropdown } from './UserDropdown';
 export { CreateProjectForm } from './CreateProjectForm';
+export { ComparePicker } from './ComparePicker';
