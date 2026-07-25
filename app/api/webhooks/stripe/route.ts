@@ -26,7 +26,13 @@ export async function POST(req: NextRequest) {
       if (userId) {
         const lineItems = await getStripe().checkout.sessions.listLineItems(session.id);
         const priceId = lineItems.data[0]?.price?.id;
-        const plan = planForPriceId(priceId) ?? 'PRO';
+        const resolvedPlan = planForPriceId(priceId);
+        if (!resolvedPlan) {
+          console.error(
+            `Stripe webhook: unrecognized price id "${priceId}" on checkout session ${session.id} — defaulting to PRO. Check STRIPE_PRO_PRICE_ID/STRIPE_TEAM_PRICE_ID configuration.`
+          );
+        }
+        const plan = resolvedPlan ?? 'PRO';
 
         await prisma.user.update({
           where: { id: userId },
