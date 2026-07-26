@@ -1,35 +1,38 @@
 import { notFound } from 'next/navigation';
-import {
-  Plus,
-  GitCompare,
-  AlertTriangle,
-  AlertCircle,
-  Lightbulb,
-  ArrowRight,
-  FolderOpen,
-} from 'lucide-react';
+import { Plus, ArrowRight, FolderOpen, Sparkles } from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { Link } from '@/i18n/navigation';
-import { ProjectHeader, ProjectAnalysesList, ScoreTrendWidget } from '@/components/poisik';
-import type { AnalysisResult } from '@/lib/schemas';
+import {
+  ProjectHeader,
+  ProjectAnalysesList,
+  ProjectScoreTrend,
+  ProjectFooterBar,
+} from '@/components/poisik';
+import type { AnalysisResult, Category } from '@/lib/schemas';
+import { CATEGORY_LABELS } from '@/lib/categories';
 
 function scoreOf(result: unknown): number | undefined {
   return (result as { overall_score?: number } | null)?.overall_score;
 }
 
-// Design reference: design_v2/project_alpha_details (Stitch mockup). Kept
-// the bento layout (score trend + findings side panel) and the analyses
-// list, but dropped everything not backed by real data: there's no
-// per-analysis title or "scan type" in the schema (AI doesn't name audits),
-// so rows are labeled "Audit #N" + the real date instead of inventing names
-// like "V2 Checkout Flow Audit"; the mockup's PASS/FAIL/WARNING badges and
-// colored Key Findings dots are replaced with the monochrome score-tier
-// treatment already used elsewhere (RecentActivityWidget) and icon-shape
-// (not color) differentiation; the "Audit Strategy Optimized — next scan in
-// 14 hours" AI upsell card is dropped entirely — there's no scheduling
-// system behind it. Findings counts are real, computed from the latest
-// analysis's actual issues array.
+// Design reference: design_v2/project_alpha_details (Stitch mockup). After
+// review, matched the mockup as closely as possible per explicit direction
+// — including the colored PASSED/FAIL/WARNING status (ProjectAnalysesList),
+// the colored Key Findings dots below, the bar-chart score trend with
+// 30D/90D range chips (ProjectScoreTrend), and the fixed bottom action bar
+// (ProjectFooterBar) — a deliberate, scoped exception to the monochrome
+// treatment used everywhere else in the app (dashboard, projects, report).
+//
+// Two things were still not reproduced literally, because they cross from
+// "visual style" into "showing the user something false":
+// - No per-analysis title/"scan type" exists in the schema (the AI doesn't
+//   name audits), so rows read "Audit #N" + real date + real issue count
+//   instead of invented names like "V2 Checkout Flow Audit".
+// - The mockup's "Audit Strategy Optimized — next scan in 14 hours" card is
+//   replaced with a real "Priority focus area" callout computed from the
+//   latest analysis's actual category_scores (lowest-scoring category) —
+//   same visual treatment, no fabricated scheduling claim.
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const session = await auth();
@@ -76,9 +79,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
   const latest = analysesDesc[0]!;
 
-  const scoreSeries = analysesAsc.map((a) => ({
+  const scorePoints = analysesAsc.map((a) => ({
+    id: a.id,
     score: scoreOf(a.result) ?? 0,
-    date: a.createdAt.toISOString(),
+    createdAt: a.createdAt.toISOString(),
   }));
 
   const latestResult = latest.result as AnalysisResult | undefined;
@@ -88,86 +92,93 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   });
   const totalIssues = issueCounts.critical + issueCounts.warning + issueCounts.suggestion;
 
-  const analysisItems = analysesDesc.map((a, i) => ({
-    id: a.id,
-    index: analysesDesc.length - i,
-    score: scoreOf(a.result),
-    imageUrl: a.imageUrl,
-    createdAt: a.createdAt,
-  }));
+  const categoryEntries = Object.entries(latestResult?.category_scores ?? {}) as [
+    Category,
+    number,
+  ][];
+  const priorityCategory =
+    categoryEntries.length > 0
+      ? categoryEntries.reduce((min, cur) => (cur[1] < min[1] ? cur : min))
+      : undefined;
+
+  const analysisItems = analysesDesc.map((a, i) => {
+    const result = a.result as AnalysisResult | undefined;
+    return {
+      id: a.id,
+      index: analysesDesc.length - i,
+      score: scoreOf(a.result),
+      issuesCount: result?.issues.length ?? 0,
+      imageUrl: a.imageUrl,
+      createdAt: a.createdAt,
+    };
+  });
+
+  const showCompare = analysesAsc.length >= 2;
 
   return (
-    <div className="space-y-gutter">
+    <div className="space-y-gutter pb-24">
       <ProjectHeader
         projectId={project.id}
         initialName={project.name}
         analysisCount={analysesAsc.length}
-      >
-        {analysesAsc.length >= 2 && (
-          <Link
-            href={`/projects/${project.id}/compare`}
-            className="flex flex-1 items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover sm:flex-none"
-          >
-            <GitCompare className="size-4" strokeWidth={1.5} />
-            Compare
-          </Link>
-        )}
-        <Link
-          href={`/projects/${project.id}/analyze`}
-          className="flex flex-1 items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 sm:flex-none"
-        >
-          <Plus className="size-4" strokeWidth={2} />
-          New Analysis
-        </Link>
-      </ProjectHeader>
+      />
 
       <div className="grid grid-cols-1 gap-gutter lg:grid-cols-12">
         <div className="lg:col-span-8">
-          <ScoreTrendWidget scores={scoreSeries} subtitle="This project's audit score over time" />
+          <ProjectScoreTrend analyses={scorePoints} />
         </div>
-        <div className="lg:col-span-4">
-          <div className="flex h-full flex-col rounded-xl border border-border bg-surface p-lg">
+        <div className="flex flex-col gap-gutter lg:col-span-4">
+          <div className="flex flex-col rounded-xl border border-border bg-surface p-lg">
             <h3 className="mb-md text-label-sm font-bold tracking-wider text-text-secondary uppercase">
-              Latest findings
+              Key Findings
             </h3>
             {totalIssues > 0 ? (
-              <div className="flex-1 space-y-md">
+              <div className="space-y-md">
                 <div className="flex items-center gap-md">
-                  <AlertTriangle
-                    className="size-4 shrink-0 text-accent-signal"
-                    strokeWidth={1.5}
-                  />
-                  <p className="text-body-md text-text-primary">
+                  <span className="size-2 shrink-0 rounded-full bg-[#ffb4ab]" />
+                  <p className="flex-1 text-body-md text-text-primary">
                     {issueCounts.critical} critical{' '}
                     {issueCounts.critical === 1 ? 'issue' : 'issues'}
                   </p>
                 </div>
                 <div className="flex items-center gap-md">
-                  <AlertCircle className="size-4 shrink-0 text-accent-signal" strokeWidth={1.5} />
-                  <p className="text-body-md text-text-primary">
+                  <span className="size-2 shrink-0 rounded-full bg-[#f3bf4f]" />
+                  <p className="flex-1 text-body-md text-text-primary">
                     {issueCounts.warning} warning{issueCounts.warning === 1 ? '' : 's'}
                   </p>
                 </div>
                 <div className="flex items-center gap-md">
-                  <Lightbulb className="size-4 shrink-0 text-accent-signal" strokeWidth={1.5} />
-                  <p className="text-body-md text-text-primary">
+                  <span className="size-2 shrink-0 rounded-full bg-accent-signal" />
+                  <p className="flex-1 text-body-md text-text-primary">
                     {issueCounts.suggestion} suggestion{issueCounts.suggestion === 1 ? '' : 's'}
                   </p>
                 </div>
               </div>
             ) : (
-              <p className="flex-1 text-body-md text-text-secondary">
+              <p className="text-body-md text-text-secondary">
                 No issues found in the latest audit — clean bill of health.
               </p>
             )}
-            <Link
-              href={`/report/${latest.id}`}
-              className="mt-lg inline-flex items-center gap-xs text-label-md font-bold text-accent-signal hover:underline"
-            >
-              View full report
-              <ArrowRight className="size-3.5" strokeWidth={2} />
-            </Link>
           </div>
+
+          {priorityCategory && (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-accent-signal/20 bg-accent-soft-bg p-lg text-center">
+              <Sparkles className="mb-sm size-5 text-accent-signal" strokeWidth={1.5} />
+              <p className="text-label-md font-bold text-accent-signal">Priority focus area</p>
+              <p className="mt-xs text-label-sm text-text-secondary">
+                {CATEGORY_LABELS[priorityCategory[0]] || priorityCategory[0]} scored{' '}
+                {priorityCategory[1]}/100 — the most room to improve.
+              </p>
+            </div>
+          )}
+
+          <Link
+            href={`/report/${latest.id}`}
+            className="inline-flex items-center justify-center gap-xs rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-accent-signal transition-colors hover:bg-surface-hover"
+          >
+            View full report
+            <ArrowRight className="size-3.5" strokeWidth={2} />
+          </Link>
         </div>
       </div>
 
@@ -178,6 +189,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
         <ProjectAnalysesList analyses={analysisItems} />
       </div>
+
+      <ProjectFooterBar
+        projectId={project.id}
+        projectName={project.name}
+        showCompare={showCompare}
+      />
     </div>
   );
 }

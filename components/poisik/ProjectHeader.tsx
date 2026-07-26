@@ -4,6 +4,7 @@ import { useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { FolderOpen, Pencil, Trash2, Check, X } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
 import {
   Dialog,
   DialogContent,
@@ -118,7 +119,13 @@ export function ProjectHeader({
               </button>
             </div>
           ) : (
-            <div className="flex min-w-0 items-center gap-xs">
+            <div className="flex min-w-0 flex-wrap items-center gap-xs">
+              <Link
+                href="/projects"
+                className="shrink-0 text-body-md text-text-secondary transition-colors hover:text-text-primary"
+              >
+                Projects /
+              </Link>
               <h1 className="truncate text-headline-lg font-bold text-text-primary">{name}</h1>
               <button
                 onClick={() => setEditing(true)}

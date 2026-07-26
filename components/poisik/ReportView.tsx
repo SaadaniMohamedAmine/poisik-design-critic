@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import type { AnalysisResult } from '@/lib/schemas';
+import { CATEGORY_LABELS } from '@/lib/categories';
 
 interface ReportViewProps {
   result: AnalysisResult;
@@ -28,16 +29,6 @@ interface ReportViewProps {
 }
 
 type Issue = AnalysisResult['issues'][number];
-
-const CATEGORY_LABELS: Record<string, string> = {
-  all: 'All',
-  visual_hierarchy: 'Visual Hierarchy',
-  contrast: 'Contrast',
-  spacing: 'Spacing',
-  typography: 'Typography',
-  accessibility: 'Accessibility',
-  consistency: 'Consistency',
-};
 
 const severityStyles = {
   critical:
