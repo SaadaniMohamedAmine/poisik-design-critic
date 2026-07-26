@@ -27,6 +27,7 @@ export { ComparePicker } from './ComparePicker';
 export { ScoreTrendWidget } from './ScoreTrendWidget';
 export { RecentActivityWidget } from './RecentActivityWidget';
 export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
+export { ProjectsGrid, type ProjectGridItem } from './ProjectsGrid';
 export { PlanUsageWidget } from './PlanUsageWidget';
 export { NotificationBell } from './NotificationBell';
 export { WelcomeToast } from './WelcomeToast';
