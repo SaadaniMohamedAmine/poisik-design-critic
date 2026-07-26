@@ -9,6 +9,7 @@ export type NotificationType =
   | 'GOODBYE'
   | 'PROJECT_CREATED'
   | 'ANALYSIS_COMPLETED'
+  | 'ANALYSIS_FAILED'
   | 'USAGE_LIMIT_REACHED'
   | 'PLAN_UPGRADED'
   | 'PLAN_DOWNGRADED';

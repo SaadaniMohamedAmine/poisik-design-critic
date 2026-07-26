@@ -2,8 +2,9 @@ import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { checkAndIncrementUsage } from '@/lib/usage';
+import { checkAndIncrementUsage, decrementUsage } from '@/lib/usage';
 import { runAnalysisPipeline } from '@/lib/ai/run-analysis';
+import { toFriendlyAiErrorMessage } from '@/lib/ai/client';
 import { createNotification } from '@/lib/notifications';
 
 // Keep in sync with the `AiProvider` union in lib/ai/client.ts. Validated here
@@ -69,10 +70,25 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
 
     return NextResponse.json(analysis, { status: 201 });
   } catch (error) {
-    const message =
-      error instanceof Error
-        ? error.message
-        : "The analysis didn't come back as expected — try again.";
+    // The real error (e.g. a Groq/Gemini provider error body — quota
+    // metrics, internal rate-limit URLs, RetryInfo blobs) is logged here
+    // for debugging, but never sent to the client: it's raw provider JSON,
+    // not something a user should ever see on screen.
+    console.error(`Analysis failed for project ${project.id}:`, error);
+    const message = toFriendlyAiErrorMessage(error);
+
+    // checkAndIncrementUsage above already spent the monthly credit before
+    // the AI call ran — give it back since this attempt produced nothing.
+    await decrementUsage(userId);
+
+    await createNotification(
+      userId,
+      'ANALYSIS_FAILED',
+      'Analysis failed',
+      `Your audit of "${project.name}" couldn't be completed. ${message}`,
+      `/projects/${project.id}/analyze`
+    );
+
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

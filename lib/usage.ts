@@ -48,6 +48,20 @@ export async function checkAndIncrementUsage(
   return { allowed: true, remaining: limit - currentCount - 1 };
 }
 
+// checkAndIncrementUsage spends the credit up front, before the AI call
+// even runs — necessary so a burst of concurrent requests can't all slip
+// past the limit check. But that means a failed analysis (provider error,
+// bad image, etc.) would otherwise burn a monthly credit for nothing. Call
+// this from the route's catch block to give it back. `count: { gt: 0 }`
+// guards against ever decrementing below zero.
+export async function decrementUsage(userId: string): Promise<void> {
+  const periodStart = currentPeriodStart();
+  await prisma.usageRecord.updateMany({
+    where: { userId, periodStart, count: { gt: 0 } },
+    data: { count: { decrement: 1 } },
+  });
+}
+
 export async function getCurrentUsage(
   userId: string,
   plan: string

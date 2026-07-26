@@ -13,11 +13,9 @@ export default function ProjectAnalyzePage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   async function createAnalysis(imageUrl: string) {
     setLoading(true);
-    setError('');
     const toastId = toast.loading('Running your AI audit...');
     const res = await fetch(`/api/projects/${params.id}/analyses`, {
       method: 'POST',
@@ -27,11 +25,14 @@ export default function ProjectAnalyzePage() {
     setLoading(false);
     if (!res.ok) {
       const data = await res.json();
+      // The API route already sanitizes this — never the raw provider
+      // error body. A toast is enough here; a failure also lands in the
+      // notification bell (ANALYSIS_FAILED) so it isn't lost once the
+      // toast auto-closes.
       const message =
         data.error === 'MONTHLY_LIMIT_REACHED'
           ? "You've reached your monthly analysis limit — upgrade to keep auditing."
           : (data.error ?? "The analysis didn't come back as expected — try again.");
-      setError(message);
       toast.update(toastId, { render: message, type: 'error', isLoading: false, autoClose: 5000 });
       return;
     }
@@ -69,7 +70,6 @@ export default function ProjectAnalyzePage() {
       <div className="rounded-xl border border-border bg-surface p-lg">
         <UploadDropzone onAnalyze={createAnalysis} />
         {loading && <p className="mt-md text-label-md text-text-secondary">Analyzing...</p>}
-        {error && <p className="mt-md text-label-md text-accent-signal">{error}</p>}
       </div>
     </div>
   );

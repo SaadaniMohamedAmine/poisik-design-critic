@@ -135,5 +135,36 @@ export async function analyzeImage(options: AnalyzeOptions): Promise<AnalysisRes
     }
   }
 
+  console.error('All AI providers failed:', lastError?.message);
   throw lastError ?? new Error('All AI providers failed');
+}
+
+// Groq/Gemini error bodies are raw provider JSON (quota metrics, internal
+// rate-limit URLs, RetryInfo blobs, ...) — never fit to show a user. Call
+// sites (API routes) should log the real Error server-side and send only
+// this sanitized string to the client.
+export function toFriendlyAiErrorMessage(error: unknown): string {
+  const raw = error instanceof Error ? error.message : String(error);
+  const lower = raw.toLowerCase();
+
+  if (
+    lower.includes('429') ||
+    lower.includes('resource_exhausted') ||
+    lower.includes('quota') ||
+    lower.includes('rate limit')
+  ) {
+    return "Our AI provider is rate-limited right now — please try again in a minute.";
+  }
+
+  if (
+    lower.includes('401') ||
+    lower.includes('403') ||
+    lower.includes('api key') ||
+    lower.includes('api_key') ||
+    lower.includes('unauthorized')
+  ) {
+    return "There's a configuration issue with our AI provider — we've been notified.";
+  }
+
+  return "The analysis didn't come back as expected — please try again.";
 }
