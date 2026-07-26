@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { getLocale } from 'next-intl/server';
+import type { Session } from 'next-auth';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
 import { prisma } from '@/lib/prisma';
@@ -10,15 +11,20 @@ import { WelcomeToast } from './WelcomeToast';
 import { OnboardingFlow } from './OnboardingFlow';
 import { GettingStartedProvider, type GettingStartedItem } from './GettingStartedContext';
 
-export async function AppShell({ children }: { children: React.ReactNode }) {
-  const session = await auth();
-  if (!session?.user) {
-    const locale = await getLocale();
-    redirect({ href: '/sign-in', locale });
-    return null;
-  }
+interface ShellData {
+  usage: { remaining: number | null; limit: number | null; plan: string };
+  gettingStartedItems: GettingStartedItem[];
+  gettingStartedDismissed: boolean;
+  onboardingShow: boolean;
+}
 
-  const userId = session.user.id as string;
+// Shared by AppShell (dashboard/projects, requires auth) and the report
+// page's owner branch (report/[id]/page.tsx, auth already checked there
+// since a report can also be viewed by nobody signed in via a public link).
+// Keeping this one place means both surfaces load the exact same
+// usage/onboarding/getting-started signals instead of drifting apart.
+export async function loadShellData(session: Session): Promise<ShellData> {
+  const userId = session.user!.id as string;
   const plan = ((session.user as { plan?: string }).plan ?? 'FREE') as
     'FREE' | 'PRO' | 'ENTERPRISE';
 
@@ -64,22 +70,60 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
     },
   ];
 
+  return {
+    usage,
+    gettingStartedItems,
+    gettingStartedDismissed: !!me?.gettingStartedDismissedAt,
+    onboardingShow: !me?.onboardingCompletedAt,
+  };
+}
+
+// Presentational chrome (topbar + sidebar + onboarding overlays) — no auth
+// check, no redirect. AppShell below is the page-layout entry point that
+// does the redirect; report/[id]/page.tsx calls loadShellData + this
+// directly for its owner branch, where redirecting on no-session would be
+// wrong (a report can be public).
+export function AppShellChrome({
+  session,
+  shellData,
+  children,
+}: {
+  session: Session;
+  shellData: ShellData;
+  children: React.ReactNode;
+}) {
+  const { usage, gettingStartedItems, gettingStartedDismissed, onboardingShow } = shellData;
+
   return (
-    <GettingStartedProvider
-      items={gettingStartedItems}
-      initialDismissed={!!me?.gettingStartedDismissedAt}
-    >
+    <GettingStartedProvider items={gettingStartedItems} initialDismissed={gettingStartedDismissed}>
       <div className="min-h-screen bg-bg-base">
         <Suspense fallback={null}>
           <WelcomeToast />
         </Suspense>
-        <OnboardingFlow show={!me?.onboardingCompletedAt} />
-        <TopBarAuth userName={session.user.name} userImage={session.user.image} />
+        <OnboardingFlow show={onboardingShow} />
+        <TopBarAuth userName={session.user!.name} userImage={session.user!.image} />
         <div className="flex pt-20">
           <Sidebar usage={usage} />
           <main className="flex-1 p-xl lg:ml-64">{children}</main>
         </div>
       </div>
     </GettingStartedProvider>
+  );
+}
+
+export async function AppShell({ children }: { children: React.ReactNode }) {
+  const session = await auth();
+  if (!session?.user) {
+    const locale = await getLocale();
+    redirect({ href: '/sign-in', locale });
+    return null;
+  }
+
+  const shellData = await loadShellData(session);
+
+  return (
+    <AppShellChrome session={session} shellData={shellData}>
+      {children}
+    </AppShellChrome>
   );
 }

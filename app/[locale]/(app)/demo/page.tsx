@@ -75,7 +75,7 @@ export default function DemoPage() {
         </p>
       </div>
       <div className="animate-in fade-in slide-in-from-bottom-6 fill-mode-both delay-150 duration-700">
-        <ReportView result={DEMO_RESULT} isReadOnly isDemo />
+        <ReportView result={DEMO_RESULT} isDemo />
       </div>
     </div>
   );

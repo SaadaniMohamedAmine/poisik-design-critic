@@ -18,8 +18,13 @@ import type { AnalysisResult } from '@/lib/schemas';
 
 interface ReportViewProps {
   result: AnalysisResult;
-  isReadOnly?: boolean;
+  imageUrl?: string;
   isDemo?: boolean;
+  // The signed-in owner viewing their own analysis gets Export/Share
+  // actions instead of the public-share footer. Everyone else (an
+  // anonymous visitor on a share link, or a different signed-in account)
+  // sees the read-only public variant.
+  showOwnerActions?: boolean;
 }
 
 type Issue = AnalysisResult['issues'][number];
@@ -43,9 +48,19 @@ const severityStyles = {
     'border border-border-strong text-text-muted font-medium uppercase tracking-wide px-3 py-1 rounded-full text-xs',
 };
 
-export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
-  const isDemoMode = Boolean(isReadOnly && isDemo);
-  const isPublicShare = Boolean(isReadOnly && !isDemo);
+// Falls back to the illustrative Stitch mockup only when no real screenshot
+// is available (the /demo page, which has no upload at all) — every real
+// analysis passes its own analysis.imageUrl down from the report page.
+const FALLBACK_IMAGE = '/demo-sample-ui.png';
+
+export function ReportView({
+  result,
+  imageUrl,
+  isDemo,
+  showOwnerActions,
+}: ReportViewProps) {
+  const isDemoMode = Boolean(isDemo);
+  const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
   const [activeFilter, setActiveFilter] = useState('all');
   const [expandedIssue, setExpandedIssue] = useState<string | null>(null);
@@ -87,10 +102,8 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
     <div
       id={`issue-${issue.id}`}
       key={issue.id}
-      style={isReadOnly ? { animationDelay: `${200 + index * 120}ms` } : undefined}
-      className={`rounded-xl border p-lg transition-all ${
-        isReadOnly ? 'animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500' : ''
-      } ${
+      style={{ animationDelay: `${200 + index * 120}ms` }}
+      className={`rounded-xl border p-lg transition-all animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500 ${
         activeMarker === issue.id
           ? 'border-accent-signal bg-accent-soft-bg'
           : 'border-border bg-surface hover:border-accent-signal/50'
@@ -184,23 +197,17 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
   );
 
   return (
-    <div className={`flex flex-col antialiased ${isReadOnly ? '' : 'min-h-screen pt-20'}`}>
+    <div className="flex flex-col antialiased">
       {/* Main Split View */}
       <main
-        className={`mx-auto flex w-full max-w-[1280px] ${
-          isReadOnly
-            ? `flex-col gap-lg md:flex-row ${isDemoMode ? 'md:items-stretch' : 'md:items-start'}`
-            : 'h-[calc(100vh-80px)] overflow-hidden'
+        className={`mx-auto flex w-full max-w-[1280px] flex-col gap-lg md:flex-row ${
+          isDemoMode ? 'md:items-stretch' : 'md:items-start'
         }`}
       >
         {/* Left: Screenshot + Annotations */}
         <section
-          className={`relative flex w-full items-center justify-center overflow-hidden bg-surface p-xl md:w-[60%] ${
-            isReadOnly
-              ? `rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-left-6 duration-700 ${
-                  isPublicShare ? 'md:sticky md:top-24' : ''
-                }`
-              : ''
+          className={`relative flex w-full items-center justify-center overflow-hidden bg-surface p-xl md:w-[60%] rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-left-6 duration-700 ${
+            isPublicShare ? 'md:sticky md:top-24' : ''
           }`}
         >
           <div className="pointer-events-none absolute inset-0 opacity-10">
@@ -208,9 +215,7 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
           </div>
 
           <div
-            className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 ${
-              isReadOnly ? 'animate-float' : ''
-            } ${
+            className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 animate-float ${
               isDemoMode
                 ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto'
                 : isPublicShare
@@ -218,16 +223,26 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
                   : 'w-full max-w-[400px]'
             }`}
           >
-            <Image
-              src="/demo-sample-ui.png"
-              alt="Analyzed screenshot"
-              fill
-              className="object-cover"
-            />
-            {filteredIssues.map((issue) => (
+            {imageUrl ? (
+              // Plain <img>, not next/image: real screenshots come from
+              // UploadThing's CDN, which isn't (and doesn't need to be)
+              // registered in next.config.ts images.remotePatterns — same
+              // pattern already used for real imageUrls in
+              // ProjectsOverviewWidget.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={imageUrl} alt="Analyzed screenshot" className="size-full object-cover" />
+            ) : (
+              <Image
+                src={FALLBACK_IMAGE}
+                alt="Analyzed screenshot"
+                fill
+                className="object-cover"
+              />
+            )}
+            {filteredIssues.map((issue, index) => (
               <AnnotationMarker
                 key={issue.id}
-                number={parseInt(issue.id)}
+                number={index + 1}
                 x={issue.location.x}
                 y={issue.location.y}
                 onClick={() => handleMarkerClick(issue.id)}
@@ -237,14 +252,8 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
         </section>
 
         {/* Right: Report Panel */}
-        <aside
-          className={`flex w-full flex-col bg-surface md:w-[40%] ${
-            isReadOnly
-              ? 'rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-right-6 duration-700'
-              : 'border-l border-border'
-          }`}
-        >
-          <div className={`${isReadOnly ? '' : 'flex-1 overflow-y-auto'} px-lg pt-xl pb-xxl`}>
+        <aside className="flex w-full flex-col rounded-2xl border border-border bg-surface shadow-2xl animate-in fade-in slide-in-from-right-6 duration-700 md:w-[40%]">
+          <div className="px-lg pt-xl pb-xxl">
             <div className="mb-xl flex flex-col items-center">
               <CircularGauge value={result.overall_score} />
               <h2 className="mt-md text-headline-md font-medium text-text-primary">
@@ -299,7 +308,7 @@ export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
             )}
           </div>
 
-          {!isReadOnly && (
+          {showOwnerActions && (
             <footer className="flex gap-md border-t border-border bg-surface p-lg">
               <Button variant="outline" className="flex flex-1 items-center justify-center gap-sm">
                 <Download className="size-4" />
