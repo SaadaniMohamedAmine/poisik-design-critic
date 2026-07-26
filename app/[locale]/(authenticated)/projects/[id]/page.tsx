@@ -3,12 +3,7 @@ import { Plus, ArrowRight, FolderOpen, Sparkles } from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { Link } from '@/i18n/navigation';
-import {
-  ProjectHeader,
-  ProjectAnalysesList,
-  ProjectScoreTrend,
-  ProjectFooterBar,
-} from '@/components/poisik';
+import { ProjectHeader, ProjectAnalysesList, ProjectScoreTrend } from '@/components/poisik';
 import type { AnalysisResult, Category } from '@/lib/schemas';
 import { CATEGORY_LABELS } from '@/lib/categories';
 
@@ -19,10 +14,12 @@ function scoreOf(result: unknown): number | undefined {
 // Design reference: design_v2/project_alpha_details (Stitch mockup). After
 // review, matched the mockup as closely as possible per explicit direction
 // — including the colored PASSED/FAIL/WARNING status (ProjectAnalysesList),
-// the colored Key Findings dots below, the bar-chart score trend with
-// 30D/90D range chips (ProjectScoreTrend), and the fixed bottom action bar
-// (ProjectFooterBar) — a deliberate, scoped exception to the monochrome
-// treatment used everywhere else in the app (dashboard, projects, report).
+// the colored Key Findings dots below, and the bar-chart score trend with
+// 30D/90D range chips (ProjectScoreTrend) — a deliberate, scoped exception
+// to the monochrome treatment used everywhere else in the app (dashboard,
+// projects, report). The mockup's fixed bottom action bar was tried and
+// then dropped per follow-up feedback — New Analysis/Compare placement is
+// being revisited.
 //
 // Two things were still not reproduced literally, because they cross from
 // "visual style" into "showing the user something false":
@@ -113,10 +110,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     };
   });
 
-  const showCompare = analysesAsc.length >= 2;
-
   return (
-    <div className="space-y-gutter pb-24">
+    <div className="space-y-gutter">
       <ProjectHeader
         projectId={project.id}
         initialName={project.name}
@@ -189,12 +184,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
         <ProjectAnalysesList analyses={analysisItems} />
       </div>
-
-      <ProjectFooterBar
-        projectId={project.id}
-        projectName={project.name}
-        showCompare={showCompare}
-      />
     </div>
   );
 }
