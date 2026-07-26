@@ -214,41 +214,56 @@ export function ReportView({
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-accent-signal/20 via-transparent to-transparent" />
           </div>
 
-          <div
-            className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 animate-float ${
-              isDemoMode
-                ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto'
-                : isPublicShare
-                  ? 'w-full max-w-[380px]'
-                  : 'w-full max-w-[400px]'
-            }`}
-          >
-            {imageUrl ? (
-              // Plain <img>, not next/image: real screenshots come from
-              // UploadThing's CDN, which isn't (and doesn't need to be)
-              // registered in next.config.ts images.remotePatterns — same
-              // pattern already used for real imageUrls in
-              // ProjectsOverviewWidget.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={imageUrl} alt="Analyzed screenshot" className="size-full object-cover" />
-            ) : (
-              <Image
-                src={FALLBACK_IMAGE}
+          {imageUrl ? (
+            // Real screenshots are NOT forced into the 9:19.5 phone bezel:
+            // markers are positioned by percentage against whichever box
+            // wraps the image, so that box must match the image's own
+            // aspect ratio exactly — any crop (object-cover) or letterbox
+            // mismatch there would shift every marker off its real target.
+            // A plain <img> with h-auto makes this wrapper size itself to
+            // the image's natural rendered box, keeping the AI's x/y
+            // percentages (computed against the full uncropped upload in
+            // run-analysis.ts) aligned with what's on screen.
+            // Plain <img>, not next/image: real screenshots come from
+            // UploadThing's CDN, which isn't (and doesn't need to be)
+            // registered in next.config.ts images.remotePatterns — same
+            // pattern already used for real imageUrls in
+            // ProjectsOverviewWidget.
+            <div className="relative w-full max-w-[480px]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imageUrl}
                 alt="Analyzed screenshot"
-                fill
-                className="object-cover"
+                className="w-full rounded-2xl border-[6px] border-border shadow-2xl"
               />
-            )}
-            {filteredIssues.map((issue, index) => (
-              <AnnotationMarker
-                key={issue.id}
-                number={index + 1}
-                x={issue.location.x}
-                y={issue.location.y}
-                onClick={() => handleMarkerClick(issue.id)}
-              />
-            ))}
-          </div>
+              {filteredIssues.map((issue, index) => (
+                <AnnotationMarker
+                  key={issue.id}
+                  number={index + 1}
+                  x={issue.location.x}
+                  y={issue.location.y}
+                  onClick={() => handleMarkerClick(issue.id)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div
+              className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 animate-float ${
+                isDemoMode ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto' : 'w-full max-w-[400px]'
+              }`}
+            >
+              <Image src={FALLBACK_IMAGE} alt="Analyzed screenshot" fill className="object-cover" />
+              {filteredIssues.map((issue, index) => (
+                <AnnotationMarker
+                  key={issue.id}
+                  number={index + 1}
+                  x={issue.location.x}
+                  y={issue.location.y}
+                  onClick={() => handleMarkerClick(issue.id)}
+                />
+              ))}
+            </div>
+          )}
         </section>
 
         {/* Right: Report Panel */}
