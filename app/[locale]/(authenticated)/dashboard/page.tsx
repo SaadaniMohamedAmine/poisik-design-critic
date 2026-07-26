@@ -1,3 +1,4 @@
+import { FolderPlus, Sparkles, ShieldCheck } from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import {
@@ -23,15 +24,45 @@ export default async function DashboardPage() {
 
   if (projects.length === 0) {
     return (
-      <div className="mx-auto mt-24 max-w-112 text-center">
-        <h1 className="mb-sm text-headline-md font-semibold text-text-primary">
-          Create your first project
-        </h1>
-        <p className="mb-lg text-body-md text-text-secondary">
-          A project groups every analysis you run on the same design, so you can track its progress
-          over time.
-        </p>
-        <CreateProjectForm />
+      <div className="relative overflow-hidden">
+        <div className="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-accent-signal/5 blur-[100px]" />
+
+        <div className="relative z-10 mx-auto w-full max-w-[448px] animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="relative overflow-hidden rounded-xl border border-border bg-surface p-lg shadow-2xl">
+            <div className="relative z-10 w-full text-center">
+              <div className="mx-auto mb-md flex size-20 items-center justify-center rounded-2xl border border-border bg-bg-elevated shadow-[0_0_40px_-8px_var(--color-accent-glow)]">
+                <FolderPlus className="size-9 text-accent-signal" strokeWidth={1.5} />
+              </div>
+
+              <h1 className="mb-sm text-headline-lg font-bold text-text-primary">
+                Create your first project
+              </h1>
+              <p className="mb-lg text-body-md leading-relaxed text-text-secondary">
+                Start by naming your first project to organize your design audits. Our AI engine
+                will be ready to scan your first upload.
+              </p>
+
+              <CreateProjectForm />
+            </div>
+          </div>
+
+          <div className="mt-lg grid grid-cols-2 gap-md opacity-70">
+            <div className="flex items-start gap-md rounded-lg border border-border bg-surface p-md">
+              <Sparkles className="size-5 shrink-0 text-accent-signal" strokeWidth={1.5} />
+              <div>
+                <p className="text-label-md text-text-primary">AI Powered</p>
+                <p className="text-[12px] text-text-muted">Real-time heuristics</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-md rounded-lg border border-border bg-surface p-md">
+              <ShieldCheck className="size-5 shrink-0 text-accent-signal" strokeWidth={1.5} />
+              <div>
+                <p className="text-label-md text-text-primary">Standardized</p>
+                <p className="text-[12px] text-text-muted">WCAG &amp; ISO Ready</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

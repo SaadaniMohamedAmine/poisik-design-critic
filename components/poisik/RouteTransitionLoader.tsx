@@ -29,7 +29,12 @@ export function RouteTransitionLoader() {
 
     function startLoading() {
       shownAtRef.current = Date.now();
-      setLoading(true);
+      // Next.js can call pushState/replaceState synchronously from inside a
+      // React useInsertionEffect during a route transition, and React
+      // forbids scheduling a state update in that phase ("useInsertionEffect
+      // must not schedule updates"). Deferring by a tick moves this state
+      // update outside that restricted call stack.
+      setTimeout(() => setLoading(true), 0);
     }
 
     window.history.pushState = function patchedPushState(
