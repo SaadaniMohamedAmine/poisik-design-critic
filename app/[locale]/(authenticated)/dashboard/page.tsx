@@ -1,15 +1,31 @@
-import { FolderPlus, Sparkles, ShieldCheck } from 'lucide-react';
+import {
+  FolderPlus,
+  Sparkles,
+  ShieldCheck,
+  FolderKanban,
+  BarChart3,
+  Award,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { getCurrentUsage } from '@/lib/usage';
 import {
   CreateProjectForm,
   ScoreTrendWidget,
   RecentActivityWidget,
   ProjectsOverviewWidget,
+  PlanUsageWidget,
 } from '@/components/poisik';
 
 function scoreOf(result: unknown): number | undefined {
   return (result as { overall_score?: number } | null)?.overall_score;
+}
+
+function startOfMonth(): Date {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1);
 }
 
 export default async function DashboardPage() {
@@ -19,7 +35,10 @@ export default async function DashboardPage() {
   const projects = await prisma.project.findMany({
     where: { userId },
     orderBy: { updatedAt: 'desc' },
-    include: { analyses: { orderBy: { createdAt: 'desc' }, take: 1 } },
+    include: {
+      analyses: { orderBy: { createdAt: 'desc' }, take: 1 },
+      _count: { select: { analyses: true } },
+    },
   });
 
   if (projects.length === 0) {
@@ -67,6 +86,8 @@ export default async function DashboardPage() {
     );
   }
 
+  const monthStart = startOfMonth();
+
   const recentAnalyses = await prisma.analysis.findMany({
     where: { project: { userId } },
     orderBy: { createdAt: 'desc' },
@@ -75,6 +96,10 @@ export default async function DashboardPage() {
   });
 
   const totalAnalyses = await prisma.analysis.count({ where: { project: { userId } } });
+  const analysesThisMonth = await prisma.analysis.count({
+    where: { project: { userId }, createdAt: { gte: monthStart } },
+  });
+  const projectsThisMonth = projects.filter((p) => p.createdAt >= monthStart).length;
 
   const allScored = await prisma.analysis.findMany({
     where: { project: { userId } },
@@ -91,40 +116,126 @@ export default async function DashboardPage() {
       : 0;
 
   const plan = (session!.user as { plan?: string }).plan ?? 'FREE';
+  const { remaining, limit } = await getCurrentUsage(userId, plan);
+  const used = limit === null ? 0 : limit - (remaining ?? 0);
+  const usagePct = limit === null ? 0 : Math.min(100, Math.round((used / Math.max(limit, 1)) * 100));
+
+  const topProjects = [...projects]
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      score: scoreOf(p.analyses[0]?.result),
+      analysisCount: p._count.analyses,
+      imageUrl: p.analyses[0]?.imageUrl,
+    }))
+    .sort((a, b) => (b.score ?? -1) - (a.score ?? -1))
+    .slice(0, 4);
+
+  interface StatCard {
+    label: string;
+    value: string | number;
+    delta?: string;
+    icon: LucideIcon;
+    progress?: number;
+  }
+
+  const statCards: StatCard[] = [
+    {
+      label: 'Total projects',
+      value: projects.length,
+      delta: projectsThisMonth > 0 ? `+${projectsThisMonth} this month` : undefined,
+      icon: FolderKanban,
+    },
+    {
+      label: 'Total analyses',
+      value: totalAnalyses,
+      delta: analysesThisMonth > 0 ? `+${analysesThisMonth} this month` : undefined,
+      icon: BarChart3,
+    },
+    {
+      label: 'Average score',
+      value: scoreSeries.length > 0 ? avgScore : '—',
+      delta: scoreSeries.length > 0 ? '/ 100' : undefined,
+      icon: Award,
+    },
+    {
+      label: 'Analyses left',
+      value: limit === null ? '∞' : `${remaining}/${limit}`,
+      delta: limit === null ? 'Unlimited' : 'This month',
+      icon: Zap,
+      progress: limit === null ? undefined : usagePct,
+    },
+  ];
 
   return (
-    <div className="space-y-lg">
-      <div className="grid grid-cols-2 gap-gutter md:grid-cols-4">
-        {[
-          { label: 'Projects', value: projects.length },
-          { label: 'Analyses', value: totalAnalyses },
-          { label: 'Average score', value: avgScore },
-          { label: 'Plan', value: plan },
-        ].map((stat) => (
-          <div key={stat.label} className="rounded-xl border border-border bg-surface p-lg">
-            <p className="mb-xs text-label-sm text-text-secondary">{stat.label}</p>
-            <p className="text-headline-md font-semibold text-text-primary">{stat.value}</p>
+    <div className="space-y-gutter">
+      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <h1 className="text-headline-lg font-bold text-text-primary">Overview</h1>
+        <p className="mt-xs text-body-md text-text-secondary">
+          Real-time auditing performance and project health.
+        </p>
+      </div>
+
+      <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-2 gap-gutter duration-500 md:grid-cols-4">
+        {statCards.map((stat) => (
+          <div
+            key={stat.label}
+            className="group rounded-xl border border-border bg-surface p-lg transition-colors hover:bg-surface-hover"
+          >
+            <div className="mb-md flex items-start justify-between">
+              <p className="text-label-sm tracking-wider text-text-secondary uppercase">
+                {stat.label}
+              </p>
+              <stat.icon
+                className="size-5 text-accent-signal transition-transform group-hover:scale-110"
+                strokeWidth={1.5}
+              />
+            </div>
+            <div className="flex items-baseline gap-sm">
+              <span className="text-[32px] leading-none font-bold text-text-primary">
+                {stat.value}
+              </span>
+              {stat.delta && (
+                <span className="text-label-sm text-text-secondary">{stat.delta}</span>
+              )}
+            </div>
+            {stat.progress !== undefined && (
+              <div className="mt-md h-1 w-full overflow-hidden rounded-full bg-bg-elevated">
+                <div
+                  className="h-full bg-accent-signal transition-all"
+                  style={{ width: `${stat.progress}%` }}
+                />
+              </div>
+            )}
           </div>
         ))}
       </div>
 
-      <ScoreTrendWidget scores={scoreSeries} />
+      <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-1 gap-gutter duration-700 lg:grid-cols-12">
+        <div className="lg:col-span-8">
+          <ScoreTrendWidget scores={scoreSeries} />
+        </div>
+        <div className="lg:col-span-4">
+          <PlanUsageWidget plan={plan} remaining={remaining} limit={limit} />
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
-        <RecentActivityWidget
-          analyses={recentAnalyses.map((a) => ({
-            id: a.id,
-            projectName: a.project.name,
-            score: scoreOf(a.result),
-          }))}
-        />
-        <ProjectsOverviewWidget
-          projects={projects.map((p) => ({
-            id: p.id,
-            name: p.name,
-            score: scoreOf(p.analyses[0]?.result),
-          }))}
-        />
+      <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-1 gap-gutter duration-700 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <RecentActivityWidget
+            analyses={recentAnalyses.map((a) => ({
+              id: a.id,
+              projectId: a.projectId,
+              projectName: a.project.name,
+              imageUrl: a.imageUrl,
+              score: scoreOf(a.result),
+              createdAt: a.createdAt,
+            }))}
+          />
+        </div>
+        <div className="lg:col-span-5">
+          <ProjectsOverviewWidget projects={topProjects} />
+        </div>
       </div>
     </div>
   );

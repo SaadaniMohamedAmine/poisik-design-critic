@@ -25,3 +25,4 @@ export { ComparePicker } from './ComparePicker';
 export { ScoreTrendWidget } from './ScoreTrendWidget';
 export { RecentActivityWidget } from './RecentActivityWidget';
 export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
+export { PlanUsageWidget } from './PlanUsageWidget';
