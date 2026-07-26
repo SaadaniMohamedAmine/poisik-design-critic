@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
 import { Menu, X } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { PoisikLogo } from './PoisikLogo';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { UserDropdown } from './UserDropdown';
 
 export function MarketingHeader() {
   const n = useTranslations('Navigation');
+  const { data: session } = useSession();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const closeMobile = () => setMobileOpen(false);
@@ -55,18 +58,32 @@ export function MarketingHeader() {
 
           <div className="hidden items-center gap-md md:flex">
             <LanguageSwitcher />
-            <Link
-              href="/sign-in"
-              className="text-label-md font-medium text-text-secondary transition-colors hover:text-text-primary"
-            >
-              {n('signIn')}
-            </Link>
-            <Link
-              href="/sign-up"
-              className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
-            >
-              {n('signUp')}
-            </Link>
+            {session?.user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
+                >
+                  Dashboard
+                </Link>
+                <UserDropdown name={session.user.name} image={session.user.image} />
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/sign-in"
+                  className="text-label-md font-medium text-text-secondary transition-colors hover:text-text-primary"
+                >
+                  {n('signIn')}
+                </Link>
+                <Link
+                  href="/sign-up"
+                  className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
+                >
+                  {n('signUp')}
+                </Link>
+              </>
+            )}
           </div>
 
           <button
@@ -144,22 +161,41 @@ export function MarketingHeader() {
 
                 <div className="my-md border-t border-border" />
 
-                <LanguageSwitcher />
+                <div className="flex items-center justify-between">
+                  <LanguageSwitcher />
+                  {session?.user && (
+                    <UserDropdown name={session.user.name} image={session.user.image} />
+                  )}
+                </div>
 
-                <Link
-                  href="/sign-in"
-                  onClick={closeMobile}
-                  className="text-label-md font-medium text-text-secondary"
-                >
-                  {n('signIn')}
-                </Link>
-                <Link
-                  href="/sign-up"
-                  onClick={closeMobile}
-                  className="rounded-md bg-accent-signal px-lg py-md text-center text-label-md font-bold text-white"
-                >
-                  {n('signUp')}
-                </Link>
+                {session?.user && (
+                  <Link
+                    href="/dashboard"
+                    onClick={closeMobile}
+                    className="rounded-md bg-accent-signal px-lg py-md text-center text-label-md font-bold text-white"
+                  >
+                    Dashboard
+                  </Link>
+                )}
+
+                {!session?.user && (
+                  <>
+                    <Link
+                      href="/sign-in"
+                      onClick={closeMobile}
+                      className="text-label-md font-medium text-text-secondary"
+                    >
+                      {n('signIn')}
+                    </Link>
+                    <Link
+                      href="/sign-up"
+                      onClick={closeMobile}
+                      className="rounded-md bg-accent-signal px-lg py-md text-center text-label-md font-bold text-white"
+                    >
+                      {n('signUp')}
+                    </Link>
+                  </>
+                )}
               </nav>
             </motion.div>
           </>
