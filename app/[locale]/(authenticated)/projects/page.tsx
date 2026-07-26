@@ -5,8 +5,9 @@ import { CreateProjectForm } from '@/components/poisik';
 
 export default async function ProjectsPage() {
   const session = await auth();
+  const userId = (session!.user as { id: string }).id;
   const projects = await prisma.project.findMany({
-    where: { userId: (session!.user as { id: string }).id },
+    where: { userId },
     orderBy: { updatedAt: 'desc' },
     include: { analyses: { orderBy: { createdAt: 'desc' }, take: 1 } },
   });
@@ -25,6 +26,13 @@ export default async function ProjectsPage() {
       </div>
     );
   }
+
+  // Fire-and-forget: powers the "Explore your Projects overview" onboarding
+  // checklist step (see GettingStartedProvider in AppShell.tsx). Guarded by
+  // the `null` filter so it only ever writes once per account.
+  prisma.user
+    .updateMany({ where: { id: userId, projectsOverviewViewedAt: null }, data: { projectsOverviewViewedAt: new Date() } })
+    .catch(() => {});
 
   return (
     <div>

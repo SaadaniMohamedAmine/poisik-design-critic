@@ -17,6 +17,7 @@ import {
   RecentActivityWidget,
   ProjectsOverviewWidget,
   PlanUsageWidget,
+  GettingStartedWidget,
 } from '@/components/poisik';
 
 function scoreOf(result: unknown): number | undefined {
@@ -175,6 +176,8 @@ export default async function DashboardPage() {
           Real-time auditing performance and project health.
         </p>
       </div>
+
+      <GettingStartedWidget />
 
       <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-2 gap-gutter duration-500 md:grid-cols-4">
         {statCards.map((stat) => (

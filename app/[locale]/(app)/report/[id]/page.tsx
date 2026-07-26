@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/navigation';
 import { ReportView } from '@/components/poisik/ReportView';
 import type { AnalysisResult } from '@/lib/schemas';
@@ -15,6 +16,7 @@ interface AnalysisData {
 
 export default function ReportPage() {
   const params = useParams();
+  const { data: session } = useSession();
   const [data, setData] = useState<AnalysisData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +31,14 @@ export default function ReportPage() {
       .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [params.id]);
+
+  // Powers the "View your first report" onboarding checklist step (see
+  // GettingStartedProvider in AppShell.tsx) — only fired for signed-in
+  // viewers, once per account (the route itself guards idempotency).
+  useEffect(() => {
+    if (!session?.user) return;
+    fetch('/api/onboarding/mark-report-viewed', { method: 'POST' }).catch(() => {});
+  }, [session]);
 
   if (loading) {
     return (

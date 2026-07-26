@@ -2,10 +2,11 @@
 
 import { LayoutDashboard, FolderKanban, Plus } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
+import { GettingStartedPill } from './GettingStartedPill';
 
 const NAV_LINKS = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/projects', label: 'Projects', icon: FolderKanban },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, id: undefined },
+  { href: '/projects', label: 'Projects', icon: FolderKanban, id: 'tour-projects-nav' },
 ] as const;
 
 interface SidebarProps {
@@ -19,6 +20,7 @@ export function Sidebar({ usage }: SidebarProps) {
     <aside className="fixed top-20 bottom-0 left-0 hidden w-64 flex-col justify-between border-r border-border bg-surface px-md py-lg lg:flex">
       <div>
         <Link
+          id="tour-new-analysis"
           href="/projects/new-analysis"
           className="mb-lg flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal px-md py-md font-bold text-white transition-opacity hover:opacity-90"
         >
@@ -26,11 +28,12 @@ export function Sidebar({ usage }: SidebarProps) {
           New Analysis
         </Link>
         <nav className="space-y-xs">
-          {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+          {NAV_LINKS.map(({ href, label, icon: Icon, id }) => {
             const active = pathname.startsWith(href);
             return (
               <Link
                 key={href}
+                id={id}
                 href={href}
                 className={`flex items-center gap-md rounded-xl px-md py-md text-label-md transition-colors ${
                   active
@@ -46,10 +49,13 @@ export function Sidebar({ usage }: SidebarProps) {
         </nav>
       </div>
 
-      <Link
-        href="/settings"
-        className="block rounded-xl border border-border p-md transition-colors hover:bg-surface-hover"
-      >
+      <div>
+        <GettingStartedPill />
+        <Link
+          id="tour-plan-usage"
+          href="/settings"
+          className="block rounded-xl border border-border p-md transition-colors hover:bg-surface-hover"
+        >
         <p className="mb-xs text-label-sm text-text-secondary">{usage.plan} plan</p>
         <p className="mb-sm text-label-md text-text-primary">
           {usage.limit === null
@@ -66,7 +72,8 @@ export function Sidebar({ usage }: SidebarProps) {
             />
           </div>
         )}
-      </Link>
+        </Link>
+      </div>
     </aside>
   );
 }

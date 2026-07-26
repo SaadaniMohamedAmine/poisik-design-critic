@@ -44,6 +44,7 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
   return (
     <div className="relative" ref={ref}>
       <button
+        id="tour-avatar"
         onClick={() => setOpen((o) => !o)}
         className="size-9 overflow-hidden rounded-full border border-border bg-accent-soft-bg"
       >

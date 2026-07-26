@@ -29,6 +29,13 @@ model User {
   usageRecords           UsageRecord[]
   notifications          Notification[]
   createdAt              DateTime      @default(now())
+
+  // Onboarding — all nullable timestamps rather than booleans, so "when" is
+  // preserved for free and a null is unambiguously "hasn't happened yet".
+  onboardingCompletedAt     DateTime? // welcome modal (3 steps) + product tour (4 steps), set once either finishes or is skipped
+  firstReportViewedAt       DateTime? // set the first time this user opens any /report/[id] page while signed in
+  projectsOverviewViewedAt  DateTime? // set the first time this user opens /projects
+  gettingStartedDismissedAt DateTime? // set when the checklist card's "Dismiss" is clicked (all steps done)
 }
 
 model Account {
