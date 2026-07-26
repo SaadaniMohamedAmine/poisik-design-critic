@@ -5,9 +5,13 @@ import { TrendingUp, TrendingDown, LineChart as LineChartIcon } from 'lucide-rea
 
 interface ScoreTrendWidgetProps {
   scores: { score: number; date: string }[];
+  subtitle?: string;
 }
 
-export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
+export function ScoreTrendWidget({
+  scores,
+  subtitle = 'Performance progression across all projects',
+}: ScoreTrendWidgetProps) {
   const hasData = scores.length > 0;
   // A line chart with exactly one point renders nothing (dot={false}, and a
   // line needs 2+ points) — a near-empty box that reads as broken, not as
@@ -21,9 +25,7 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
       <div className="mb-lg flex items-start justify-between">
         <div>
           <h3 className="text-headline-sm font-bold text-text-primary">Score trend</h3>
-          <p className="mt-xs text-label-sm text-text-secondary">
-            Performance progression across all projects
-          </p>
+          <p className="mt-xs text-label-sm text-text-secondary">{subtitle}</p>
         </div>
         {hasTrend && (
           <div

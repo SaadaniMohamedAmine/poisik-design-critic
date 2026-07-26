@@ -28,6 +28,8 @@ export { ScoreTrendWidget } from './ScoreTrendWidget';
 export { RecentActivityWidget } from './RecentActivityWidget';
 export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
 export { ProjectsGrid, type ProjectGridItem } from './ProjectsGrid';
+export { ProjectHeader } from './ProjectHeader';
+export { ProjectAnalysesList, type ProjectAnalysisItem } from './ProjectAnalysesList';
 export { PlanUsageWidget } from './PlanUsageWidget';
 export { SettingsView } from './SettingsView';
 export { NotificationBell } from './NotificationBell';
