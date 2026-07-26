@@ -193,7 +193,7 @@ export default async function DashboardPage() {
 
       <GettingStartedWidget />
 
-      <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-2 gap-gutter duration-500 md:grid-cols-4">
+      <div className="grid animate-in fade-in slide-in-from-bottom-4 grid-cols-1 gap-gutter duration-500 sm:grid-cols-2 md:grid-cols-4">
         {statCards.map((stat) => (
           <div
             key={stat.label}
@@ -207,10 +207,9 @@ export default async function DashboardPage() {
               <p className="text-label-sm tracking-wider text-text-secondary uppercase">
                 {stat.label}
               </p>
-              <stat.icon
-                className="size-5 text-accent-signal transition-transform group-hover:scale-110"
-                strokeWidth={1.5}
-              />
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft-bg shadow-[0_0_8px_-3px_var(--color-accent-glow)] transition-transform group-hover:scale-110">
+                <stat.icon className="size-4 text-accent-signal" strokeWidth={1.5} />
+              </div>
             </div>
             <div className="flex items-baseline gap-sm">
               <span className="text-[32px] leading-none font-bold text-text-primary">

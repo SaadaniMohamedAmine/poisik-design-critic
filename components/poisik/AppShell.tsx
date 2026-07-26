@@ -101,10 +101,12 @@ export function AppShellChrome({
           <WelcomeToast />
         </Suspense>
         <OnboardingFlow show={onboardingShow} />
-        <TopBarAuth userName={session.user!.name} userImage={session.user!.image} />
+        <TopBarAuth userName={session.user!.name} userImage={session.user!.image} usage={usage} />
         <div className="flex pt-20">
           <Sidebar usage={usage} />
-          <main className="flex-1 p-xl lg:ml-64">{children}</main>
+          <main className="flex-1 p-md lg:ml-64 lg:p-xl">
+            <div className="mx-auto max-w-7xl">{children}</div>
+          </main>
         </div>
       </div>
     </GettingStartedProvider>

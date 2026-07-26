@@ -20,6 +20,7 @@ export { MarketingFooter } from './MarketingFooter';
 export { AppShell, AppShellChrome, loadShellData } from './AppShell';
 export { TopBarAuth } from './TopBarAuth';
 export { Sidebar } from './Sidebar';
+export { SidebarNav } from './SidebarNav';
 export { UserDropdown } from './UserDropdown';
 export { CreateProjectForm } from './CreateProjectForm';
 export { ComparePicker } from './ComparePicker';

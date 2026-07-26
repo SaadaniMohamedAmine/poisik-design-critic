@@ -73,9 +73,31 @@ export function NotificationBell() {
   }, []);
 
   useEffect(() => {
-    load();
+    let ignore = false;
+    // Inlined (not `load()`) so the mount fetch doesn't call setLoading(true)
+    // synchronously in the effect body — `loading` is already true from its
+    // initial state, so there's nothing to set before the first await.
+    async function fetchInitial() {
+      try {
+        const res = await fetch('/api/notifications');
+        if (res.ok && !ignore) {
+          const data = await res.json();
+          setNotifications(data.notifications);
+          setUnreadCount(data.unreadCount);
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+          setLoaded(true);
+        }
+      }
+    }
+    fetchInitial();
     const interval = setInterval(load, 60000);
-    return () => clearInterval(interval);
+    return () => {
+      ignore = true;
+      clearInterval(interval);
+    };
   }, [load]);
 
   useEffect(() => {
@@ -124,7 +146,7 @@ export function NotificationBell() {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-lg border border-border bg-surface shadow-2xl">
+        <div className="fixed inset-x-margin top-20 z-70 mt-2 overflow-hidden rounded-lg border border-border bg-surface shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:w-80">
           <div className="flex items-center justify-between border-b border-border px-md py-sm">
             <span className="text-label-md font-bold text-text-primary">Notifications</span>
             {unreadCount > 0 && (
@@ -139,9 +161,7 @@ export function NotificationBell() {
 
           <div className="max-h-96 overflow-y-auto">
             {loading && !loaded ? (
-              <div className="px-lg py-xl text-center text-label-sm text-text-muted">
-                Loading…
-              </div>
+              <div className="px-lg py-xl text-center text-label-sm text-text-muted">Loading…</div>
             ) : notifications.length === 0 ? (
               <div className="flex flex-col items-center gap-sm px-lg py-xl text-center">
                 <Bell className="size-6 text-text-muted" strokeWidth={1.5} />
