@@ -1,5 +1,13 @@
 # Poisik — Progress Log
 
+## Phase 9 — Premium UI Polish (Complete — 5/5)
+- **Report page**: fixed hardcoded demo image (now shows the real uploaded screenshot), NaN annotation marker numbers, wrong navbar/chrome (moved to a top-level route that picks owner vs. public chrome at runtime), marker/image misalignment (real screenshots no longer cropped into a fixed phone-bezel aspect ratio)
+- **Error handling**: sanitized AI provider errors before they reach the client (`toFriendlyAiErrorMessage`), refund the usage credit on a failed analysis instead of burning it
+- **Dashboard**: icon+subtitle header, richer stat cards, gradient score-trend chart, zero-quota state (monochrome, no red), responsive app shell with a mobile nav drawer, content container aligned with the top navbar
+- **Projects**: rebuilt list page from `design_v2/all_projects` — search, rich cards (thumbnail, score badge, updated time, real analysis count), inline "start new project" tile
+- **Settings**: rebuilt from `design_v2`/`design_v3` settings mockups — tabbed layout (Profile / Billing / Danger zone), editable name (new `PATCH /api/account` + NextAuth session refresh), real `PlanUsageWidget` with a working Upgrade-to-Pro CTA for FREE users (previously missing), Stripe Customer Portal link for paying users instead of fake payment/invoice data, fully responsive (scrollable tab pills on mobile, vertical list on desktop)
+- Commits: `25bc169`, `b00279c`, `0b96eec`, `76e87e1`, `0a4d01f`, `d9b70b7`, `c928b4f`, `1730f56`, `6ca9d9d`
+
 ## Phase 8 — Notifications & Onboarding (Complete)
 - **Notification system**: `Notification` Prisma model (userId, type, title, message, link, read), full API (`GET /api/notifications`, `PATCH .../[id]/read`, `PATCH .../read-all`), `NotificationBell` wired into both the marketing header and the authenticated topbar (hidden when logged out)
 - **Toast layer**: react-toastify installed and themed to the monochrome Dark Luxe palette (no red/green/amber), `notify()` client helper, toasts fired on sign-in ("Bienvenue encore dans Poisik"), sign-out ("Au revoir"), project creation, new analysis, and Stripe webhook events
