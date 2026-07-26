@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getStripe, planForPriceId } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
+import { createNotification } from '@/lib/notifications';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -42,24 +43,64 @@ export async function POST(req: NextRequest) {
             stripeSubscriptionId: session.subscription as string,
           },
         });
+
+        await createNotification(
+          userId,
+          'PLAN_UPGRADED',
+          'Plan upgraded',
+          `You're now on the ${plan} plan. Enjoy your new limits!`,
+          '/settings'
+        );
       }
       break;
     }
     case 'customer.subscription.deleted': {
       const subscription = event.data.object as Stripe.Subscription;
+      // `updateMany` doesn't return the affected rows, and a notification
+      // needs a userId — fetch matching users first so we know who to notify.
+      const affected = await prisma.user.findMany({
+        where: { stripeSubscriptionId: subscription.id },
+        select: { id: true },
+      });
       await prisma.user.updateMany({
         where: { stripeSubscriptionId: subscription.id },
         data: { plan: 'FREE', stripeSubscriptionId: null },
       });
+      await Promise.all(
+        affected.map((u) =>
+          createNotification(
+            u.id,
+            'PLAN_DOWNGRADED',
+            'Plan ended',
+            'Your subscription ended — you are now on the Free plan.',
+            '/pricing'
+          )
+        )
+      );
       break;
     }
     case 'customer.subscription.updated': {
       const subscription = event.data.object as Stripe.Subscription;
       if (subscription.cancel_at_period_end || subscription.status !== 'active') {
+        const affected = await prisma.user.findMany({
+          where: { stripeSubscriptionId: subscription.id },
+          select: { id: true },
+        });
         await prisma.user.updateMany({
           where: { stripeSubscriptionId: subscription.id },
           data: { plan: 'FREE' },
         });
+        await Promise.all(
+          affected.map((u) =>
+            createNotification(
+              u.id,
+              'PLAN_DOWNGRADED',
+              'Plan downgraded',
+              'Your subscription was cancelled — you are now on the Free plan.',
+              '/pricing'
+            )
+          )
+        );
       }
       break;
     }

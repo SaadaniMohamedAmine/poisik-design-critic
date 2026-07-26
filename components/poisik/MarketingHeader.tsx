@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl';
 import { PoisikLogo } from './PoisikLogo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { UserDropdown } from './UserDropdown';
+import { NotificationBell } from './NotificationBell';
 
 export function MarketingHeader() {
   const n = useTranslations('Navigation');
@@ -60,6 +61,7 @@ export function MarketingHeader() {
             <LanguageSwitcher />
             {session?.user ? (
               <>
+                <NotificationBell />
                 <Link
                   href="/dashboard"
                   className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
@@ -162,7 +164,10 @@ export function MarketingHeader() {
                 <div className="my-md border-t border-border" />
 
                 <div className="flex items-center justify-between">
-                  <LanguageSwitcher />
+                  <div className="flex items-center gap-md">
+                    <LanguageSwitcher />
+                    {session?.user && <NotificationBell />}
+                  </div>
                   {session?.user && (
                     <UserDropdown name={session.user.name} image={session.user.image} />
                   )}

@@ -27,6 +27,7 @@ model User {
   sessions               Session[]
   projects               Project[]
   usageRecords           UsageRecord[]
+  notifications          Notification[]
   createdAt              DateTime      @default(now())
 }
 
@@ -92,4 +93,23 @@ model UsageRecord {
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, periodStart])
+}
+
+// `type` is a free-form string (not a Prisma enum) rather than
+// `NotificationType` on purpose — new notification triggers get added
+// frequently as the product grows, and a raw string avoids a migration for
+// every new kind. The known values are enumerated in lib/notifications.ts.
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  type      String
+  title     String
+  message   String
+  link      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([userId, createdAt])
 }

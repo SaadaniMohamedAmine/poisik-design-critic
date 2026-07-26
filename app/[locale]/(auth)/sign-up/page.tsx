@@ -44,7 +44,7 @@ export default function SignUpPage() {
 
     await signIn('credentials', { email, password, redirect: false });
     setLoading(false);
-    router.push('/dashboard');
+    router.push('/dashboard?welcome=1');
   }
 
   useEffect(() => {
@@ -154,7 +154,7 @@ export default function SignUpPage() {
             <div className="mt-lg flex flex-col gap-md sm:flex-row">
               <button
                 type="button"
-                onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard` })}
+                onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard?welcome=1` })}
                 className="flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 transition-colors hover:bg-surface-hover"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

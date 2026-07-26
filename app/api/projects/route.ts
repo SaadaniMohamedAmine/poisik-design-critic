@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
+import { createNotification } from '@/lib/notifications';
 
 export async function GET() {
   const session = await auth();
@@ -23,8 +24,18 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Project name is required.' }, { status: 400 });
   }
 
+  const userId = (session.user as { id: string }).id;
   const project = await prisma.project.create({
-    data: { name: name.trim(), userId: (session.user as { id: string }).id },
+    data: { name: name.trim(), userId },
   });
+
+  await createNotification(
+    userId,
+    'PROJECT_CREATED',
+    'Project created',
+    `"${project.name}" is ready — upload a design to run your first audit.`,
+    `/projects/${project.id}`
+  );
+
   return NextResponse.json(project, { status: 201 });
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
+import { toast } from 'react-toastify';
 import { UploadDropzone } from '@/components/poisik';
 import { Link2 } from 'lucide-react';
 
@@ -17,6 +18,7 @@ export default function ProjectAnalyzePage() {
   async function createAnalysis(imageUrl: string) {
     setLoading(true);
     setError('');
+    const toastId = toast.loading('Running your AI audit...');
     const res = await fetch(`/api/projects/${params.id}/analyses`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -25,10 +27,21 @@ export default function ProjectAnalyzePage() {
     setLoading(false);
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error ?? "The analysis didn't come back as expected — try again.");
+      const message =
+        data.error === 'MONTHLY_LIMIT_REACHED'
+          ? "You've reached your monthly analysis limit — upgrade to keep auditing."
+          : (data.error ?? "The analysis didn't come back as expected — try again.");
+      setError(message);
+      toast.update(toastId, { render: message, type: 'error', isLoading: false, autoClose: 5000 });
       return;
     }
     const analysis = await res.json();
+    toast.update(toastId, {
+      render: 'Analysis complete — your report is ready.',
+      type: 'success',
+      isLoading: false,
+      autoClose: 4000,
+    });
     router.push(`/report/${analysis.id}`);
   }
 

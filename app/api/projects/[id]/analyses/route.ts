@@ -4,6 +4,7 @@ import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { checkAndIncrementUsage } from '@/lib/usage';
 import { runAnalysisPipeline } from '@/lib/ai/run-analysis';
+import { createNotification } from '@/lib/notifications';
 
 // Keep in sync with the `AiProvider` union in lib/ai/client.ts. Validated here
 // because this route is a call site of runAnalysisPipeline, whose `model`
@@ -38,6 +39,13 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
   const plan = (session.user as { plan?: string }).plan ?? 'FREE';
   const usage = await checkAndIncrementUsage(userId, plan);
   if (!usage.allowed) {
+    await createNotification(
+      userId,
+      'USAGE_LIMIT_REACHED',
+      'Monthly limit reached',
+      `You've used all your analyses for this month on the ${plan} plan.`,
+      '/pricing'
+    );
     return NextResponse.json({ error: 'MONTHLY_LIMIT_REACHED' }, { status: 402 });
   }
 
@@ -49,6 +57,15 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
     });
 
     await prisma.project.update({ where: { id: project.id }, data: { updatedAt: new Date() } });
+
+    const score = (result as { overall_score?: number } | null)?.overall_score;
+    await createNotification(
+      userId,
+      'ANALYSIS_COMPLETED',
+      'Analysis complete',
+      score !== undefined ? `Your audit of "${project.name}" scored ${score}/100.` : `Your audit of "${project.name}" is ready to view.`,
+      `/report/${analysis.id}`
+    );
 
     return NextResponse.json(analysis, { status: 201 });
   } catch (error) {

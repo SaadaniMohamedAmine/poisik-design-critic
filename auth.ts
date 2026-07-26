@@ -4,6 +4,7 @@ import Google from 'next-auth/providers/google';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
+import { createNotification } from '@/lib/notifications';
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -64,6 +65,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           (token.plan as string) ?? 'FREE';
       }
       return session;
+    },
+  },
+  events: {
+    // Fires on every successful sign-in (Credentials or Google, every time —
+    // not just the first one), which is exactly what "Welcome back" should
+    // do. This is the single persistence point for the login notification;
+    // the ephemeral toast is a separate concern handled client-side by
+    // WelcomeToast.tsx via a `?welcome=1` redirect flag.
+    async signIn({ user }) {
+      if (!user.id) return;
+      const name = user.name?.split(' ')[0] || user.email?.split('@')[0] || 'there';
+      await createNotification(
+        user.id,
+        'WELCOME',
+        'Welcome back',
+        `Welcome back to Poisik, ${name}!`
+      );
     },
   },
 });

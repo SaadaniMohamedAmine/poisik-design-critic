@@ -27,7 +27,7 @@ export default function SignInPage() {
       setError('Incorrect email or password.');
       return;
     }
-    router.push('/dashboard');
+    router.push('/dashboard?welcome=1');
   }
 
   useEffect(() => {
@@ -125,7 +125,7 @@ export default function SignInPage() {
           <div className="flex flex-col gap-md sm:flex-row">
             <button
               type="button"
-              onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard` })}
+              onClick={() => signIn('google', { callbackUrl: `/${locale}/dashboard?welcome=1` })}
               className="flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 text-label-sm text-text-secondary transition-colors hover:bg-surface-hover"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24">

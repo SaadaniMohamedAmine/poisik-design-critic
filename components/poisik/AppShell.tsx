@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
 import { getLocale } from 'next-intl/server';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
 import { getCurrentUsage } from '@/lib/usage';
 import { TopBarAuth } from './TopBarAuth';
 import { Sidebar } from './Sidebar';
+import { WelcomeToast } from './WelcomeToast';
 
 export async function AppShell({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -19,6 +21,9 @@ export async function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-bg-base">
+      <Suspense fallback={null}>
+        <WelcomeToast />
+      </Suspense>
       <TopBarAuth userName={session.user.name} userImage={session.user.image} />
       <div className="flex pt-20">
         <Sidebar usage={usage} />

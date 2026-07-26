@@ -1,4 +1,4 @@
-import { PoisikLogo, LanguageSwitcher, UserDropdown } from '@/components/poisik';
+import { PoisikLogo, LanguageSwitcher, UserDropdown, NotificationBell } from '@/components/poisik';
 import { Link } from '@/i18n/navigation';
 
 interface TopBarAuthProps {
@@ -19,6 +19,7 @@ export function TopBarAuth({ userName, userImage }: TopBarAuthProps) {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end gap-md px-margin">
+          <NotificationBell />
           <LanguageSwitcher />
           <UserDropdown name={userName} image={userImage} />
         </div>

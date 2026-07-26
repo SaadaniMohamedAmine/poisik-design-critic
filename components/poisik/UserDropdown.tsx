@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { signOut } from 'next-auth/react';
+import { toast } from 'react-toastify';
 import { Link } from '@/i18n/navigation';
 
 interface UserDropdownProps {
@@ -20,6 +21,25 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
     document.addEventListener('click', handleClick);
     return () => document.removeEventListener('click', handleClick);
   }, []);
+
+  // The session (and its auth cookie) is still valid here, right before
+  // signOut() tears it down — so this is the only reliable place to persist
+  // a "goodbye" notification for next time the user logs back in. Delaying
+  // signOut slightly lets the toast actually render before the page
+  // navigates away.
+  function handleSignOut() {
+    toast.info('See you soon!');
+    fetch('/api/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'GOODBYE',
+        title: 'Signed out',
+        message: 'You signed out of Poisik. See you soon!',
+      }),
+    }).catch(() => {});
+    setTimeout(() => signOut({ callbackUrl: '/' }), 400);
+  }
 
   return (
     <div className="relative" ref={ref}>
@@ -45,7 +65,7 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
             Account
           </Link>
           <button
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={handleSignOut}
             className="block w-full px-md py-sm text-left text-label-md text-text-primary hover:bg-surface-hover"
           >
             Sign out

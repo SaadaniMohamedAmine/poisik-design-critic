@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ArrowRight, Lock } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useRouter } from '@/i18n/navigation';
 
 export function CreateProjectForm() {
@@ -23,9 +24,11 @@ export function CreateProjectForm() {
       const data = await res.json();
       setError(data.error ?? 'Something went wrong.');
       setLoading(false);
+      toast.error(data.error ?? "Couldn't create the project — try again.");
       return;
     }
     const project = await res.json();
+    toast.success(`"${project.name}" created.`);
     router.push(`/projects/${project.id}/analyze`);
   }
 
