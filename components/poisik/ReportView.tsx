@@ -53,12 +53,7 @@ const severityStyles = {
 // analysis passes its own analysis.imageUrl down from the report page.
 const FALLBACK_IMAGE = '/demo-sample-ui.png';
 
-export function ReportView({
-  result,
-  imageUrl,
-  isDemo,
-  showOwnerActions,
-}: ReportViewProps) {
+export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: ReportViewProps) {
   const isDemoMode = Boolean(isDemo);
   const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
@@ -76,26 +71,19 @@ export function ReportView({
 
   const handleMarkerClick = (issueId: string) => {
     setActiveMarker(issueId);
-    if (isDemoMode) {
-      setActiveFilter('all');
-      setDialogOpen(true);
-      setTimeout(() => {
-        document
-          .getElementById(`issue-${issueId}`)
-          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 50);
-    } else {
-      document.getElementById(`issue-${issueId}`)?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-      });
-    }
+    setActiveFilter('all');
+    setDialogOpen(true);
+    setTimeout(() => {
+      document
+        .getElementById(`issue-${issueId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
     setTimeout(() => setActiveMarker(null), 2000);
   };
 
   const handleChipClick = (cat: string) => {
     setActiveFilter(cat);
-    if (isDemoMode) setDialogOpen(true);
+    setDialogOpen(true);
   };
 
   const renderIssueCard = (issue: Issue, index: number) => (
@@ -164,9 +152,7 @@ export function ReportView({
                       className="size-8 rounded border border-border"
                       style={{ backgroundColor: issue.code_fix.after }}
                     />
-                    <code className="text-label-sm text-accent-signal">
-                      {issue.code_fix.after}
-                    </code>
+                    <code className="text-label-sm text-accent-signal">{issue.code_fix.after}</code>
                   </div>
                 </div>
               )}
@@ -199,17 +185,9 @@ export function ReportView({
   return (
     <div className="flex flex-col antialiased">
       {/* Main Split View */}
-      <main
-        className={`mx-auto flex w-full max-w-[1280px] flex-col gap-lg md:flex-row ${
-          isDemoMode ? 'md:items-stretch' : 'md:items-start'
-        }`}
-      >
+      <main className="mx-auto flex w-full max-w-[1280px] flex-col gap-lg md:flex-row md:items-stretch">
         {/* Left: Screenshot + Annotations */}
-        <section
-          className={`relative flex w-full items-center justify-center overflow-hidden bg-surface p-xl md:w-[60%] rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-left-6 duration-700 ${
-            isPublicShare ? 'md:sticky md:top-24' : ''
-          }`}
-        >
+        <section className="relative flex w-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface p-xl shadow-2xl animate-in fade-in slide-in-from-left-6 duration-700 md:sticky md:top-24 md:w-[60%]">
           <div className="pointer-events-none absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-accent-signal/20 via-transparent to-transparent" />
           </div>
@@ -229,7 +207,7 @@ export function ReportView({
             // registered in next.config.ts images.remotePatterns — same
             // pattern already used for real imageUrls in
             // ProjectsOverviewWidget.
-            <div className="relative w-full max-w-[480px]">
+            <div className="relative w-full">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={imageUrl}
@@ -249,7 +227,9 @@ export function ReportView({
           ) : (
             <div
               className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 animate-float ${
-                isDemoMode ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto' : 'w-full max-w-[400px]'
+                isDemoMode
+                  ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto'
+                  : 'w-full max-w-[400px]'
               }`}
             >
               <Image src={FALLBACK_IMAGE} alt="Analyzed screenshot" fill className="object-cover" />
@@ -296,40 +276,31 @@ export function ReportView({
               ))}
             </div>
 
-            <div className={`flex flex-wrap gap-sm ${isDemoMode ? '' : 'mb-lg'}`}>
+            <div className="flex flex-wrap gap-sm">
               {['all', ...Object.keys(result.category_scores)].map((cat) => (
                 <button
                   key={cat}
                   onClick={() => handleChipClick(cat)}
-                  className={`rounded-full border px-md py-1.5 text-label-sm transition-colors ${
-                    activeFilter === cat && !isDemoMode
-                      ? 'border-accent-signal bg-accent-soft-bg text-accent-signal'
-                      : 'border-border text-text-secondary hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal'
-                  }`}
+                  className="rounded-full border border-border px-md py-1.5 text-label-sm text-text-secondary transition-colors hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal"
                 >
                   {CATEGORY_LABELS[cat] || cat}
                 </button>
               ))}
             </div>
 
-            {isDemoMode ? (
-              <p className="mt-md text-label-sm text-text-muted">
-                Tap a category to see its issues.
-              </p>
-            ) : (
-              <div className="space-y-lg">
-                {filteredIssues.map((issue, index) => renderIssueCard(issue, index))}
-              </div>
-            )}
+            <p className="mt-md text-label-sm text-text-muted">Tap a category to see its issues.</p>
           </div>
 
           {showOwnerActions && (
             <footer className="flex gap-md border-t border-border bg-surface p-lg">
-              <Button variant="outline" className="flex flex-1 items-center justify-center gap-sm">
+              <Button
+                variant="outline"
+                className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold"
+              >
                 <Download className="size-4" />
                 Export PDF
               </Button>
-              <Button className="flex flex-1 items-center justify-center gap-sm">
+              <Button className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold">
                 <Share2 className="size-4" />
                 Share Report
               </Button>
@@ -367,30 +338,30 @@ export function ReportView({
         </aside>
       </main>
 
-      {isDemoMode && (
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogContent className="max-h-[80vh] w-full max-w-2xl overflow-y-auto sm:max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {activeFilter === 'all' ? 'All Issues' : CATEGORY_LABELS[activeFilter] || activeFilter}
-              </DialogTitle>
-              <DialogDescription>
-                {filteredIssues.length} issue{filteredIssues.length !== 1 ? 's' : ''} found in this
-                category.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="space-y-lg">
-              {filteredIssues.length === 0 ? (
-                <p className="py-lg text-center text-body-md text-text-secondary">
-                  No issues detected in this category — nice work.
-                </p>
-              ) : (
-                filteredIssues.map((issue, index) => renderIssueCard(issue, index))
-              )}
-            </div>
-          </DialogContent>
-        </Dialog>
-      )}
+      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <DialogContent className="max-h-[80vh] w-full max-w-2xl overflow-y-auto sm:max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>
+              {activeFilter === 'all'
+                ? 'All Issues'
+                : CATEGORY_LABELS[activeFilter] || activeFilter}
+            </DialogTitle>
+            <DialogDescription>
+              {filteredIssues.length} issue{filteredIssues.length !== 1 ? 's' : ''} found in this
+              category.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-lg">
+            {filteredIssues.length === 0 ? (
+              <p className="py-lg text-center text-body-md text-text-secondary">
+                No issues detected in this category — nice work.
+              </p>
+            ) : (
+              filteredIssues.map((issue, index) => renderIssueCard(issue, index))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
