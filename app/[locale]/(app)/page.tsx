@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { ScrollReveal, ScrollToTopButton } from '@/components/poisik';
+import { ScrollReveal } from '@/components/poisik';
 import {
   ArrowRight,
   Upload,
@@ -308,8 +308,6 @@ export default function LandingPage() {
           </div>
         </section>
       </main>
-
-      <ScrollToTopButton />
     </>
   );
 }
