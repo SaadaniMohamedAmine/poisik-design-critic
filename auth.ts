@@ -31,11 +31,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     // "Continue with Facebook" button until this flag is flipped to true.
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.plan = (user as { plan?: string }).plan ?? 'FREE';
         token.planRefreshedAt = Date.now();
+        return token;
+      }
+
+      // Settings page calls `update({ name })` after a successful PATCH to
+      // /api/account — patch the JWT's name claim immediately instead of
+      // leaving the displayed name stale until the next sign-in.
+      if (trigger === 'update' && session?.name) {
+        token.name = session.name;
         return token;
       }
 

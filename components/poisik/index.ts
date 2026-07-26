@@ -29,6 +29,7 @@ export { RecentActivityWidget } from './RecentActivityWidget';
 export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
 export { ProjectsGrid, type ProjectGridItem } from './ProjectsGrid';
 export { PlanUsageWidget } from './PlanUsageWidget';
+export { SettingsView } from './SettingsView';
 export { NotificationBell } from './NotificationBell';
 export { WelcomeToast } from './WelcomeToast';
 export { WelcomeModal } from './WelcomeModal';
