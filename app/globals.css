@@ -162,6 +162,21 @@
   animation: poisik-float 6s ease-in-out infinite;
 }
 
+/* ComparePicker: brief nudge when a 3rd card is clicked past the 2-item
+   selection cap, instead of the click silently doing nothing. */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
 @keyframes poisik-bar-pulse {
   0%,
   80%,
