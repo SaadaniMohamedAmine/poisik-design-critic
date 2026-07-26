@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik AI - Audit Success</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#30353d",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "tertiary-container": "#b98b1d",
+                    "outline-variant": "#424750",
+                    "on-tertiary": "#402d00",
+                    "surface": "#0f141b",
+                    "on-secondary-container": "#adb5c7",
+                    "on-primary-fixed-variant": "#004786",
+                    "on-primary": "#00315f",
+                    "outline": "#8c919c",
+                    "surface-variant": "#30353d",
+                    "on-secondary-fixed": "#141c29",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "primary-fixed": "#d4e3ff",
+                    "surface-container-high": "#252a32",
+                    "inverse-on-surface": "#2c3139",
+                    "error": "#ffb4ab",
+                    "background": "#0f141b",
+                    "primary-container": "#6294da",
+                    "on-surface": "#dee2ed",
+                    "secondary-fixed": "#dbe3f5",
+                    "tertiary": "#f3bf4f",
+                    "surface-container-lowest": "#090e15",
+                    "on-primary-fixed": "#001c3b",
+                    "secondary-container": "#3f4756",
+                    "on-tertiary-container": "#3a2800",
+                    "surface-container": "#1b2027",
+                    "inverse-primary": "#275fa2",
+                    "primary": "#a6c8ff",
+                    "surface-dim": "#0f141b",
+                    "inverse-surface": "#dee2ed",
+                    "on-tertiary-fixed": "#261900",
+                    "on-error": "#690005",
+                    "surface-container-low": "#171c23",
+                    "tertiary-fixed": "#ffdea2",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "on-secondary": "#29313f",
+                    "on-primary-container": "#002b56",
+                    "on-background": "#dee2ed",
+                    "secondary": "#bfc7d9",
+                    "surface-tint": "#a6c8ff",
+                    "error-container": "#93000a",
+                    "surface-bright": "#353942",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "on-surface-variant": "#c2c6d2",
+                    "on-tertiary-fixed-variant": "#5c4200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "base": "4px",
+                    "md": "16px",
+                    "margin": "32px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xxl": "80px",
+                    "xl": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f141b;
+            color: #dee2ed;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+        }
+        .modal-overlay {
+            background: rgba(9, 14, 21, 0.85);
+            backdrop-filter: blur(8px);
+        }
+        .modal-card {
+            background-color: #0d131c;
+            border: 1px solid #1d2b3f;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        .feature-badge {
+            background: rgba(29, 43, 63, 0.3);
+            border: 1px solid #1d2b3f;
+            transition: all 0.2s ease;
+        }
+        .feature-badge:hover {
+            background: rgba(29, 43, 63, 0.5);
+            border-color: #263954;
+        }
+        .btn-hover-effect {
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .btn-hover-effect:active {
+            transform: scale(0.97);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+<!-- Background Content Placeholder (Simulated UI underneath) -->
+<div class="absolute inset-0 pointer-events-none opacity-20 p-margin max-w-[1280px] mx-auto overflow-hidden">
+<header class="flex justify-between items-center h-20 mb-xl">
+<div class="w-32 h-8 bg-surface-container-high rounded-lg"></div>
+<div class="flex gap-md">
+<div class="w-20 h-4 bg-surface-container-high rounded"></div>
+<div class="w-20 h-4 bg-surface-container-high rounded"></div>
+<div class="w-20 h-4 bg-surface-container-high rounded"></div>
+</div>
+</header>
+<div class="grid grid-cols-12 gap-lg">
+<div class="col-span-8 space-y-lg">
+<div class="h-64 bg-surface-container-high rounded-xl w-full"></div>
+<div class="grid grid-cols-2 gap-lg">
+<div class="h-40 bg-surface-container-high rounded-xl"></div>
+<div class="h-40 bg-surface-container-high rounded-xl"></div>
+</div>
+</div>
+<div class="col-span-4 h-full bg-surface-container-high rounded-xl"></div>
+</div>
+</div>
+<!-- Modal Shell -->
+<div class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-md">
+<div class="modal-card w-full max-w-[560px] p-[32px] rounded-xl relative animate-in fade-in zoom-in duration-300">
+<!-- Dismiss Button -->
+<button class="absolute top-md right-md text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="close">close</span>
+</button>
+<!-- Header Section -->
+<div class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-[#e3e9f2] tracking-tight mb-sm">
+                    You're all set
+                </h1>
+<p class="font-body-md text-body-md text-[#87a1c5]">
+                    Create your first project to run your first audit.
+                </p>
+</div>
+<!-- Primary Action -->
+<button class="btn-hover-effect w-full bg-[#6294da] hover:bg-[#7aa6e3] text-on-primary-container h-[56px] px-lg rounded-lg flex items-center justify-center gap-base font-label-md group transition-all mb-xl shadow-lg shadow-primary-container/10">
+<span class="font-bold text-white">Create your first project</span>
+<span class="material-symbols-outlined text-white transition-transform group-hover:translate-x-1" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<!-- Feature Grid -->
+<div class="grid grid-cols-2 gap-md mb-xl">
+<!-- Badge 1 -->
+<div class="feature-badge p-md rounded-lg flex flex-col items-start gap-xs">
+<div class="flex items-center gap-sm mb-base">
+<span class="material-symbols-outlined text-[#e3e9f2] text-[20px]" data-icon="bolt">bolt</span>
+<span class="font-label-md text-[#e3e9f2] font-semibold uppercase tracking-wider text-[11px]">AI Powered</span>
+</div>
+<p class="text-[#4b6c9b] text-label-sm font-medium">Real-time heuristics</p>
+</div>
+<!-- Badge 2 -->
+<div class="feature-badge p-md rounded-lg flex flex-col items-start gap-xs">
+<div class="flex items-center gap-sm mb-base">
+<span class="material-symbols-outlined text-[#e3e9f2] text-[20px]" data-icon="check_circle">check_circle</span>
+<span class="font-label-md text-[#e3e9f2] font-semibold uppercase tracking-wider text-[11px]">Standardized</span>
+</div>
+<p class="text-[#4b6c9b] text-label-sm font-medium">WCAG &amp; ISO Ready</p>
+</div>
+</div>
+<!-- Progress Footer -->
+<div class="flex flex-col items-center gap-md">
+<div class="flex items-center gap-sm">
+<!-- Dot 1 -->
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<!-- Dot 2 -->
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<!-- Dot 3 (Active) -->
+<div class="w-2.5 h-2.5 rounded-full bg-[#6294da] ring-4 ring-[#6294da]/10"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.querySelector('.modal-card');
+            const closeBtn = document.querySelector('button.absolute');
+
+            // Simple hover depth effect
+            modal.addEventListener('mousemove', (e) => {
+                const rect = modal.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Subtle shine effect on borders would go here if using custom shader
+            });
+
+            // Dismiss logic (visual only)
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('scale-95', 'opacity-0');
+                modal.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    document.querySelector('.modal-overlay').style.display = 'none';
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

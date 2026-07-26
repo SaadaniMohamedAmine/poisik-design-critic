@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#30353d",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "tertiary-container": "#b98b1d",
+                    "outline-variant": "#424750",
+                    "on-tertiary": "#402d00",
+                    "surface": "#0f141b",
+                    "on-secondary-container": "#adb5c7",
+                    "on-primary-fixed-variant": "#004786",
+                    "on-primary": "#00315f",
+                    "outline": "#8c919c",
+                    "surface-variant": "#30353d",
+                    "on-secondary-fixed": "#141c29",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "primary-fixed": "#d4e3ff",
+                    "surface-container-high": "#252a32",
+                    "inverse-on-surface": "#2c3139",
+                    "error": "#ffb4ab",
+                    "background": "#0f141b",
+                    "primary-container": "#6294da",
+                    "on-surface": "#dee2ed",
+                    "secondary-fixed": "#dbe3f5",
+                    "tertiary": "#f3bf4f",
+                    "surface-container-lowest": "#090e15",
+                    "on-primary-fixed": "#001c3b",
+                    "secondary-container": "#3f4756",
+                    "on-tertiary-container": "#3a2800",
+                    "surface-container": "#1b2027",
+                    "inverse-primary": "#275fa2",
+                    "primary": "#a6c8ff",
+                    "surface-dim": "#0f141b",
+                    "inverse-surface": "#dee2ed",
+                    "on-tertiary-fixed": "#261900",
+                    "on-error": "#690005",
+                    "surface-container-low": "#171c23",
+                    "tertiary-fixed": "#ffdea2",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "on-secondary": "#29313f",
+                    "on-primary-container": "#002b56",
+                    "on-background": "#dee2ed",
+                    "secondary": "#bfc7d9",
+                    "surface-tint": "#a6c8ff",
+                    "error-container": "#93000a",
+                    "surface-bright": "#353942",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "on-surface-variant": "#c2c6d2",
+                    "on-tertiary-fixed-variant": "#5c4200"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "base": "4px",
+                    "md": "16px",
+                    "margin": "32px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "xxl": "80px",
+                    "xl": "48px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        body {
+            background-color: #0f141b;
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-background">
+<!-- Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-md">
+<!-- Modal Card -->
+<div class="relative w-full max-w-[560px] bg-[#0d131c] border border-[#1d2b3f] p-margin rounded-lg shadow-2xl flex flex-col gap-lg">
+<!-- Dismiss Button -->
+<button class="absolute top-md right-md text-on-surface-variant hover:text-primary transition-colors duration-200 active:scale-95">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+<!-- Headline -->
+<div class="mt-base">
+<h2 class="font-headline-md text-headline-md text-[#e3e9f2] tracking-tight leading-tight">
+                    Three steps to a sharper design
+                </h2>
+</div>
+<!-- Steps Stack -->
+<div class="flex flex-col gap-md">
+<!-- Step 1 -->
+<div class="flex items-start gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded bg-[#1d2b3f]/30 border border-[#1d2b3f] flex items-center justify-center text-[#6294da] group-hover:border-[#6294da]/50 transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="upload">upload</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#e3e9f2] font-semibold">Upload</span>
+<p class="font-label-md text-label-md text-[#87a1c5]">Drop a screenshot or paste a live URL</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex items-start gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded bg-[#1d2b3f]/30 border border-[#1d2b3f] flex items-center justify-center text-[#6294da] group-hover:border-[#6294da]/50 transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="sparkles" style="font-variation-settings: 'FILL' 1;">arrow_back_ios_new</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#e3e9f2] font-semibold">AI Analysis</span>
+<p class="font-label-md text-label-md text-[#87a1c5]">Our engine audits accessibility, hierarchy, and consistency</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex items-start gap-md group">
+<div class="flex-shrink-0 w-10 h-10 rounded bg-[#1d2b3f]/30 border border-[#1d2b3f] flex items-center justify-center text-[#6294da] group-hover:border-[#6294da]/50 transition-colors">
+<span class="material-symbols-outlined text-[20px]" data-icon="file-text">rotate_left</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#e3e9f2] font-semibold">Report</span>
+<p class="font-label-md text-label-md text-[#87a1c5]">Get a scored, actionable breakdown in seconds</p>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-md pt-base">
+<button class="w-full bg-[#6294da] hover:bg-[#72a1e4] text-on-primary-container font-label-md text-label-md py-md rounded-lg transition-all duration-200 active:scale-[0.98] font-bold">
+                    Next
+                </button>
+<div class="flex flex-col items-center gap-md">
+<a class="text-[#4b6c9b] font-label-md text-label-md hover:text-[#6294da] transition-colors duration-200 underline-offset-4 hover:underline" href="#">
+                        Back
+                    </a>
+<!-- Progress Dots -->
+<div class="flex gap-xs items-center">
+<div class="w-1.5 h-1.5 rounded-full bg-[#1d2b3f]"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-[#6294da]"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-[#1d2b3f]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Content Mock (The "Dashboard" underneath) -->
+<main class="max-w-[1280px] mx-auto px-margin py-xxl opacity-20 pointer-events-none select-none">
+<div class="h-8 w-48 bg-surface-container-high rounded mb-xl"></div>
+<div class="grid grid-cols-3 gap-lg">
+<div class="h-64 bg-surface-container-low border border-[#1d2b3f] rounded-xl"></div>
+<div class="h-64 bg-surface-container-low border border-[#1d2b3f] rounded-xl"></div>
+<div class="h-64 bg-surface-container-low border border-[#1d2b3f] rounded-xl"></div>
+</div>
+<div class="mt-xl h-96 bg-surface-container-low border border-[#1d2b3f] rounded-xl"></div>
+</main>
+<script>
+        // Simple logic for micro-interactions
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Potential for subtle sound or hover logic
+            });
+        });
+
+        // Close modal simulation
+        const closeBtn = document.querySelector('button[data-icon="close"]');
+        const modal = document.querySelector('.fixed.inset-0');
+        
+        if(closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+                setTimeout(() => modal.style.display = 'none', 300);
+            });
+        }
+    </script>
+</body></html>

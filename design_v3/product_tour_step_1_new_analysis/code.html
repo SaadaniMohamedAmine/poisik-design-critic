@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Poisik - Product Tour Frame 1</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#6294da",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "primary": "#a6c8ff",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-high": "#252a32",
+                    "inverse-surface": "#dee2ed",
+                    "on-surface": "#dee2ed",
+                    "on-primary-fixed-variant": "#004786",
+                    "surface-dim": "#0f141b",
+                    "on-secondary-container": "#adb5c7",
+                    "secondary": "#bfc7d9",
+                    "on-background": "#dee2ed",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "primary-fixed": "#d4e3ff",
+                    "secondary-fixed": "#dbe3f5",
+                    "outline": "#8c919c",
+                    "on-secondary-fixed": "#141c29",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "on-surface-variant": "#c2c6d2",
+                    "inverse-primary": "#275fa2",
+                    "tertiary-fixed": "#ffdea2",
+                    "tertiary-container": "#b98b1d",
+                    "on-tertiary-container": "#3a2800",
+                    "surface-tint": "#a6c8ff",
+                    "background": "#0f141b",
+                    "surface-variant": "#30353d",
+                    "surface": "#0f141b",
+                    "on-tertiary": "#402d00",
+                    "on-primary-container": "#002b56",
+                    "surface-container-low": "#171c23",
+                    "surface-bright": "#353942",
+                    "surface-container-highest": "#30353d",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "surface-container-lowest": "#090e15",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-on-surface": "#2c3139",
+                    "secondary-container": "#3f4756",
+                    "on-secondary": "#29313f",
+                    "error": "#ffb4ab",
+                    "surface-container": "#1b2027",
+                    "on-primary": "#00315f",
+                    "on-primary-fixed": "#001c3b",
+                    "outline-variant": "#424750",
+                    "tertiary": "#f3bf4f",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "xl": "48px",
+                    "xxl": "80px",
+                    "margin": "32px",
+                    "sm": "8px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        
+        /* Custom Mask for Spotlight Effect */
+        .spotlight-overlay {
+            background-color: rgba(9, 14, 21, 0.7);
+            clip-path: polygon(0% 0%, 0% 100%, 16px 100%, 16px 100px, 248px 100px, 248px 148px, 16px 148px, 16px 100%, 100% 100%, 100% 0%);
+            /* Note: Hardcoded clip-path for demonstration; calculated based on New Audit button position in sidebar */
+        }
+
+        .luxe-border {
+            border: 1px solid #1d2b3f;
+        }
+        
+        .accent-glow {
+            box-shadow: 0 0 20px rgba(98, 148, 218, 0.15);
+        }
+
+        /* Tooltip Arrow */
+        .tooltip-arrow::after {
+            content: "";
+            position: absolute;
+            left: -8px;
+            top: 24px;
+            width: 16px;
+            height: 16px;
+            background-color: #0d131c;
+            border-left: 1px solid #1d2b3f;
+            border-bottom: 1px solid #1d2b3f;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-hidden">
+<!-- THE SHELL (Background Context) -->
+<div class="flex h-screen w-full">
+<!-- SIDEBAR -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-20 bottom-0 py-lg px-md w-64 bg-surface-container-low border-r border-outline-variant z-10">
+<!-- New Audit Button (The Highlight Target) -->
+<button class="flex items-center justify-center gap-sm bg-primary-container text-on-primary-container h-12 rounded-xl font-bold mb-xl transition-transform hover:scale-95" id="target-audit-btn">
+<span class="material-symbols-outlined">add</span>
+<span class="font-label-md text-label-md">Run New Audit</span>
+</button>
+<nav class="flex flex-col gap-xs flex-grow">
+<div class="bg-secondary-container text-on-secondary-container rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Overview</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">palette</span>
+<span class="font-label-md text-label-md">Visual Design</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">touch_app</span>
+<span class="font-label-md text-label-md">Usability</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-label-md text-label-md">Accessibility</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-md text-label-md">AI Insights</span>
+</div>
+</nav>
+<div class="pt-xl mt-auto flex flex-col gap-xs">
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">Documentation</span>
+</div>
+<div class="text-on-surface-variant hover:bg-surface-container-highest rounded-xl flex items-center gap-md px-md py-sm transition-all duration-200 cursor-pointer">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-md text-label-md">Support</span>
+</div>
+</div>
+</aside>
+<!-- TOP BAR -->
+<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="flex items-center gap-xl">
+<span class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</span>
+<nav class="hidden md:flex gap-lg">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">Dashboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Audit Logs</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Knowledge Base</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-200 font-label-md text-label-md" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS CONTENT -->
+<main class="flex-1 lg:pl-64 pt-20 p-xl bg-background min-h-screen">
+<div class="max-w-7xl mx-auto space-y-xl">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div>
+<h1 class="font-headline-lg text-headline-lg">Project Alpha Dashboard</h1>
+<p class="text-on-surface-variant font-body-md mt-sm">V2.4.0 Revision • Last audit 2 hours ago</p>
+</div>
+<button class="px-lg py-sm border border-outline-variant text-on-surface rounded-xl font-label-md text-label-md flex items-center gap-sm hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined">download</span>
+                        Export Report
+                    </button>
+</div>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-12 gap-lg">
+<!-- Score Card -->
+<div class="col-span-12 lg:col-span-4 bg-surface-container-low luxe-border rounded-xl p-lg flex flex-col justify-between h-64">
+<div>
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Global Health</span>
+<h2 class="text-display-lg font-display-lg text-primary mt-md">84<span class="text-headline-md">/100</span></h2>
+</div>
+<div class="flex items-center gap-sm">
+<span class="px-sm py-xs bg-primary/10 text-primary text-label-sm font-label-sm rounded">+12% from last week</span>
+</div>
+</div>
+<!-- Chart Card -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-low luxe-border rounded-xl p-lg relative overflow-hidden h-64">
+<div class="flex justify-between items-start mb-lg">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Accessibility Score Trends</span>
+<div class="flex gap-sm">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-32 px-lg pb-lg flex items-end justify-between">
+<!-- Mock chart bars -->
+<div class="w-8 bg-primary/20 h-12 rounded-t-sm"></div>
+<div class="w-8 bg-primary/20 h-16 rounded-t-sm"></div>
+<div class="w-8 bg-primary/20 h-20 rounded-t-sm"></div>
+<div class="w-8 bg-primary/40 h-24 rounded-t-sm"></div>
+<div class="w-8 bg-primary/60 h-28 rounded-t-sm"></div>
+<div class="w-8 bg-primary h-32 rounded-t-sm"></div>
+<div class="w-8 bg-primary/50 h-24 rounded-t-sm"></div>
+</div>
+</div>
+<!-- AI Insights Bento -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-low luxe-border rounded-xl p-lg space-y-md">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-tertiary">psychology</span>
+<h3 class="font-headline-md text-headline-md">Critical AI Insights</h3>
+</div>
+<div class="space-y-md">
+<div class="p-md bg-background/50 border border-outline-variant/30 rounded-xl hover:border-primary/50 transition-colors cursor-pointer group">
+<div class="flex justify-between items-start">
+<p class="font-label-md text-label-md text-on-surface">Button contrast ratio in header is 3.1:1 (Failing WCAG)</p>
+<span class="material-symbols-outlined text-error text-sm">priority_high</span>
+</div>
+<p class="text-on-surface-variant text-label-sm mt-xs">Suggested: #E2E2E2 background for optimal legibility.</p>
+</div>
+<div class="p-md bg-background/50 border border-outline-variant/30 rounded-xl hover:border-primary/50 transition-colors cursor-pointer">
+<div class="flex justify-between items-start">
+<p class="font-label-md text-label-md text-on-surface">Layout shift detected on mobile nav trigger</p>
+<span class="material-symbols-outlined text-tertiary text-sm">warning</span>
+</div>
+<p class="text-on-surface-variant text-label-sm mt-xs">Cause: Dynamic loading of SVG icons without height reservation.</p>
+</div>
+</div>
+</div>
+<!-- Mini Map / Project Feed -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-low luxe-border rounded-xl overflow-hidden flex flex-col h-full">
+<div class="p-lg border-b border-outline-variant">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Project Activity</span>
+</div>
+<div class="flex-1 p-lg space-y-md overflow-y-auto">
+<div class="flex gap-md">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">history</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">New audit started by Sarah</p>
+<p class="text-label-sm text-on-surface-variant">14 mins ago • Core flow audit</p>
+</div>
+</div>
+<div class="flex gap-md">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+</div>
+<div>
+<p class="text-label-md font-label-md text-on-surface">Report #902 Exported</p>
+<p class="text-label-sm text-on-surface-variant">1 hour ago • PDF format</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- PRODUCT TOUR OVERLAY LAYER -->
+<div class="fixed inset-0 z-[60] flex items-start pointer-events-none">
+<!-- Dark Overlay with Spotlight Punch-out -->
+<div class="absolute inset-0 bg-[#090e15]/70 backdrop-blur-[2px] pointer-events-auto">
+<div class="absolute inset-0" style="clip-path: polygon(0% 0%, 0% 100%, 16px 100%, 16px 100px, 248px 100px, 248px 148px, 16px 148px, 16px 100%, 100% 100%, 100% 0%);">
+</div>
+</div>
+<!-- Spotlight Border and Glow -->
+<!-- Coordinates manually aligned to the sidebar "Run New Audit" button -->
+<div class="absolute left-4 top-[100px] w-[232px] h-[48px] border-2 border-primary-container rounded-xl accent-glow z-[70] pointer-events-none"></div>
+<!-- Tooltip Card -->
+<div class="absolute left-[264px] top-[100px] w-80 bg-[#0d131c] rounded-xl luxe-border p-lg shadow-2xl z-[80] pointer-events-auto flex flex-col gap-md tooltip-arrow">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">Step 1 of 4</span>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="space-y-sm">
+<h3 class="text-on-surface font-headline-md text-headline-md font-bold">Start your first audit</h3>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+                    Upload a screenshot or paste a live URL — your AI critique is ready in seconds.
+                </p>
+</div>
+<!-- Tooltip Footer -->
+<div class="flex flex-col gap-lg pt-md">
+<!-- Progress Dots -->
+<div class="flex gap-sm">
+<div class="w-1.5 h-1.5 rounded-full bg-primary-container"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+</div>
+<div class="flex items-center justify-between">
+<button class="text-on-surface-variant font-label-md text-label-md hover:text-on-surface transition-colors">Skip tour</button>
+<button class="px-lg py-sm bg-primary-container text-on-primary-container rounded-xl font-bold font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center gap-sm shadow-lg shadow-primary-container/10">
+                        Next
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Subtle atmospheric effect -->
+<div class="fixed inset-0 pointer-events-none z-0">
+<div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-tertiary/5 rounded-full blur-[120px]"></div>
+</div>
+<script>
+        // Micro-interaction for tour button
+        document.querySelector('.pointer-events-auto button').addEventListener('click', function() {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+        });
+    </script>
+</body></html>
