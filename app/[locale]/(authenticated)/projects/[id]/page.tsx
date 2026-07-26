@@ -3,7 +3,12 @@ import { Plus, ArrowRight, FolderOpen, Sparkles } from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { Link } from '@/i18n/navigation';
-import { ProjectHeader, ProjectAnalysesList, ProjectScoreTrend } from '@/components/poisik';
+import {
+  ProjectHeader,
+  ProjectAnalysesList,
+  ProjectScoreTrend,
+  ProjectActionBar,
+} from '@/components/poisik';
 import type { AnalysisResult, Category } from '@/lib/schemas';
 import { CATEGORY_LABELS } from '@/lib/categories';
 
@@ -17,9 +22,11 @@ function scoreOf(result: unknown): number | undefined {
 // the colored Key Findings dots below, and the bar-chart score trend with
 // 30D/90D range chips (ProjectScoreTrend) — a deliberate, scoped exception
 // to the monochrome treatment used everywhere else in the app (dashboard,
-// projects, report). The mockup's fixed bottom action bar was tried and
-// then dropped per follow-up feedback — New Analysis/Compare placement is
-// being revisited.
+// projects, report). The mockup's fixed-to-viewport bottom action bar was
+// tried and dropped per follow-up feedback; New Analysis/Compare now live
+// in ProjectActionBar, a `sticky top-20` bar (docks below TopBarAuth) so
+// they stay reachable while scrolling without behaving like a mobile app's
+// bottom tab bar.
 //
 // Two things were still not reproduced literally, because they cross from
 // "visual style" into "showing the user something false":
@@ -110,12 +117,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     };
   });
 
+  const showCompare = analysesAsc.length >= 2;
+
   return (
     <div className="space-y-gutter">
       <ProjectHeader
         projectId={project.id}
         initialName={project.name}
         analysisCount={analysesAsc.length}
+      />
+
+      <ProjectActionBar
+        projectId={project.id}
+        projectName={project.name}
+        showCompare={showCompare}
       />
 
       <div className="grid grid-cols-1 gap-gutter lg:grid-cols-12">

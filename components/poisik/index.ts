@@ -31,6 +31,7 @@ export { ProjectsGrid, type ProjectGridItem } from './ProjectsGrid';
 export { ProjectHeader } from './ProjectHeader';
 export { ProjectAnalysesList, type ProjectAnalysisItem } from './ProjectAnalysesList';
 export { ProjectScoreTrend } from './ProjectScoreTrend';
+export { ProjectActionBar } from './ProjectActionBar';
 export { PlanUsageWidget } from './PlanUsageWidget';
 export { SettingsView } from './SettingsView';
 export { NotificationBell } from './NotificationBell';
