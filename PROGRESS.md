@@ -1,12 +1,13 @@
 # Poisik — Progress Log
 
-## Phase 9 — Premium UI Polish (Complete — 5/5)
+## Phase 9 — Premium UI Polish (Complete — 6/6)
 - **Report page**: fixed hardcoded demo image (now shows the real uploaded screenshot), NaN annotation marker numbers, wrong navbar/chrome (moved to a top-level route that picks owner vs. public chrome at runtime), marker/image misalignment (real screenshots no longer cropped into a fixed phone-bezel aspect ratio)
 - **Error handling**: sanitized AI provider errors before they reach the client (`toFriendlyAiErrorMessage`), refund the usage credit on a failed analysis instead of burning it
 - **Dashboard**: icon+subtitle header, richer stat cards, gradient score-trend chart, zero-quota state (monochrome, no red), responsive app shell with a mobile nav drawer, content container aligned with the top navbar
 - **Projects**: rebuilt list page from `design_v2/all_projects` — search, rich cards (thumbnail, score badge, updated time, real analysis count), inline "start new project" tile
-- **Settings**: rebuilt from `design_v2`/`design_v3` settings mockups — tabbed layout (Profile / Billing / Danger zone), editable name (new `PATCH /api/account` + NextAuth session refresh), real `PlanUsageWidget` with a working Upgrade-to-Pro CTA for FREE users (previously missing), Stripe Customer Portal link for paying users instead of fake payment/invoice data, fully responsive (scrollable tab pills on mobile, vertical list on desktop)
-- Commits: `25bc169`, `b00279c`, `0b96eec`, `76e87e1`, `0a4d01f`, `d9b70b7`, `c928b4f`, `1730f56`, `6ca9d9d`
+- **Settings**: rebuilt from `design_v2`/`design_v3` settings mockups — tabbed layout (Profile / Billing / Danger zone), editable name (new `PATCH /api/account` + NextAuth session refresh), real `PlanUsageWidget` with a working Upgrade-to-Pro CTA for FREE users (previously missing), Stripe Customer Portal link for paying users instead of fake payment/invoice data, fully responsive (scrollable tab pills on mobile, vertical list on desktop). Added an explicit "Settings" item to the sidebar/mobile nav (previously only reachable via the avatar dropdown or by clicking the plan-usage box)
+- **Project Detail** (`projects/[id]`): rebuilt from `design_v2/project_alpha_details` — inline rename + delete (wired to the pre-existing but previously unused ownership-checked `PATCH`/`DELETE /api/projects/[id]`), real per-project score trend chart, "Latest findings" panel computed from the latest analysis's real issues (critical/warning/suggestion counts, monochrome), analyses list with real thumbnails/scores/dates ("Audit #N" instead of invented titles), Compare action gated on 2+ analyses, mobile-responsive
+- Commits: `25bc169`, `b00279c`, `0b96eec`, `76e87e1`, `0a4d01f`, `d9b70b7`, `c928b4f`, `1730f56`, `6ca9d9d`, `b1b2f6f`, `82ea174`
 
 ## Phase 8 — Notifications & Onboarding (Complete)
 - **Notification system**: `Notification` Prisma model (userId, type, title, message, link, read), full API (`GET /api/notifications`, `PATCH .../[id]/read`, `PATCH .../read-all`), `NotificationBell` wired into both the marketing header and the authenticated topbar (hidden when logged out)
