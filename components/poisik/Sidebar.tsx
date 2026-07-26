@@ -1,6 +1,6 @@
 'use client';
 
-import { LayoutDashboard, FolderKanban, Plus } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Plus, Lock } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { GettingStartedPill } from './GettingStartedPill';
 
@@ -15,17 +15,27 @@ interface SidebarProps {
 
 export function Sidebar({ usage }: SidebarProps) {
   const pathname = usePathname();
+  // Redirect straight to /pricing instead of letting the user walk through
+  // project selection only to hit the 402 at the very last step — the API
+  // route still enforces this server-side regardless, this is just sparing
+  // a dead-end click.
+  const isAtLimit = usage.limit !== null && usage.remaining === 0;
 
   return (
     <aside className="fixed top-20 bottom-0 left-0 hidden w-64 flex-col justify-between border-r border-border bg-surface px-md py-lg lg:flex">
       <div>
         <Link
           id="tour-new-analysis"
-          href="/projects/new-analysis"
+          href={isAtLimit ? '/pricing' : '/projects/new-analysis'}
+          title={isAtLimit ? "You're out of analyses this month — upgrade to keep going" : undefined}
           className="mb-lg flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal px-md py-md font-bold text-white transition-opacity hover:opacity-90"
         >
-          <Plus className="size-4" strokeWidth={1.5} />
-          New Analysis
+          {isAtLimit ? (
+            <Lock className="size-4" strokeWidth={1.5} />
+          ) : (
+            <Plus className="size-4" strokeWidth={1.5} />
+          )}
+          {isAtLimit ? 'Upgrade to analyze' : 'New Analysis'}
         </Link>
         <nav className="space-y-xs">
           {NAV_LINKS.map(({ href, label, icon: Icon, id }) => {
@@ -54,7 +64,11 @@ export function Sidebar({ usage }: SidebarProps) {
         <Link
           id="tour-plan-usage"
           href="/settings"
-          className="block rounded-xl border border-border p-md transition-colors hover:bg-surface-hover"
+          className={`block rounded-xl border p-md transition-colors ${
+            isAtLimit
+              ? 'border-accent-signal/50 bg-accent-soft-bg'
+              : 'border-border hover:bg-surface-hover'
+          }`}
         >
         <p className="mb-xs text-label-sm text-text-secondary">{usage.plan} plan</p>
         <p className="mb-sm text-label-md text-text-primary">

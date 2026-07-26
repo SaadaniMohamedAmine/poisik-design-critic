@@ -6,9 +6,11 @@ import {
   BarChart3,
   Award,
   Zap,
+  Activity,
   type LucideIcon,
 } from 'lucide-react';
 import { auth } from '@/auth';
+import { Link } from '@/i18n/navigation';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUsage } from '@/lib/usage';
 import {
@@ -118,8 +120,6 @@ export default async function DashboardPage() {
 
   const plan = (session!.user as { plan?: string }).plan ?? 'FREE';
   const { remaining, limit } = await getCurrentUsage(userId, plan);
-  const used = limit === null ? 0 : limit - (remaining ?? 0);
-  const usagePct = limit === null ? 0 : Math.min(100, Math.round((used / Math.max(limit, 1)) * 100));
 
   const topProjects = [...projects]
     .map((p) => ({
@@ -138,6 +138,12 @@ export default async function DashboardPage() {
     delta?: string;
     icon: LucideIcon;
     progress?: number;
+    // Only the "Analyses left" card ever sets this — monochrome brand rule
+    // means "you're out of credits" can't be signaled with a red/amber
+    // accent, so it's done with emphasis (accent border + tinted
+    // background) instead. See PlanUsageWidget and Sidebar for the same
+    // zero-quota treatment.
+    isAtLimit?: boolean;
   }
 
   const statCards: StatCard[] = [
@@ -160,21 +166,29 @@ export default async function DashboardPage() {
       icon: Award,
     },
     {
+      // No `progress` here on purpose — PlanUsageWidget below already has
+      // its own progress bar for this exact number; showing two bars for
+      // one metric on the same screen was redundant.
       label: 'Analyses left',
       value: limit === null ? '∞' : `${remaining}/${limit}`,
-      delta: limit === null ? 'Unlimited' : 'This month',
+      delta: limit === null ? 'Unlimited' : remaining === 0 ? 'Upgrade for more' : 'This month',
       icon: Zap,
-      progress: limit === null ? undefined : usagePct,
+      isAtLimit: limit !== null && remaining === 0,
     },
   ];
 
   return (
     <div className="space-y-gutter">
-      <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        <h1 className="text-headline-lg font-bold text-text-primary">Overview</h1>
-        <p className="mt-xs text-body-md text-text-secondary">
-          Real-time auditing performance and project health.
-        </p>
+      <div className="animate-in fade-in slide-in-from-bottom-4 flex items-center gap-md duration-500">
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-bg-elevated">
+          <Activity className="size-5 text-accent-signal" strokeWidth={1.5} />
+        </div>
+        <div>
+          <h1 className="text-headline-lg font-bold text-text-primary">Overview</h1>
+          <p className="mt-xs text-body-md text-text-secondary">
+            Real-time auditing performance and project health.
+          </p>
+        </div>
       </div>
 
       <GettingStartedWidget />
@@ -183,7 +197,11 @@ export default async function DashboardPage() {
         {statCards.map((stat) => (
           <div
             key={stat.label}
-            className="group rounded-xl border border-border bg-surface p-lg transition-colors hover:bg-surface-hover"
+            className={`group rounded-xl border p-lg transition-colors ${
+              stat.isAtLimit
+                ? 'border-accent-signal/50 bg-accent-soft-bg'
+                : 'border-border bg-surface hover:bg-surface-hover'
+            }`}
           >
             <div className="mb-md flex items-start justify-between">
               <p className="text-label-sm tracking-wider text-text-secondary uppercase">
@@ -198,9 +216,17 @@ export default async function DashboardPage() {
               <span className="text-[32px] leading-none font-bold text-text-primary">
                 {stat.value}
               </span>
-              {stat.delta && (
-                <span className="text-label-sm text-text-secondary">{stat.delta}</span>
-              )}
+              {stat.delta &&
+                (stat.isAtLimit ? (
+                  <Link
+                    href="/pricing"
+                    className="text-label-sm font-semibold text-accent-signal hover:underline"
+                  >
+                    {stat.delta}
+                  </Link>
+                ) : (
+                  <span className="text-label-sm text-text-secondary">{stat.delta}</span>
+                ))}
             </div>
             {stat.progress !== undefined && (
               <div className="mt-md h-1 w-full overflow-hidden rounded-full bg-bg-elevated">

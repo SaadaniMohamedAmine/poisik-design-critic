@@ -12,9 +12,17 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
   const remainingCount = remaining ?? 0;
   const used = isUnlimited ? 0 : limit - remainingCount;
   const pct = isUnlimited ? 0 : Math.min(100, Math.round((used / Math.max(limit, 1)) * 100));
+  // Monochrome brand rule means "you're out of credits" can't be a red/
+  // amber alert — same accent hue, just more of it (border + tint), matching
+  // the "Analyses left" stat card's isAtLimit treatment on the dashboard.
+  const isAtLimit = !isUnlimited && remainingCount === 0;
 
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-xl border border-border bg-surface p-lg">
+    <div
+      className={`relative flex h-full flex-col justify-between overflow-hidden rounded-xl border p-lg ${
+        isAtLimit ? 'border-accent-signal/50 bg-accent-soft-bg' : 'border-border bg-surface'
+      }`}
+    >
       <div className="pointer-events-none absolute -top-16 -right-16 size-32 rounded-full bg-accent-signal/5 blur-[60px]" />
 
       <div className="relative z-10">
@@ -25,16 +33,18 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
           <Zap className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <h3 className="mb-xs text-headline-sm font-bold text-text-primary">
-          {isUnlimited ? 'Unlimited analyses' : 'Monthly quota'}
+          {isUnlimited ? 'Unlimited analyses' : isAtLimit ? "You're out of credits" : 'Monthly quota'}
         </h3>
         <p className="text-label-md text-text-secondary">
           {isUnlimited
             ? "You're on a plan with no monthly analysis cap."
-            : // "Remaining", not "used" — matches the Sidebar footer and the
-              // dashboard's "Analyses left" stat card, so the same number
-              // reads the same way everywhere on the page instead of
-              // requiring a subtraction to reconcile "used" vs "left".
-              `You have ${remainingCount} of ${limit} analyses left this month.`}
+            : isAtLimit
+              ? "You've used all your analyses for this month — upgrade to keep auditing."
+              : // "Remaining", not "used" — matches the Sidebar footer and
+                // the dashboard's "Analyses left" stat card, so the same
+                // number reads the same way everywhere on the page instead
+                // of requiring a subtraction to reconcile "used" vs "left".
+                `You have ${remainingCount} of ${limit} analyses left this month.`}
         </p>
       </div>
 
@@ -55,7 +65,9 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
         {plan !== 'ENTERPRISE' && (
           <Link
             href="/pricing"
-            className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
+            className={`flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white transition-opacity hover:opacity-90 ${
+              isAtLimit ? 'shadow-lg shadow-accent-signal/30' : ''
+            }`}
           >
             <Zap className="size-4" strokeWidth={2} />
             {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}

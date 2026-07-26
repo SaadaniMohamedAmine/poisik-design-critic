@@ -1,6 +1,6 @@
 'use client';
 
-import { LineChart, Line, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 import { TrendingUp, TrendingDown, LineChart as LineChartIcon } from 'lucide-react';
 
 interface ScoreTrendWidgetProps {
@@ -47,7 +47,13 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
       {hasTrend ? (
         <div className="h-64 flex-1">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={scores} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+            <AreaChart data={scores} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+              <defs>
+                <linearGradient id="scoreTrendFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-accent-signal)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="var(--color-accent-signal)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <YAxis domain={[0, 100]} hide />
               <Tooltip
                 contentStyle={{
@@ -58,15 +64,16 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
                 }}
                 labelFormatter={() => ''}
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="score"
                 stroke="var(--color-accent-signal)"
                 strokeWidth={2}
+                fill="url(#scoreTrendFill)"
                 dot={false}
                 activeDot={{ r: 4 }}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       ) : hasData ? (
