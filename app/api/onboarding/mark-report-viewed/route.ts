@@ -2,14 +2,12 @@ import { NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 
-// Called from the report page's client component on mount. Deliberately not
-// scoped to "this user's own report" — /api/analyses/[id] doesn't yet
-// support owner-authenticated reads of private analyses (only isPublic ones),
-// so ownership can't be checked from here either. Signed-in users reach a
-// /report/[id] page almost exclusively right after running their own
-// analysis, so "has this user opened a report page" is a good enough proxy
-// for the "View your first report" checklist step without touching that
-// separate, pre-existing gap.
+// Called from the report page's client component on mount. Not scoped to
+// "this user's own report" specifically — it just marks that a signed-in
+// user opened *a* report page, which is what the "View your first report"
+// checklist step means in practice. (/api/analyses/[id] now does enforce
+// real ownership for private analyses; this route just doesn't need that
+// check for its own purposes.)
 export async function POST() {
   const session = await auth();
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
