@@ -1,12 +1,13 @@
 'use client';
 
-import { LayoutDashboard, FolderKanban, Plus, Lock } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, Settings, Plus, Lock } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { GettingStartedPill } from './GettingStartedPill';
 
 const NAV_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, id: undefined },
   { href: '/projects', label: 'Projects', icon: FolderKanban, id: 'tour-projects-nav' },
+  { href: '/settings', label: 'Settings', icon: Settings, id: undefined },
 ] as const;
 
 interface SidebarNavProps {
