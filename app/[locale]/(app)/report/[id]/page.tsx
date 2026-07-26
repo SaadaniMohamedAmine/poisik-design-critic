@@ -32,7 +32,7 @@ export default function ReportPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-bg-base">
+      <div className="flex min-h-screen items-center justify-center bg-bg-base pt-20">
         <div className="size-8 animate-spin rounded-full border-2 border-accent-signal border-t-transparent" />
       </div>
     );
@@ -40,7 +40,7 @@ export default function ReportPage() {
 
   if (!data) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center bg-bg-base text-text-primary">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg-base pt-20 text-text-primary">
         <p className="text-headline-md text-text-secondary">Analysis not found</p>
         <Link href="/" className="mt-md text-label-md text-accent-signal hover:underline">
           Go Home
@@ -49,5 +49,9 @@ export default function ReportPage() {
     );
   }
 
-  return <ReportView result={data.result} isReadOnly={data.isPublic} />;
+  return (
+    <div className="mx-auto max-w-[1280px] px-lg pb-24 pt-32">
+      <ReportView result={data.result} isReadOnly={data.isPublic} />
+    </div>
+  );
 }

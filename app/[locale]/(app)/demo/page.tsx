@@ -22,7 +22,7 @@ const DEMO_RESULT: AnalysisResult = {
       description: 'The primary CTA text #87a1c5 on #121a27 fails WCAG AA contrast standards.',
       recommendation: 'Increase brightness to #e3e9f2 for better legibility and WCAG compliance.',
       code_fix: { language: 'hex', snippet: 'text-[#e3e9f2]', before: '#87a1c5', after: '#e3e9f2' },
-      location: { x: 50, y: 8 },
+      location: { x: 90, y: 56 },
     },
     {
       id: '2',
@@ -38,7 +38,7 @@ const DEMO_RESULT: AnalysisResult = {
         before: 'padding: 4px 8px',
         after: 'padding: 12px 16px',
       },
-      location: { x: 25, y: 35 },
+      location: { x: 90, y: 50 },
     },
     {
       id: '3',
@@ -54,15 +54,29 @@ const DEMO_RESULT: AnalysisResult = {
         before: 'mixed stroke widths',
         after: '1.5px stroke',
       },
-      location: { x: 20, y: 15 },
+      location: { x: 90, y: 7 },
     },
   ],
 };
 
 export default function DemoPage() {
   return (
-    <main className="pt-20">
-      <ReportView result={DEMO_RESULT} isReadOnly />
-    </main>
+    <div className="mx-auto max-w-[1280px] px-lg pb-24 pt-32">
+      <div className="animate-in fade-in slide-in-from-bottom-4 mx-auto mb-12 max-w-2xl text-center duration-700">
+        <p className="mb-3 text-label-sm font-semibold uppercase tracking-wide text-accent-signal">
+          Live Example
+        </p>
+        <h1 className="mb-4 text-headline-lg font-bold text-text-primary">
+          See a real Poisik analysis
+        </h1>
+        <p className="text-body-lg text-text-secondary">
+          No upload needed — this is a real audit report, exactly what you&apos;ll get in seconds
+          once you analyze your own design.
+        </p>
+      </div>
+      <div className="animate-in fade-in slide-in-from-bottom-6 fill-mode-both delay-150 duration-700">
+        <ReportView result={DEMO_RESULT} isReadOnly isDemo />
+      </div>
+    </div>
   );
 }

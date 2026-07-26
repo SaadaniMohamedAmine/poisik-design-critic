@@ -1,17 +1,28 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
-import { PoisikLogo, CircularGauge, AnnotationMarker, CategoryScoreBar } from '@/components/poisik';
+import { CircularGauge, AnnotationMarker, CategoryScoreBar } from '@/components/poisik';
 import { getClosestBenchmark } from '@/lib/benchmarks';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import type { AnalysisResult } from '@/lib/schemas';
 
 interface ReportViewProps {
   result: AnalysisResult;
   isReadOnly?: boolean;
+  isDemo?: boolean;
 }
+
+type Issue = AnalysisResult['issues'][number];
 
 const CATEGORY_LABELS: Record<string, string> = {
   all: 'All',
@@ -32,12 +43,16 @@ const severityStyles = {
     'border border-border-strong text-text-muted font-medium uppercase tracking-wide px-3 py-1 rounded-full text-xs',
 };
 
-export function ReportView({ result, isReadOnly }: ReportViewProps) {
+export function ReportView({ result, isReadOnly, isDemo }: ReportViewProps) {
+  const isDemoMode = Boolean(isReadOnly && isDemo);
+  const isPublicShare = Boolean(isReadOnly && !isDemo);
+
   const [activeFilter, setActiveFilter] = useState('all');
   const [expandedIssue, setExpandedIssue] = useState<string | null>(null);
   const [expandedFix, setExpandedFix] = useState<string | null>(null);
   const [copiedFix, setCopiedFix] = useState<string | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const filteredIssues =
     activeFilter === 'all'
@@ -46,51 +61,169 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
 
   const handleMarkerClick = (issueId: string) => {
     setActiveMarker(issueId);
-    const el = document.getElementById(`issue-${issueId}`);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (isDemoMode) {
+      setActiveFilter('all');
+      setDialogOpen(true);
+      setTimeout(() => {
+        document
+          .getElementById(`issue-${issueId}`)
+          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 50);
+    } else {
+      document.getElementById(`issue-${issueId}`)?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
     setTimeout(() => setActiveMarker(null), 2000);
   };
 
-  return (
-    <div className="flex min-h-screen flex-col antialiased">
-      {/* Top Bar */}
-      <nav className="sticky top-0 z-50 flex h-20 w-full items-center justify-between border-b border-border bg-surface px-margin">
-        <div className="flex items-center gap-xl">
-          <PoisikLogo size="md" />
-          <div className="hidden items-center gap-lg md:flex">
-            <Link
-              href="/projects/new-analysis"
-              className="border-b-2 border-accent-signal pb-1 text-label-md font-medium text-accent-signal"
-            >
-              Analyze
-            </Link>
-            <Link
-              href="/projects"
-              className="text-label-md font-medium text-text-secondary transition-colors hover:text-accent-signal"
-            >
-              Projects
-            </Link>
-          </div>
-        </div>
-        <div className="flex items-center gap-md">
-          <span className="rounded-full border border-border px-md py-1 text-label-sm font-semibold uppercase tracking-wider text-text-secondary">
-            Free Plan
-          </span>
-        </div>
-      </nav>
+  const handleChipClick = (cat: string) => {
+    setActiveFilter(cat);
+    if (isDemoMode) setDialogOpen(true);
+  };
 
+  const renderIssueCard = (issue: Issue, index: number) => (
+    <div
+      id={`issue-${issue.id}`}
+      key={issue.id}
+      style={isReadOnly ? { animationDelay: `${200 + index * 120}ms` } : undefined}
+      className={`rounded-xl border p-lg transition-all ${
+        isReadOnly ? 'animate-in fade-in slide-in-from-bottom-2 fill-mode-both duration-500' : ''
+      } ${
+        activeMarker === issue.id
+          ? 'border-accent-signal bg-accent-soft-bg'
+          : 'border-border bg-surface hover:border-accent-signal/50'
+      }`}
+    >
+      <div className="mb-md flex items-start justify-between">
+        <span className={severityStyles[issue.severity]}>{issue.severity}</span>
+        <button
+          onClick={() => setActiveMarker(issue.id)}
+          className="text-text-secondary transition-colors hover:text-accent-signal"
+          title="Locate on image"
+        >
+          <MapPin className="size-4" />
+        </button>
+      </div>
+      <h3 className="mb-sm text-body-lg font-bold text-text-primary">{issue.title}</h3>
+      <p className="text-body-md text-text-secondary">{issue.description}</p>
+      <div className="mt-lg">
+        <button
+          onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
+          className="text-label-md font-medium text-accent-signal hover:underline"
+        >
+          {expandedIssue === issue.id ? 'Hide recommendation' : 'Show recommendation'}
+        </button>
+        {expandedIssue === issue.id && (
+          <div className="mt-md rounded-lg border-l-4 border-accent-signal bg-surface p-md">
+            <p className="mb-1 text-label-md font-medium text-accent-signal">Recommendation:</p>
+            <p className="text-body-md text-text-primary">{issue.recommendation}</p>
+          </div>
+        )}
+      </div>
+      {issue.code_fix && (
+        <div className="mt-lg">
+          <button
+            onClick={() => setExpandedFix(expandedFix === issue.id ? null : issue.id)}
+            className="text-label-md font-medium text-accent-signal hover:underline"
+          >
+            {expandedFix === issue.id ? 'Hide fix' : 'View fix'}
+          </button>
+          {expandedFix === issue.id && (
+            <div className="mt-md space-y-md">
+              {issue.code_fix.before && issue.code_fix.after && (
+                <div className="flex items-center gap-lg">
+                  <div className="flex items-center gap-md">
+                    <span className="text-label-sm text-text-muted">Before</span>
+                    <div
+                      className="size-8 rounded border border-border"
+                      style={{ backgroundColor: issue.code_fix.before }}
+                    />
+                    <code className="text-label-sm text-text-secondary">
+                      {issue.code_fix.before}
+                    </code>
+                  </div>
+                  <span className="text-text-muted">&rarr;</span>
+                  <div className="flex items-center gap-md">
+                    <span className="text-label-sm text-text-muted">After</span>
+                    <div
+                      className="size-8 rounded border border-border"
+                      style={{ backgroundColor: issue.code_fix.after }}
+                    />
+                    <code className="text-label-sm text-accent-signal">
+                      {issue.code_fix.after}
+                    </code>
+                  </div>
+                </div>
+              )}
+              <div className="relative rounded-lg border border-border bg-bg-base p-md">
+                <pre className="overflow-x-auto text-label-sm text-text-primary">
+                  <code>{issue.code_fix.snippet}</code>
+                </pre>
+                <button
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(issue.code_fix.snippet);
+                    setCopiedFix(issue.id);
+                    setTimeout(() => setCopiedFix(null), 2000);
+                  }}
+                  className="absolute top-md right-md rounded bg-surface px-2 py-1 text-label-sm text-text-secondary transition-colors hover:text-accent-signal"
+                >
+                  {copiedFix === issue.id ? (
+                    <Check className="size-4 text-accent-signal" />
+                  ) : (
+                    <Copy className="size-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className={`flex flex-col antialiased ${isReadOnly ? '' : 'min-h-screen pt-20'}`}>
       {/* Main Split View */}
-      <main className="mx-auto flex h-[calc(100vh-80px)] w-full max-w-[1280px] overflow-hidden">
+      <main
+        className={`mx-auto flex w-full max-w-[1280px] ${
+          isReadOnly
+            ? `flex-col gap-lg md:flex-row ${isDemoMode ? 'md:items-stretch' : 'md:items-start'}`
+            : 'h-[calc(100vh-80px)] overflow-hidden'
+        }`}
+      >
         {/* Left: Screenshot + Annotations */}
-        <section className="relative flex w-[60%] items-center justify-center overflow-hidden bg-surface p-xl">
+        <section
+          className={`relative flex w-full items-center justify-center overflow-hidden bg-surface p-xl md:w-[60%] ${
+            isReadOnly
+              ? `rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-left-6 duration-700 ${
+                  isPublicShare ? 'md:sticky md:top-24' : ''
+                }`
+              : ''
+          }`}
+        >
           <div className="pointer-events-none absolute inset-0 opacity-10">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--tw-gradient-stops))] from-accent-signal/20 via-transparent to-transparent" />
           </div>
 
-          <div className="relative aspect-[9/19.5] w-full max-w-[400px] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30">
-            <div className="absolute inset-0 flex items-center justify-center bg-surface text-text-muted">
-              <p className="text-label-md">UI screenshot preview</p>
-            </div>
+          <div
+            className={`relative aspect-[9/19.5] overflow-hidden rounded-[3rem] border-[8px] border-border bg-surface shadow-2xl ring-1 ring-border/30 ${
+              isReadOnly ? 'animate-float' : ''
+            } ${
+              isDemoMode
+                ? 'w-full max-w-[320px] md:h-full md:max-h-[640px] md:w-auto'
+                : isPublicShare
+                  ? 'w-full max-w-[380px]'
+                  : 'w-full max-w-[400px]'
+            }`}
+          >
+            <Image
+              src="/demo-sample-ui.png"
+              alt="Analyzed screenshot"
+              fill
+              className="object-cover"
+            />
             {filteredIssues.map((issue) => (
               <AnnotationMarker
                 key={issue.id}
@@ -101,17 +234,17 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
               />
             ))}
           </div>
-
-          <div className="absolute bottom-lg left-lg flex items-center gap-md rounded-xl border border-border bg-surface/70 px-lg py-md backdrop-blur-lg">
-            <span className="text-label-md text-accent-signal">
-              AI Audit Active: Analysis {result.overall_score}% Complete
-            </span>
-          </div>
         </section>
 
         {/* Right: Report Panel */}
-        <aside className="flex w-[40%] flex-col border-l border-border bg-surface">
-          <div className="flex-1 overflow-y-auto px-lg pt-xl pb-xxl">
+        <aside
+          className={`flex w-full flex-col bg-surface md:w-[40%] ${
+            isReadOnly
+              ? 'rounded-2xl border border-border shadow-2xl animate-in fade-in slide-in-from-right-6 duration-700'
+              : 'border-l border-border'
+          }`}
+        >
+          <div className={`${isReadOnly ? '' : 'flex-1 overflow-y-auto'} px-lg pt-xl pb-xxl`}>
             <div className="mb-xl flex flex-col items-center">
               <CircularGauge value={result.overall_score} />
               <h2 className="mt-md text-headline-md font-medium text-text-primary">
@@ -139,15 +272,15 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
               ))}
             </div>
 
-            <div className="mb-lg flex flex-wrap gap-sm">
+            <div className={`flex flex-wrap gap-sm ${isDemoMode ? '' : 'mb-lg'}`}>
               {['all', ...Object.keys(result.category_scores)].map((cat) => (
                 <button
                   key={cat}
-                  onClick={() => setActiveFilter(cat)}
+                  onClick={() => handleChipClick(cat)}
                   className={`rounded-full border px-md py-1.5 text-label-sm transition-colors ${
-                    activeFilter === cat
+                    activeFilter === cat && !isDemoMode
                       ? 'border-accent-signal bg-accent-soft-bg text-accent-signal'
-                      : 'border-border text-text-secondary hover:bg-surface'
+                      : 'border-border text-text-secondary hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal'
                   }`}
                 >
                   {CATEGORY_LABELS[cat] || cat}
@@ -155,106 +288,15 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
               ))}
             </div>
 
-            <div className="space-y-lg">
-              {filteredIssues.map((issue) => (
-                <div
-                  id={`issue-${issue.id}`}
-                  key={issue.id}
-                  className={`rounded-xl border p-lg transition-all ${
-                    activeMarker === issue.id
-                      ? 'border-accent-signal bg-accent-soft-bg'
-                      : 'border-border bg-surface hover:border-accent-signal/50'
-                  }`}
-                >
-                  <div className="mb-md flex items-start justify-between">
-                    <span className={severityStyles[issue.severity]}>{issue.severity}</span>
-                    <button
-                      onClick={() => setActiveMarker(issue.id)}
-                      className="text-text-secondary transition-colors hover:text-accent-signal"
-                      title="Locate on image"
-                    >
-                      <MapPin className="size-4" />
-                    </button>
-                  </div>
-                  <h3 className="mb-sm text-body-lg font-bold text-text-primary">{issue.title}</h3>
-                  <p className="text-body-md text-text-secondary">{issue.description}</p>
-                  <div className="mt-lg">
-                    <button
-                      onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
-                      className="text-label-md font-medium text-accent-signal hover:underline"
-                    >
-                      {expandedIssue === issue.id ? 'Hide recommendation' : 'Show recommendation'}
-                    </button>
-                    {expandedIssue === issue.id && (
-                      <div className="mt-md rounded-lg border-l-4 border-accent-signal bg-surface p-md">
-                        <p className="mb-1 text-label-md font-medium text-accent-signal">
-                          Recommendation:
-                        </p>
-                        <p className="text-body-md text-text-primary">{issue.recommendation}</p>
-                      </div>
-                    )}
-                  </div>
-                  {issue.code_fix && (
-                    <div className="mt-lg">
-                      <button
-                        onClick={() => setExpandedFix(expandedFix === issue.id ? null : issue.id)}
-                        className="text-label-md font-medium text-accent-signal hover:underline"
-                      >
-                        {expandedFix === issue.id ? 'Hide fix' : 'View fix'}
-                      </button>
-                      {expandedFix === issue.id && (
-                        <div className="mt-md space-y-md">
-                          {issue.code_fix.before && issue.code_fix.after && (
-                            <div className="flex items-center gap-lg">
-                              <div className="flex items-center gap-md">
-                                <span className="text-label-sm text-text-muted">Before</span>
-                                <div
-                                  className="size-8 rounded border border-border"
-                                  style={{ backgroundColor: issue.code_fix.before }}
-                                />
-                                <code className="text-label-sm text-text-secondary">
-                                  {issue.code_fix.before}
-                                </code>
-                              </div>
-                              <span className="text-text-muted">&rarr;</span>
-                              <div className="flex items-center gap-md">
-                                <span className="text-label-sm text-text-muted">After</span>
-                                <div
-                                  className="size-8 rounded border border-border"
-                                  style={{ backgroundColor: issue.code_fix.after }}
-                                />
-                                <code className="text-label-sm text-accent-signal">
-                                  {issue.code_fix.after}
-                                </code>
-                              </div>
-                            </div>
-                          )}
-                          <div className="relative rounded-lg border border-border bg-bg-base p-md">
-                            <pre className="overflow-x-auto text-label-sm text-text-primary">
-                              <code>{issue.code_fix.snippet}</code>
-                            </pre>
-                            <button
-                              onClick={async () => {
-                                await navigator.clipboard.writeText(issue.code_fix.snippet);
-                                setCopiedFix(issue.id);
-                                setTimeout(() => setCopiedFix(null), 2000);
-                              }}
-                              className="absolute top-md right-md rounded bg-surface px-2 py-1 text-label-sm text-text-secondary transition-colors hover:text-accent-signal"
-                            >
-                              {copiedFix === issue.id ? (
-                                <Check className="size-4 text-accent-signal" />
-                              ) : (
-                                <Copy className="size-4" />
-                              )}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            {isDemoMode ? (
+              <p className="mt-md text-label-sm text-text-muted">
+                Tap a category to see its issues.
+              </p>
+            ) : (
+              <div className="space-y-lg">
+                {filteredIssues.map((issue, index) => renderIssueCard(issue, index))}
+              </div>
+            )}
           </div>
 
           {!isReadOnly && (
@@ -270,12 +312,24 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
             </footer>
           )}
 
-          {isReadOnly && (
+          {isDemoMode && (
+            <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
+              <p className="text-label-md text-text-secondary">This was a sample analysis</p>
+              <Link
+                href="/sign-up"
+                className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
+              >
+                Analyze your own design
+              </Link>
+            </footer>
+          )}
+
+          {isPublicShare && (
             <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
               <p className="text-label-sm text-text-muted">
                 Made with{' '}
                 <Link href="/" className="text-accent-signal hover:underline">
-                  Poisik
+                  poisik
                 </Link>
               </p>
               <Link
@@ -288,6 +342,31 @@ export function ReportView({ result, isReadOnly }: ReportViewProps) {
           )}
         </aside>
       </main>
+
+      {isDemoMode && (
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogContent className="max-h-[80vh] w-full max-w-2xl overflow-y-auto sm:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>
+                {activeFilter === 'all' ? 'All Issues' : CATEGORY_LABELS[activeFilter] || activeFilter}
+              </DialogTitle>
+              <DialogDescription>
+                {filteredIssues.length} issue{filteredIssues.length !== 1 ? 's' : ''} found in this
+                category.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-lg">
+              {filteredIssues.length === 0 ? (
+                <p className="py-lg text-center text-body-md text-text-secondary">
+                  No issues detected in this category — nice work.
+                </p>
+              ) : (
+                filteredIssues.map((issue, index) => renderIssueCard(issue, index))
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

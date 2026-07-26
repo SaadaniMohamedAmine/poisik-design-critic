@@ -53,7 +53,7 @@ export default function SignInPage() {
       </div>
 
       <main className="relative flex min-h-screen items-center justify-center px-margin pt-20">
-        <div className="w-full max-w-[440px] rounded-xl border border-border bg-surface p-xl shadow-2xl transition-colors hover:border-border-strong">
+        <div className="w-full max-w-[440px] rounded-xl border border-border bg-surface p-lg shadow-2xl transition-colors hover:border-border-strong md:p-xl">
           <div className="mb-xl text-center">
             <h1 className="mb-xs text-3xl font-bold text-text-primary">Welcome back</h1>
             <p className="text-base text-text-secondary">Sign in to your AI auditing dashboard</p>

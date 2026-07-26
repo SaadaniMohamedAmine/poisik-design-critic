@@ -50,20 +50,25 @@ export function SplashScreen() {
       }`}
     >
       <div className="relative flex items-center justify-center">
-        <div className="absolute size-32 rounded-full bg-accent-signal/10 blur-2xl" />
-        <div className="relative flex size-20 items-center justify-center rounded-2xl border border-border-strong bg-surface shadow-[0_0_40px_-8px_var(--color-accent-glow)]">
-          <span className="text-display-lg font-black text-accent-signal">P</span>
+        <div className="absolute size-20 rounded-full bg-accent-signal/10 blur-2xl sm:size-32" />
+        <div className="relative flex size-14 items-center justify-center rounded-2xl border border-border-strong bg-surface shadow-[0_0_40px_-8px_var(--color-accent-glow)] sm:size-20">
+          <span className="text-headline-sm font-black text-accent-signal sm:text-display-lg">
+            P
+          </span>
         </div>
       </div>
 
-      <div className="mt-md flex flex-col items-center gap-xs text-center">
-        <PoisikLogo size="lg" className="font-black capitalize text-accent-signal" />
-        <p className="text-label-sm uppercase tracking-[0.2em] text-text-secondary">
+      <div className="mt-sm flex flex-col items-center gap-xs text-center sm:mt-md">
+        <PoisikLogo
+          size="md"
+          className="font-black capitalize text-accent-signal sm:text-display-lg"
+        />
+        <p className="text-label-sm uppercase tracking-[0.1em] text-text-secondary sm:tracking-[0.2em]">
           Design and passion, with poise.
         </p>
       </div>
 
-      <div className="mt-lg w-64">
+      <div className="mt-md w-48 sm:mt-lg sm:w-64">
         <div className="h-1 w-full overflow-hidden rounded-full bg-bg-elevated">
           <div
             className="h-full rounded-full bg-linear-to-r from-accent-signal to-accent-glow transition-[width] duration-100 ease-linear"
