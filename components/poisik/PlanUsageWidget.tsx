@@ -9,7 +9,8 @@ interface PlanUsageWidgetProps {
 
 export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps) {
   const isUnlimited = limit === null;
-  const used = isUnlimited ? 0 : limit - (remaining ?? 0);
+  const remainingCount = remaining ?? 0;
+  const used = isUnlimited ? 0 : limit - remainingCount;
   const pct = isUnlimited ? 0 : Math.min(100, Math.round((used / Math.max(limit, 1)) * 100));
 
   return (
@@ -29,7 +30,11 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
         <p className="text-label-md text-text-secondary">
           {isUnlimited
             ? "You're on a plan with no monthly analysis cap."
-            : `You've used ${used} of ${limit} analyses this month.`}
+            : // "Remaining", not "used" — matches the Sidebar footer and the
+              // dashboard's "Analyses left" stat card, so the same number
+              // reads the same way everywhere on the page instead of
+              // requiring a subtraction to reconcile "used" vs "left".
+              `You have ${remainingCount} of ${limit} analyses left this month.`}
         </p>
       </div>
 
@@ -39,7 +44,7 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
             <div className="mb-xs flex justify-between text-label-sm text-text-secondary">
               <span>Analysis credits</span>
               <span className="text-text-primary">
-                {used} / {limit} used
+                {remainingCount} / {limit} left
               </span>
             </div>
             <div className="mb-lg h-2 w-full overflow-hidden rounded-full border border-border bg-bg-elevated">

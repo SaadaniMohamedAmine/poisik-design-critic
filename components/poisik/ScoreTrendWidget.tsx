@@ -9,7 +9,12 @@ interface ScoreTrendWidgetProps {
 
 export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
   const hasData = scores.length > 0;
-  const delta = scores.length >= 2 ? scores[scores.length - 1].score - scores[0].score : 0;
+  // A line chart with exactly one point renders nothing (dot={false}, and a
+  // line needs 2+ points) — a near-empty box that reads as broken, not as
+  // "not enough data yet". Treat it as its own state instead of lumping it
+  // in with the 2+ line-chart case.
+  const hasTrend = scores.length >= 2;
+  const delta = hasTrend ? scores[scores.length - 1].score - scores[0].score : 0;
 
   return (
     <div className="flex h-full flex-col rounded-xl border border-border bg-surface p-lg">
@@ -20,7 +25,7 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
             Performance progression across all projects
           </p>
         </div>
-        {hasData && scores.length >= 2 && (
+        {hasTrend && (
           <div
             className={`flex shrink-0 items-center gap-xs rounded-lg px-md py-sm text-label-md font-bold ${
               delta >= 0
@@ -39,7 +44,7 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
         )}
       </div>
 
-      {hasData ? (
+      {hasTrend ? (
         <div className="h-64 flex-1">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={scores} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
@@ -63,6 +68,17 @@ export function ScoreTrendWidget({ scores }: ScoreTrendWidgetProps) {
               />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+      ) : hasData ? (
+        <div className="flex h-64 flex-1 flex-col items-center justify-center gap-sm text-center">
+          <span className="text-[40px] leading-none font-bold text-text-primary">
+            {scores[0].score}
+            <span className="text-headline-sm font-medium text-text-muted">/100</span>
+          </span>
+          <p className="text-body-md text-text-secondary">Your first score is in</p>
+          <p className="text-label-sm text-text-muted">
+            Run one more analysis to start seeing a trend line.
+          </p>
         </div>
       ) : (
         <div className="flex h-64 flex-1 flex-col items-center justify-center gap-sm text-center">
