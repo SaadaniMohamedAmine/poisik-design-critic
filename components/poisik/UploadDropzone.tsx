@@ -192,25 +192,25 @@ export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
               )}
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between gap-md border-t border-border pt-md md:flex-row">
-            <div className="flex items-center gap-sm text-text-secondary">
-              <Verified className="size-[18px] text-accent-signal" />
-              <span className="text-label-md">{t('securityScan')}</span>
+          <div className="flex flex-wrap items-center justify-between gap-md border-t border-border pt-md">
+            <div className="flex shrink-0 items-center gap-sm text-text-secondary">
+              <Verified className="size-[18px] shrink-0 text-accent-signal" />
+              <span className="text-label-md whitespace-nowrap">{t('securityScan')}</span>
             </div>
-            <div className="flex w-full gap-md md:w-auto">
+            <div className="flex w-full gap-md sm:w-auto">
               <button
                 onClick={() => {
                   handleRemove();
                   inputRef.current?.click();
                 }}
-                className="flex-1 rounded-lg border border-border px-xl py-md text-label-md font-medium text-text-primary transition-colors hover:bg-surface md:flex-none"
+                className="flex-1 rounded-lg border border-border px-lg py-md text-label-md font-medium whitespace-nowrap text-text-primary transition-colors hover:bg-surface sm:flex-none"
               >
                 {t('changeFile')}
               </button>
               <button
                 onClick={handleUpload}
                 disabled={isUploading}
-                className="flex flex-1 items-center justify-center gap-sm rounded-lg bg-accent-signal px-xxl py-md text-label-md font-bold text-white shadow-lg shadow-accent-signal/20 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 md:flex-none"
+                className="flex flex-1 items-center justify-center gap-sm rounded-lg bg-accent-signal px-xl py-md text-label-md font-bold whitespace-nowrap text-white shadow-lg shadow-accent-signal/20 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 sm:flex-none"
               >
                 <Sparkles className="size-5" />
                 {isUploading ? t('uploading') : t('analyze')}
