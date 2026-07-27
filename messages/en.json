@@ -9,7 +9,11 @@
     "history": "History",
     "freePlan": "Free Plan",
     "features": "Features",
-    "demo": "Demo"
+    "demo": "Demo",
+    "pricing": "Pricing",
+    "beyondCritique": "Beyond Critique",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
   },
   "Landing": {
     "tagline": "Design and Passion, with poise.",
@@ -89,7 +93,7 @@
     "footerBlogLink": "Blog",
     "footerCareersLink": "Careers",
     "footerCookiePolicyLink": "Cookie Policy",
-    "footerCopyright": "© 2024 poisik. All rights reserved."
+    "footerCopyright": "© 2026 poisik. All rights reserved."
   },
   "Upload": {
     "title": "Analyze Interface",

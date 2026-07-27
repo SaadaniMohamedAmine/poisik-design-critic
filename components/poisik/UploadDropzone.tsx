@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { CloudUpload, X, Eye, Verified, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useUploadThing } from '@/lib/uploadthing';
@@ -20,6 +21,7 @@ interface FilePreview {
 }
 
 export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
+  const t = useTranslations('Upload');
   const [filePreview, setFilePreview] = useState<FilePreview | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -37,22 +39,25 @@ export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
     onUploadError: () => {
       setIsUploading(false);
       setProgress(0);
-      setError('Upload failed — check your connection and try again.');
+      setError(t('errorUpload'));
     },
     onUploadProgress: (p) => {
       setProgress(p);
     },
   });
 
-  const validateFile = useCallback((file: File): string | null => {
-    if (!ACCEPTED_TYPES.includes(file.type)) {
-      return "This file type isn't supported — please use JPG, PNG, or WebP.";
-    }
-    if (file.size > MAX_SIZE) {
-      return 'This file exceeds the 10MB limit — try compressing it first.';
-    }
-    return null;
-  }, []);
+  const validateFile = useCallback(
+    (file: File): string | null => {
+      if (!ACCEPTED_TYPES.includes(file.type)) {
+        return t('errorType');
+      }
+      if (file.size > MAX_SIZE) {
+        return t('errorSize');
+      }
+      return null;
+    },
+    [t]
+  );
 
   const handleFile = useCallback(
     (file: File) => {
@@ -135,12 +140,8 @@ export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
           <div className="mb-lg flex size-16 items-center justify-center rounded-full bg-surface transition-transform group-hover:scale-110">
             <CloudUpload className="size-8 text-accent-signal" />
           </div>
-          <p className="mb-xs text-body-lg text-text-primary">
-            Drag & drop your UI screenshot, or click to browse
-          </p>
-          <p className="text-label-sm text-text-muted">
-            Accepted formats: JPG, PNG, WebP — max 10MB
-          </p>
+          <p className="mb-xs text-body-lg text-text-primary">{t('dropzoneText')}</p>
+          <p className="text-label-sm text-text-muted">{t('dropzoneFormats')}</p>
           <input
             ref={inputRef}
             type="file"
@@ -191,28 +192,28 @@ export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
               )}
             </div>
           </div>
-          <div className="flex flex-col items-center justify-between gap-md border-t border-border pt-md md:flex-row">
-            <div className="flex items-center gap-sm text-text-secondary">
-              <Verified className="size-[18px] text-accent-signal" />
-              <span className="text-label-md">Security scan passed</span>
+          <div className="flex flex-wrap items-center justify-between gap-md border-t border-border pt-md">
+            <div className="flex shrink-0 items-center gap-sm text-text-secondary">
+              <Verified className="size-[18px] shrink-0 text-accent-signal" />
+              <span className="text-label-md whitespace-nowrap">{t('securityScan')}</span>
             </div>
-            <div className="flex w-full gap-md md:w-auto">
+            <div className="flex w-full gap-md sm:w-auto">
               <button
                 onClick={() => {
                   handleRemove();
                   inputRef.current?.click();
                 }}
-                className="flex-1 rounded-lg border border-border px-xl py-md text-label-md font-medium text-text-primary transition-colors hover:bg-surface md:flex-none"
+                className="flex-1 rounded-lg border border-border px-lg py-md text-label-md font-medium whitespace-nowrap text-text-primary transition-colors hover:bg-surface sm:flex-none"
               >
-                Change File
+                {t('changeFile')}
               </button>
               <button
                 onClick={handleUpload}
                 disabled={isUploading}
-                className="flex flex-1 items-center justify-center gap-sm rounded-lg bg-accent-signal px-xxl py-md text-label-md font-bold text-white shadow-lg shadow-accent-signal/20 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 md:flex-none"
+                className="flex flex-1 items-center justify-center gap-sm rounded-lg bg-accent-signal px-xl py-md text-label-md font-bold whitespace-nowrap text-white shadow-lg shadow-accent-signal/20 transition-all hover:opacity-90 active:scale-95 disabled:opacity-50 sm:flex-none"
               >
                 <Sparkles className="size-5" />
-                {isUploading ? 'Uploading...' : 'Analyze'}
+                {isUploading ? t('uploading') : t('analyze')}
               </button>
             </div>
           </div>

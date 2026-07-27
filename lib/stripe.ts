@@ -8,18 +8,28 @@ export function getStripe() {
   return new Stripe(key);
 }
 
+// "team" here maps to the Prisma Plan enum's ENTERPRISE value — see
+// lib/plans.ts's comment for why there's no separate TEAM enum value.
 const PRICE_IDS: Record<string, string | undefined> = {
   pro: process.env.STRIPE_PRO_PRICE_ID,
   team: process.env.STRIPE_TEAM_PRICE_ID,
 };
 
+export function planForPriceId(priceId: string | null | undefined): 'PRO' | 'ENTERPRISE' | null {
+  if (!priceId) return null;
+  if (priceId === process.env.STRIPE_PRO_PRICE_ID) return 'PRO';
+  if (priceId === process.env.STRIPE_TEAM_PRICE_ID) return 'ENTERPRISE';
+  return null;
+}
+
 export async function createCheckoutSession(
-  plan?: string,
-  customerEmail?: string
+  plan: string,
+  userId: string,
+  email?: string | null,
+  existingCustomerId?: string | null
 ) {
   const stripe = getStripe();
-  const priceId =
-    (plan && PRICE_IDS[plan]) || process.env.STRIPE_PRO_PRICE_ID;
+  const priceId = PRICE_IDS[plan];
 
   if (!priceId) {
     throw new Error('Price ID not found for plan: ' + plan);
@@ -28,14 +38,15 @@ export async function createCheckoutSession(
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1,
-      },
-    ],
-    customer_email: customerEmail,
-    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/pricing?success=true`,
+    line_items: [{ price: priceId, quantity: 1 }],
+    client_reference_id: userId,
+    // Reuse the existing Stripe customer if this user already has one — passing
+    // `customer_email` instead would make Stripe mint a second customer record,
+    // orphaning any existing subscription rather than replacing/updating it.
+    ...(existingCustomerId
+      ? { customer: existingCustomerId }
+      : { customer_email: email ?? undefined }),
+    success_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/dashboard?upgraded=true`,
     cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/pricing?canceled=true`,
   });
 
@@ -46,7 +57,7 @@ export async function createCustomerPortalUrl(customerId: string) {
   const stripe = getStripe();
   const session = await stripe.billingPortal.sessions.create({
     customer: customerId,
-    return_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/pricing`,
+    return_url: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/en/settings`,
   });
 
   return session;

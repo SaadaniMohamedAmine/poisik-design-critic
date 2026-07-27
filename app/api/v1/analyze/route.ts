@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { imageUrl, imageBase64, mimeType, locale, model } = await req.json();
+    const { imageUrl, imageBase64, mimeType, model } = await req.json();
 
     let base64 = imageBase64;
     let mt = mimeType || 'image/png';
@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Provide imageUrl or imageBase64' }, { status: 400 });
     }
 
-    const analysis = await analyzeImage({ imageBase64: base64, mimeType: mt, locale, model });
+    const analysis = await analyzeImage({ imageBase64: base64, mimeType: mt, model });
 
     for (const issue of analysis.issues) {
       if (issue.category === 'contrast') {

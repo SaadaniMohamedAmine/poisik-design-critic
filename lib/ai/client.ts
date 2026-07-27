@@ -10,15 +10,10 @@ type AiProvider = 'groq' | 'gemini';
 interface AnalyzeOptions {
   imageBase64: string;
   mimeType: string;
-  locale?: string;
   model?: AiProvider;
 }
 
-async function analyzeWithGroq(
-  imageBase64: string,
-  mimeType: string,
-  locale: string
-): Promise<unknown> {
+async function analyzeWithGroq(imageBase64: string, mimeType: string): Promise<unknown> {
   const apiKey = process.env.GROQ_API_KEY;
   if (!apiKey) throw new Error('GROQ_API_KEY is not set');
 
@@ -29,11 +24,11 @@ async function analyzeWithGroq(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
-      model: 'llama-3.2-90b-vision-preview',
+      model: 'qwen/qwen3.6-27b',
       messages: [
         {
           role: 'system',
-          content: buildSystemPrompt(locale),
+          content: buildSystemPrompt(),
         },
         {
           role: 'user',
@@ -66,11 +61,7 @@ async function analyzeWithGroq(
   return JSON.parse(data.choices?.[0]?.message?.content || '{}');
 }
 
-async function analyzeWithGemini(
-  imageBase64: string,
-  mimeType: string,
-  locale: string
-): Promise<unknown> {
+async function analyzeWithGemini(imageBase64: string, mimeType: string): Promise<unknown> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) throw new Error('GEMINI_API_KEY is not set');
 
@@ -89,7 +80,7 @@ async function analyzeWithGemini(
               },
             },
             {
-              text: buildSystemPrompt(locale),
+              text: buildSystemPrompt(),
             },
             {
               text: 'Analyze this UI screenshot and provide a detailed design critique. Respond with valid JSON only.',
@@ -116,16 +107,16 @@ async function analyzeWithGemini(
 }
 
 export async function analyzeImage(options: AnalyzeOptions): Promise<AnalysisResult> {
-  const { imageBase64, mimeType, locale = 'en', model = 'groq' } = options;
+  const { imageBase64, mimeType, model = 'groq' } = options;
 
   const providers: { name: AiProvider; fn: () => Promise<unknown> }[] = [
     {
       name: 'groq',
-      fn: () => analyzeWithGroq(imageBase64, mimeType, locale),
+      fn: () => analyzeWithGroq(imageBase64, mimeType),
     },
     {
       name: 'gemini',
-      fn: () => analyzeWithGemini(imageBase64, mimeType, locale),
+      fn: () => analyzeWithGemini(imageBase64, mimeType),
     },
   ];
 
@@ -144,5 +135,36 @@ export async function analyzeImage(options: AnalyzeOptions): Promise<AnalysisRes
     }
   }
 
+  console.error('All AI providers failed:', lastError?.message);
   throw lastError ?? new Error('All AI providers failed');
+}
+
+// Groq/Gemini error bodies are raw provider JSON (quota metrics, internal
+// rate-limit URLs, RetryInfo blobs, ...) — never fit to show a user. Call
+// sites (API routes) should log the real Error server-side and send only
+// this sanitized string to the client.
+export function toFriendlyAiErrorMessage(error: unknown): string {
+  const raw = error instanceof Error ? error.message : String(error);
+  const lower = raw.toLowerCase();
+
+  if (
+    lower.includes('429') ||
+    lower.includes('resource_exhausted') ||
+    lower.includes('quota') ||
+    lower.includes('rate limit')
+  ) {
+    return "Our AI provider is rate-limited right now — please try again in a minute.";
+  }
+
+  if (
+    lower.includes('401') ||
+    lower.includes('403') ||
+    lower.includes('api key') ||
+    lower.includes('api_key') ||
+    lower.includes('unauthorized')
+  ) {
+    return "There's a configuration issue with our AI provider — we've been notified.";
+  }
+
+  return "The analysis didn't come back as expected — please try again.";
 }

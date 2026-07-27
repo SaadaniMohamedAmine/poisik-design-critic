@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { SessionProvider } from 'next-auth/react';
+import { auth } from '@/auth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { JsonLd } from '@/components/poisik/JsonLd';
 import { CommandPalette } from '@/components/poisik/CommandPalette';
+import { SplashScreen } from '@/components/poisik/SplashScreen';
 import './globals.css';
 
 const inter = Inter({
@@ -49,17 +52,30 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // A single SessionProvider for the whole app — pre-fetching the session here
+  // (rather than nesting a second provider inside AppShell) avoids the
+  // module-level `next-auth/react` session state getting wiped out whenever a
+  // client-side navigation unmounts a nested provider (e.g. the command
+  // palette's "Go to Pricing" action navigating from an authenticated page to
+  // a public one), which would otherwise strand every other page's
+  // `useSession()` in a stale "unauthenticated" state for the rest of the SPA
+  // session.
+  const session = await auth();
+
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <SplashScreen />
         <JsonLd />
         <CommandPalette />
-        <TooltipProvider>{children}</TooltipProvider>
+        <SessionProvider session={session}>
+          <TooltipProvider>{children}</TooltipProvider>
+        </SessionProvider>
       </body>
     </html>
   );

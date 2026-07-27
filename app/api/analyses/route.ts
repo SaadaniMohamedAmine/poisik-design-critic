@@ -1,48 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { cookies } from 'next/headers';
-import { AnalysisResultSchema } from '@/lib/schemas';
+import { NextResponse } from 'next/server';
 
-const SESSION_COOKIE = 'poisik_session';
+// Analysis is now project-scoped (see prisma/schema.prisma and
+// features/07-history.md) instead of keyed by an anonymous session cookie.
+// These anonymous-session endpoints are superseded by the /api/projects
+// endpoints landing in Phase B — kept as inert stubs here only so existing
+// callers (the History page) don't hard-crash in the meantime.
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
-
-  if (!sessionId) {
-    return NextResponse.json({ analyses: [] });
-  }
-
-  const analyses = await prisma.analysis.findMany({
-    where: { sessionId },
-    orderBy: { createdAt: 'desc' },
-  });
-
-  return NextResponse.json({ analyses });
+  return NextResponse.json({ analyses: [] });
 }
 
-export async function POST(req: NextRequest) {
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get(SESSION_COOKIE)?.value;
-
-  if (!sessionId) {
-    return NextResponse.json({ error: 'No session' }, { status: 401 });
-  }
-
-  const body = await req.json();
-
-  const parsed = AnalysisResultSchema.safeParse(body.result);
-  if (!parsed.success) {
-    return NextResponse.json({ error: 'Invalid analysis result' }, { status: 400 });
-  }
-
-  const analysis = await prisma.analysis.create({
-    data: {
-      sessionId,
-      imageUrl: body.imageUrl,
-      result: parsed.data,
-    },
-  });
-
-  return NextResponse.json({ analysis });
+export async function POST() {
+  return NextResponse.json(
+    { error: 'This endpoint is retired — analyses are now created within a project.' },
+    { status: 410 }
+  );
 }

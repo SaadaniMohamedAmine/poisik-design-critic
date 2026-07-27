@@ -9,7 +9,11 @@
     "history": "Historique",
     "freePlan": "Gratuit",
     "features": "Fonctionnalités",
-    "demo": "Démo"
+    "demo": "Démo",
+    "pricing": "Tarifs",
+    "beyondCritique": "Au-delà de la critique",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire"
   },
   "Landing": {
     "tagline": "Design et passion, avec poise.",
@@ -89,7 +93,7 @@
     "footerBlogLink": "Blog",
     "footerCareersLink": "Carrières",
     "footerCookiePolicyLink": "Politique de cookies",
-    "footerCopyright": "© 2024 poisik. Tous droits réservés."
+    "footerCopyright": "© 2026 poisik. Tous droits réservés."
   },
   "Upload": {
     "title": "Analyser une interface",

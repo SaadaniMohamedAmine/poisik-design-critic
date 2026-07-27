@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Load Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#6294da",
+                    "secondary-fixed-dim": "#bfc7d9",
+                    "primary": "#a6c8ff",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-high": "#252a32",
+                    "inverse-surface": "#dee2ed",
+                    "on-surface": "#dee2ed",
+                    "on-primary-fixed-variant": "#004786",
+                    "surface-dim": "#0f141b",
+                    "on-secondary-container": "#adb5c7",
+                    "secondary": "#bfc7d9",
+                    "on-background": "#dee2ed",
+                    "tertiary-fixed-dim": "#f3bf4f",
+                    "primary-fixed": "#d4e3ff",
+                    "secondary-fixed": "#dbe3f5",
+                    "outline": "#8c919c",
+                    "on-secondary-fixed": "#141c29",
+                    "on-tertiary-fixed-variant": "#5c4200",
+                    "on-surface-variant": "#c2c6d2",
+                    "inverse-primary": "#275fa2",
+                    "tertiary-fixed": "#ffdea2",
+                    "tertiary-container": "#b98b1d",
+                    "on-tertiary-container": "#3a2800",
+                    "surface-tint": "#a6c8ff",
+                    "background": "#0f141b",
+                    "surface-variant": "#30353d",
+                    "surface": "#0f141b",
+                    "on-tertiary": "#402d00",
+                    "on-primary-container": "#002b56",
+                    "surface-container-low": "#171c23",
+                    "surface-bright": "#353942",
+                    "surface-container-highest": "#30353d",
+                    "primary-fixed-dim": "#a6c8ff",
+                    "surface-container-lowest": "#090e15",
+                    "on-tertiary-fixed": "#261900",
+                    "inverse-on-surface": "#2c3139",
+                    "secondary-container": "#3f4756",
+                    "on-secondary": "#29313f",
+                    "error": "#ffb4ab",
+                    "surface-container": "#1b2027",
+                    "on-primary": "#00315f",
+                    "on-primary-fixed": "#001c3b",
+                    "outline-variant": "#424750",
+                    "tertiary": "#f3bf4f",
+                    "on-error": "#690005",
+                    "on-secondary-fixed-variant": "#3f4756",
+                    "error-container": "#93000a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "24px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "base": "4px",
+                    "xl": "48px",
+                    "xxl": "80px",
+                    "margin": "32px",
+                    "sm": "8px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-lg-mobile": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "1.4", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.03em", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f141b;
+            color: #dee2ed;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+
+        /* Spotlight Effect */
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 14, 21, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            /* Mask creates the circular hole */
+            mask: radial-gradient(circle 32px at var(--spot-x) var(--spot-y), transparent 100%, black 100%);
+            -webkit-mask: radial-gradient(circle 32px at var(--spot-x) var(--spot-y), transparent 100%, black 100%);
+        }
+
+        /* Tooltip Arrow */
+        .tooltip-arrow::after {
+            content: '';
+            position: absolute;
+            top: -8px;
+            right: 24px;
+            width: 16px;
+            height: 16px;
+            background-color: #1b2027;
+            transform: rotate(45deg);
+            border-left: 1px solid #424750;
+            border-top: 1px solid #424750;
+        }
+
+        /* Custom glow for AI elements as per style guidance */
+        .ai-glow {
+            box-shadow: inset 0 0 0 1px rgba(166, 200, 255, 0.2);
+        }
+
+        .spotlight-border {
+            position: fixed;
+            top: calc(var(--spot-y) - 32px);
+            left: calc(var(--spot-x) - 32px);
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 2px solid #a6c8ff;
+            z-index: 101;
+            box-shadow: 0 0 15px rgba(166, 200, 255, 0.4);
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="dark h-screen" style="--spot-x: calc(100% - 48px); --spot-y: 40px;">
+<!-- Background Content (Dimmed Shell) -->
+<div class="flex flex-col h-full w-full pointer-events-none opacity-50 grayscale-[0.2]">
+<!-- TopNavBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin h-20 bg-background border-b border-outline-variant">
+<div class="text-headline-md font-headline-md font-bold tracking-tight text-on-background">Poisik</div>
+<nav class="hidden md:flex items-center gap-xl">
+<span class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md">Dashboard</span>
+<span class="text-on-surface-variant font-medium font-label-md">Audit Logs</span>
+<span class="text-on-surface-variant font-medium font-label-md">Knowledge Base</span>
+<span class="text-on-surface-variant font-medium font-label-md">Settings</span>
+</nav>
+<div class="flex items-center gap-md">
+<button class="bg-primary-container text-on-primary-container px-md py-sm rounded-xl font-label-md font-bold">Run New Audit</button>
+<span class="material-symbols-outlined text-on-surface-variant p-2">notifications</span>
+<!-- Spotlight Target -->
+<div class="w-10 h-10 rounded-full bg-surface-container-highest border border-outline-variant flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A close-up, high-quality portrait of a sophisticated professional user. The lighting is soft and cinematic, with a dark monochromatic navy background that matches the app's luxe minimalism. The subject is wearing a sleek, dark turtleneck, emphasizing a minimalist and authoritative aesthetic. The image is crisp, clean, and modern." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCxKns6F1iQEvlKV1vi3oYS4ZOWYbzZ0ownPQ66t0UFt9q7zeyyRr29ejuQQeWgQLqS8G_0dZZpew0KbNwvuuonXhxYYkIf-8MjfYJL5CgbHEPZc81YnyXMaUKyQbJ5CXZwaR4pizdkna40pI1PNEgxMaDnMAZDqDOG8TfpDewKkOG-1-q-ctjCf2fa-yKAhkVOBLDXSGkyB990VaH4Rn8mpUFXDB7DJ7sWeJkoMYNCb7bAhlU2ZQ61T4wQiqmD3d-2i59eheakOmc"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 mt-20">
+<!-- SideNavBar Component -->
+<aside class="hidden lg:flex flex-col py-lg px-md w-64 bg-surface-container-low border-r border-outline-variant">
+<div class="mb-xl px-sm">
+<div class="text-headline-sm font-headline-md font-bold text-on-surface">Project Alpha</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant opacity-60">V2.4.0 Revision</div>
+</div>
+<nav class="flex flex-col gap-xs flex-1">
+<div class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">dashboard</span>
+                        Overview
+                    </div>
+<div class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">palette</span>
+                        Visual Design
+                    </div>
+<div class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">touch_app</span>
+                        Usability
+                    </div>
+<div class="flex items-center gap-md px-md py-sm rounded-xl text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">visibility</span>
+                        Accessibility
+                    </div>
+<div class="flex items-center gap-md px-md py-sm rounded-xl bg-secondary-container text-on-secondary-container font-label-md">
+<span class="material-symbols-outlined">psychology</span>
+                        AI Insights
+                    </div>
+</nav>
+<div class="mt-auto flex flex-col gap-xs border-t border-outline-variant pt-md">
+<div class="flex items-center gap-md px-md py-sm text-on-surface-variant font-label-md">
+<span class="material-symbols-outlined">description</span>
+                        Documentation
+                    </div>
+</div>
+</aside>
+<!-- Main Dashboard Canvas -->
+<main class="flex-1 overflow-y-auto p-margin max-w-7xl mx-auto w-full">
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Bento Grid Card 1 -->
+<div class="col-span-8 bg-surface-container rounded-xl p-lg border border-outline-variant">
+<div class="flex justify-between items-center mb-lg">
+<h2 class="text-headline-md font-headline-md">AI Visual Audit</h2>
+<span class="bg-surface-container-highest px-sm py-xs rounded text-label-sm text-primary">SCANNING...</span>
+</div>
+<div class="h-64 rounded-xl bg-surface-container-lowest border border-outline-variant flex items-center justify-center">
+
+</div>
+</div>
+<!-- Bento Grid Card 2 -->
+<div class="col-span-4 bg-surface-container rounded-xl p-lg border border-outline-variant">
+<h3 class="text-label-md font-label-md text-on-surface-variant mb-md">Heuristic Scores</h3>
+<div class="space-y-md">
+<div class="flex justify-between items-end border-b border-outline-variant pb-xs">
+<span class="text-body-md font-body-md">Clarity</span>
+<span class="text-headline-md font-headline-md text-primary">8.4</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant pb-xs">
+<span class="text-body-md font-body-md">Efficiency</span>
+<span class="text-headline-md font-headline-md text-primary">9.1</span>
+</div>
+<div class="flex justify-between items-end border-b border-outline-variant pb-xs">
+<span class="text-body-md font-body-md">Delight</span>
+<span class="text-headline-md font-headline-md text-primary">7.2</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- Onboarding Layer -->
+<div class="onboarding-overlay"></div>
+<div class="spotlight-border"></div>
+<!-- Tooltip Card -->
+<div class="fixed right-margin top-24 z-[110] w-[320px] animate-in fade-in slide-in-from-top-4 duration-500">
+<div class="bg-surface-container border border-outline-variant rounded-xl p-lg shadow-2xl tooltip-arrow relative ai-glow">
+<!-- Tooltip Header -->
+<div class="mb-sm">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-widest">Step 4 of 4</span>
+</div>
+<!-- Tooltip Content -->
+<div class="space-y-sm mb-lg">
+<h1 class="text-headline-md font-headline-md font-bold text-on-surface">Your account, one click away</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Manage your profile, plan, and billing from here.</p>
+</div>
+<!-- Footer Section -->
+<div class="flex items-center justify-between">
+<!-- Progress Dots -->
+<div class="flex gap-2">
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant"></div>
+<div class="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_8px_rgba(166,200,255,0.6)]"></div>
+</div>
+<!-- Primary Action -->
+<button class="bg-primary text-on-primary font-label-md font-bold px-lg py-sm rounded-xl transition-all hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(166,200,255,0.3)]" onclick="window.location.reload()">
+                    Got it
+                </button>
+</div>
+</div>
+</div>
+<script>
+        // Update spotlight position on resize to ensure it stays locked to the avatar
+        function updateSpotlight() {
+            const avatar = document.querySelector('header .w-10.h-10');
+            if (avatar) {
+                const rect = avatar.getBoundingClientRect();
+                const centerX = rect.left + (rect.width / 2);
+                const centerY = rect.top + (rect.height / 2);
+                
+                document.body.style.setProperty('--spot-x', `${centerX}px`);
+                document.body.style.setProperty('--spot-y', `${centerY}px`);
+            }
+        }
+
+        window.addEventListener('resize', updateSpotlight);
+        window.addEventListener('load', updateSpotlight);
+        // Initial call
+        updateSpotlight();
+    </script>
+</body></html>
