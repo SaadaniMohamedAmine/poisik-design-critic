@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { v4 as uuidv4 } from 'uuid';
 import createMiddleware from 'next-intl/middleware';
-import { auth } from '@/auth';
+import NextAuth from 'next-auth';
+import { authConfig } from '@/auth.config';
+
+// A separate, edge-safe NextAuth() instance built from the minimal config
+// (no Prisma adapter/providers) — see auth.config.ts. JWT session-strategy
+// verification only needs AUTH_SECRET, not the adapter, so this is enough
+// to check whether a request is signed in without pulling @prisma/client
+// into this Edge Function's bundle.
+const { auth } = NextAuth(authConfig);
 
 const SESSION_COOKIE = 'poisik_session';
 const SESSION_MAX_AGE = 365 * 24 * 60 * 60;
