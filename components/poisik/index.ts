@@ -33,6 +33,7 @@ export { ProjectAnalysesList, type ProjectAnalysisItem } from './ProjectAnalyses
 export { ProjectScoreTrend } from './ProjectScoreTrend';
 export { ProjectActionBar } from './ProjectActionBar';
 export { PlanUsageWidget } from './PlanUsageWidget';
+export { UpgradeModal } from './UpgradeModal';
 export { SettingsView } from './SettingsView';
 export { NotificationBell } from './NotificationBell';
 export { WelcomeToast } from './WelcomeToast';

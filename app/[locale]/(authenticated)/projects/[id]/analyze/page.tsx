@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useRouter, Link } from '@/i18n/navigation';
+import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
+import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { UploadDropzone } from '@/components/poisik';
+import { UploadDropzone, UpgradeModal } from '@/components/poisik';
 import { Link2, Lightbulb, CloudOff, Zap, RefreshCw } from 'lucide-react';
+import type { Plan } from '@/lib/plans';
 
 type AnalysisError = { kind: 'limit' | 'api'; message: string; imageUrl: string };
 
@@ -26,8 +28,11 @@ export default function ProjectAnalyzePage() {
   const t = useTranslations('Upload');
   const params = useParams<{ id: string }>();
   const router = useRouter();
+  const { data: session } = useSession();
+  const plan = ((session?.user as { plan?: string } | undefined)?.plan ?? 'FREE') as Plan;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AnalysisError | null>(null);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   async function createAnalysis(imageUrl: string) {
     setLoading(true);
@@ -120,12 +125,12 @@ export default function ProjectAnalyzePage() {
               <p className="mt-xs text-body-md text-text-secondary">{error.message}</p>
             </div>
             {error.kind === 'limit' ? (
-              <Link
-                href="/pricing"
+              <button
+                onClick={() => setUpgradeOpen(true)}
                 className="shrink-0 self-start rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
               >
                 Upgrade to Pro
-              </Link>
+              </button>
             ) : (
               <button
                 onClick={() => createAnalysis(error.imageUrl)}
@@ -144,6 +149,8 @@ export default function ProjectAnalyzePage() {
           <p className="text-label-md text-text-secondary italic">{t('proTip')}</p>
         </div>
       </div>
+
+      <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} plan={plan} />
     </div>
   );
 }

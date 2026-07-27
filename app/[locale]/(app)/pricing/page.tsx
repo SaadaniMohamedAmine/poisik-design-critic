@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 import { Link } from '@/i18n/navigation';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PLAN_LIMITS } from '@/lib/plans';
 
 type Plan = {
   name: string;
@@ -29,8 +30,12 @@ const PLANS: Plan[] = [
     key: 'PRO',
     price: '19',
     description: 'For serious design teams',
+    // Was "Unlimited analyses" — PLAN_LIMITS.PRO is actually 100/month
+    // (only ENTERPRISE/"Team" is truly uncapped). Sourced from the same
+    // constant the usage-limit check enforces, so this can't drift out of
+    // sync with what the API actually allows again.
     features: [
-      'Unlimited analyses',
+      `${PLAN_LIMITS.PRO} analyses/month`,
       'PDF Export without watermark',
       'Comparison mode',
       'Priority AI routing',

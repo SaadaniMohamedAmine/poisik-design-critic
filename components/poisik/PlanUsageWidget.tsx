@@ -1,5 +1,10 @@
+'use client';
+
+import { useState } from 'react';
 import { Zap } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
+import { UpgradeModal } from './UpgradeModal';
+import type { Plan } from '@/lib/plans';
 
 interface PlanUsageWidgetProps {
   plan: string;
@@ -8,6 +13,7 @@ interface PlanUsageWidgetProps {
 }
 
 export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps) {
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
   const isUnlimited = limit === null;
   const remainingCount = remaining ?? 0;
   const used = isUnlimited ? 0 : limit - remainingCount;
@@ -62,18 +68,32 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
             </div>
           </>
         )}
-        {plan !== 'ENTERPRISE' && (
-          <Link
-            href="/pricing"
-            className={`flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white transition-opacity hover:opacity-90 ${
-              isAtLimit ? 'shadow-lg shadow-accent-signal/30' : ''
-            }`}
-          >
-            <Zap className="size-4" strokeWidth={2} />
-            {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}
-          </Link>
-        )}
+        {plan !== 'ENTERPRISE' &&
+          (isAtLimit ? (
+            // At-limit is the real "hit the wall" moment — design reference:
+            // design_v2/upgrade_modal_limit_reached. A plain Link felt too
+            // easy to miss right when it matters most; the modal gives a
+            // real (code-verified) Free-vs-next-tier number comparison
+            // instead of just bouncing straight to /pricing.
+            <button
+              onClick={() => setUpgradeOpen(true)}
+              className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white shadow-lg shadow-accent-signal/30 transition-opacity hover:opacity-90"
+            >
+              <Zap className="size-4" strokeWidth={2} />
+              {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}
+            </button>
+          ) : (
+            <Link
+              href="/pricing"
+              className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
+            >
+              <Zap className="size-4" strokeWidth={2} />
+              {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}
+            </Link>
+          ))}
       </div>
+
+      <UpgradeModal open={upgradeOpen} onOpenChange={setUpgradeOpen} plan={plan as Plan} />
     </div>
   );
 }
