@@ -1,6 +1,6 @@
 # Poisik — Progress Log
 
-## Phase 9 — Premium UI Polish (Complete — 6/6)
+## Phase 9 — Premium UI Polish (Complete — 7/7)
 - **Report page**: fixed hardcoded demo image (now shows the real uploaded screenshot), NaN annotation marker numbers, wrong navbar/chrome (moved to a top-level route that picks owner vs. public chrome at runtime), marker/image misalignment (real screenshots no longer cropped into a fixed phone-bezel aspect ratio)
 - **Error handling**: sanitized AI provider errors before they reach the client (`toFriendlyAiErrorMessage`), refund the usage credit on a failed analysis instead of burning it
 - **Dashboard**: icon+subtitle header, richer stat cards, gradient score-trend chart, zero-quota state (monochrome, no red), responsive app shell with a mobile nav drawer, content container aligned with the top navbar
@@ -11,7 +11,9 @@
 - **Project Detail — action bar**: dropped the mockup's fixed-to-viewport bottom bar per feedback (felt like a mobile tab bar, broke the app's padded-card layout convention). Replaced with `ProjectActionBar`, a `sticky top-20` bar docking below `TopBarAuth` — active project name + Compare/New Analysis stay reachable while scrolling without leaving the page's normal content flow
 - **Compare** (`projects/[id]/compare`): picker rebuilt from `design_v2/select_analyses_to_compare` — thumbnail cards with checkbox overlay, date pill, "X of 2 selected" footer, shake nudge past the 2-item cap. Kept "Audit #N" + real issue counts instead of the mockup's invented version names/captions. Result view restyled with the same icon-badge header pattern
 - **Analyze/Upload** (`projects/[id]/analyze`): matched `design_v1/upload_design_poisik` — display-lg headline, ambient blobs, inset glow card, pro-tip callout. Wired `UploadDropzone` to the `Upload.*` i18n keys that already existed in `messages/en.json`/`fr.json` but weren't consumed (component had hardcoded English instead) — French users now see translated copy on this screen
-- Commits: `25bc169`, `b00279c`, `0b96eec`, `76e87e1`, `0a4d01f`, `d9b70b7`, `c928b4f`, `1730f56`, `6ca9d9d`, `b1b2f6f`, `82ea174`, `9ba070a`, `186f1fd`, `00e7b39`, `53ec5fe`, `6ef3f2b`
+- **Analyze/Upload — bugfix**: fixed "Security scan passed" label wrapping onto two lines in the selected-file footer (flex row let the button pair squeeze the label below its natural width); switched to `flex-wrap` + `shrink-0`/`whitespace-nowrap` on the label, dropped the responsive breakpoint from `md` to `sm`, trimmed oversized button padding
+- **New Analysis picker** (`projects/new-analysis`): no matching Stitch mockup for this screen, so rebuilt using the app's own established header pattern instead — icon badge + h1 + subtitle, project rows upgraded from plain text links to bordered cards with a folder icon, real per-project analysis count, and hover arrow affordance; empty state (0 projects) and create-project form both restyled to match (bordered card, icon badge)
+- Commits: `25bc169`, `b00279c`, `0b96eec`, `76e87e1`, `0a4d01f`, `d9b70b7`, `c928b4f`, `1730f56`, `6ca9d9d`, `b1b2f6f`, `82ea174`, `9ba070a`, `186f1fd`, `00e7b39`, `53ec5fe`, `6ef3f2b`, `b37bf2b`
 
 ## Phase 8 — Notifications & Onboarding (Complete)
 - **Notification system**: `Notification` Prisma model (userId, type, title, message, link, read), full API (`GET /api/notifications`, `PATCH .../[id]/read`, `PATCH .../read-all`), `NotificationBell` wired into both the marketing header and the authenticated topbar (hidden when logged out)
