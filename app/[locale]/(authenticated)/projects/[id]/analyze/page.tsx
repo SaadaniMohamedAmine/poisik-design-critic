@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useRouter } from '@/i18n/navigation';
+import { useRouter, Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { UploadDropzone } from '@/components/poisik';
-import { Link2, Lightbulb } from 'lucide-react';
+import { Link2, Lightbulb, CloudOff, Zap, RefreshCw } from 'lucide-react';
+
+type AnalysisError = { kind: 'limit' | 'api'; message: string; imageUrl: string };
 
 // Design reference: design_v1/upload_design_poisik ("Analyze Interface").
 // The mockup's own top nav/footer are the app's real chrome elsewhere
@@ -25,9 +27,11 @@ export default function ProjectAnalyzePage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<AnalysisError | null>(null);
 
   async function createAnalysis(imageUrl: string) {
     setLoading(true);
+    setError(null);
     const toastId = toast.loading('Running your AI audit...');
     const res = await fetch(`/api/projects/${params.id}/analyses`, {
       method: 'POST',
@@ -37,15 +41,19 @@ export default function ProjectAnalyzePage() {
     setLoading(false);
     if (!res.ok) {
       const data = await res.json();
+      const isLimit = data.error === 'MONTHLY_LIMIT_REACHED';
       // The API route already sanitizes this — never the raw provider
-      // error body. A toast is enough here; a failure also lands in the
-      // notification bell (ANALYSIS_FAILED) so it isn't lost once the
-      // toast auto-closes.
-      const message =
-        data.error === 'MONTHLY_LIMIT_REACHED'
-          ? "You've reached your monthly analysis limit — upgrade to keep auditing."
-          : (data.error ?? "The analysis didn't come back as expected — try again.");
+      // error body.
+      const message = isLimit
+        ? "You've reached your monthly analysis limit — upgrade to keep auditing."
+        : (data.error ?? "The analysis didn't come back as expected — try again.");
       toast.update(toastId, { render: message, type: 'error', isLoading: false, autoClose: 5000 });
+      // The toast auto-closes and is easy to miss; a failure also lands in
+      // the notification bell (ANALYSIS_FAILED), but a persistent inline
+      // card with a real retry affordance (design_v1/system_status_poisik)
+      // is the honest fix here rather than making the user re-select the
+      // file from scratch.
+      setError({ kind: isLimit ? 'limit' : 'api', message, imageUrl });
       return;
     }
     const analysis = await res.json();
@@ -87,6 +95,49 @@ export default function ProjectAnalyzePage() {
           <UploadDropzone onAnalyze={createAnalysis} />
           {loading && <p className="mt-md text-label-md text-text-secondary">Analyzing...</p>}
         </div>
+
+        {error && (
+          <div
+            className={`mt-lg flex flex-col gap-md rounded-xl border p-lg sm:flex-row sm:items-start ${
+              error.kind === 'limit' ? 'border-border bg-surface' : 'border-accent-signal/20 bg-accent-soft-bg'
+            }`}
+          >
+            <div
+              className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${
+                error.kind === 'limit' ? 'bg-bg-elevated' : 'bg-accent-signal/10'
+              }`}
+            >
+              {error.kind === 'limit' ? (
+                <Zap className="size-5 text-text-secondary" strokeWidth={1.5} />
+              ) : (
+                <CloudOff className="size-5 text-accent-signal" strokeWidth={1.5} />
+              )}
+            </div>
+            <div className="flex-1">
+              <h3 className="text-label-md font-bold text-text-primary">
+                {error.kind === 'limit' ? "You're out of credits" : 'Analysis failed'}
+              </h3>
+              <p className="mt-xs text-body-md text-text-secondary">{error.message}</p>
+            </div>
+            {error.kind === 'limit' ? (
+              <Link
+                href="/pricing"
+                className="shrink-0 self-start rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
+              >
+                Upgrade to Pro
+              </Link>
+            ) : (
+              <button
+                onClick={() => createAnalysis(error.imageUrl)}
+                disabled={loading}
+                className="flex shrink-0 items-center justify-center gap-sm self-start rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+              >
+                <RefreshCw className="size-4" strokeWidth={2} />
+                Retry analysis
+              </button>
+            )}
+          </div>
+        )}
 
         <div className="mt-lg flex items-start gap-md rounded-xl border border-border/50 bg-bg-elevated/50 p-md">
           <Lightbulb className="mt-0.5 size-4 shrink-0 text-accent-signal" strokeWidth={1.5} />

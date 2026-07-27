@@ -68,13 +68,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               Run your first AI audit for &quot;{project.name}&quot; to start tracking its score
               over time.
             </p>
-            <Link
-              href={`/projects/${project.id}/analyze`}
-              className="inline-flex items-center gap-sm rounded-xl bg-accent-signal px-lg py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
-            >
-              <Plus className="size-4" strokeWidth={2} />
-              Run first analysis
-            </Link>
+            <div className="flex flex-col gap-sm sm:flex-row sm:justify-center">
+              <Link
+                href={`/projects/${project.id}/analyze`}
+                className="inline-flex items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
+              >
+                <Plus className="size-4" strokeWidth={2} />
+                Run first analysis
+              </Link>
+              <Link
+                href="/demo"
+                className="inline-flex items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-md text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover"
+              >
+                View sample report
+              </Link>
+            </div>
           </div>
         </div>
       </div>
