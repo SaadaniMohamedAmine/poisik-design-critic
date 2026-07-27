@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
-import { ScrollReveal } from '@/components/poisik';
+import { ScrollReveal } from '@/components/poisik/ScrollReveal';
 import {
   ArrowRight,
   Upload,

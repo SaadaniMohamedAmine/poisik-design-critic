@@ -3,7 +3,12 @@
 import { useEffect, useRef } from 'react';
 import { Link } from '@/i18n/navigation';
 import { Home, HelpCircle, History, BookOpen, Search } from 'lucide-react';
-import { GlitchText, MarketingHeader, MarketingFooter } from '@/components/poisik';
+// See app/not-found.tsx for why these are imported directly instead of
+// from the '@/components/poisik' barrel (which also exports AppShell,
+// pulling lib/prisma.ts into this Client Component's browser bundle).
+import { GlitchText } from '@/components/poisik/GlitchText';
+import { MarketingHeader } from '@/components/poisik/MarketingHeader';
+import { MarketingFooter } from '@/components/poisik/MarketingFooter';
 
 export default function LocaleNotFound() {
   const glowRef = useRef<HTMLDivElement>(null);

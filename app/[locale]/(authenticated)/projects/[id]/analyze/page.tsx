@@ -6,7 +6,8 @@ import { useRouter } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { UploadDropzone, UpgradeModal } from '@/components/poisik';
+import { UploadDropzone } from '@/components/poisik/UploadDropzone';
+import { UpgradeModal } from '@/components/poisik/UpgradeModal';
 import { Link2, Lightbulb, CloudOff, Zap, RefreshCw } from 'lucide-react';
 import type { Plan } from '@/lib/plans';
 
@@ -104,7 +105,9 @@ export default function ProjectAnalyzePage() {
         {error && (
           <div
             className={`mt-lg flex flex-col gap-md rounded-xl border p-lg sm:flex-row sm:items-start ${
-              error.kind === 'limit' ? 'border-border bg-surface' : 'border-accent-signal/20 bg-accent-soft-bg'
+              error.kind === 'limit'
+                ? 'border-border bg-surface'
+                : 'border-accent-signal/20 bg-accent-soft-bg'
             }`}
           >
             <div

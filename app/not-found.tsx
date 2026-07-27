@@ -4,7 +4,15 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { NextIntlClientProvider } from 'next-intl';
 import { Home, HelpCircle, History, BookOpen, Search } from 'lucide-react';
-import { GlitchText, MarketingHeader, MarketingFooter } from '@/components/poisik';
+// Imported from their own files, not the '@/components/poisik' barrel —
+// that barrel also re-exports AppShell, which pulls in lib/prisma.ts.
+// This file is a Client Component, so bundling anything that imports
+// Prisma into it fails at build time ("Can't resolve
+// .prisma/client/index-browser", Prisma's client isn't meant to run in
+// the browser at all).
+import { GlitchText } from '@/components/poisik/GlitchText';
+import { MarketingHeader } from '@/components/poisik/MarketingHeader';
+import { MarketingFooter } from '@/components/poisik/MarketingFooter';
 import enMessages from '@/messages/en.json';
 import frMessages from '@/messages/fr.json';
 

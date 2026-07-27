@@ -3,13 +3,11 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
-import {
-  PoisikLogo,
-  LanguageSwitcher,
-  UserDropdown,
-  NotificationBell,
-  SidebarNav,
-} from '@/components/poisik';
+import { PoisikLogo } from '@/components/poisik/PoisikLogo';
+import { LanguageSwitcher } from '@/components/poisik/LanguageSwitcher';
+import { UserDropdown } from '@/components/poisik/UserDropdown';
+import { NotificationBell } from '@/components/poisik/NotificationBell';
+import { SidebarNav } from '@/components/poisik/SidebarNav';
 import { Link } from '@/i18n/navigation';
 
 interface TopBarAuthProps {

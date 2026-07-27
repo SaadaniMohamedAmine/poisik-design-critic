@@ -4,7 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
-import { CircularGauge, AnnotationMarker, CategoryScoreBar } from '@/components/poisik';
+import { CircularGauge } from '@/components/poisik/CircularGauge';
+import { AnnotationMarker } from '@/components/poisik/AnnotationMarker';
+import { CategoryScoreBar } from '@/components/poisik/CategoryScoreBar';
 import { getClosestBenchmark } from '@/lib/benchmarks';
 import { Button } from '@/components/ui/button';
 import {
