@@ -30,6 +30,7 @@ export { ProjectsOverviewWidget } from './ProjectsOverviewWidget';
 export { ProjectsGrid, type ProjectGridItem } from './ProjectsGrid';
 export { ProjectHeader } from './ProjectHeader';
 export { ProjectAnalysesList, type ProjectAnalysisItem } from './ProjectAnalysesList';
+export { AuditLogsList, type AuditLogItem } from './AuditLogsList';
 export { ProjectScoreTrend } from './ProjectScoreTrend';
 export { ProjectActionBar } from './ProjectActionBar';
 export { PlanUsageWidget } from './PlanUsageWidget';
