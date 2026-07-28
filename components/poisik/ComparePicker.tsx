@@ -107,9 +107,18 @@ export function ComparePicker({ projectId, analyses }: ComparePickerProps) {
           </Link>
           <button
             disabled={selected.length !== 2}
-            onClick={() =>
-              router.push(`/projects/${projectId}/compare?a=${selected[0]}&b=${selected[1]}`)
-            }
+            onClick={() => {
+              // Always send the chronologically earlier audit as `a` (Before)
+              // and the later one as `b` (After), regardless of click order —
+              // otherwise clicking the newer card first flips the result
+              // view's Before/After labels and sends "View full report" to
+              // the older audit instead of the newer one.
+              const [first, second] = selected;
+              const indexOf = (id: string) => analyses.find((x) => x.id === id)?.index ?? 0;
+              const [a, b] =
+                indexOf(first) <= indexOf(second) ? [first, second] : [second, first];
+              router.push(`/projects/${projectId}/compare?a=${a}&b=${b}`);
+            }}
             className="rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           >
             Compare
