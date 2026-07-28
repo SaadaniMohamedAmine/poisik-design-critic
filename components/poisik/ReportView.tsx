@@ -28,6 +28,11 @@ interface ReportViewProps {
   // anonymous visitor on a share link, or a different signed-in account)
   // sees the read-only public variant.
   showOwnerActions?: boolean;
+  // Only needed when showOwnerActions is true — the Share Report button
+  // uses these to flip Analysis.isPublic via PATCH /api/analyses/[id] and
+  // copy the real /report/[id] link.
+  analysisId?: string;
+  initialIsPublic?: boolean;
 }
 
 type Issue = AnalysisResult['issues'][number];
@@ -46,7 +51,14 @@ const severityStyles = {
 // analysis passes its own analysis.imageUrl down from the report page.
 const FALLBACK_IMAGE = '/demo-sample-ui.png';
 
-export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: ReportViewProps) {
+export function ReportView({
+  result,
+  imageUrl,
+  isDemo,
+  showOwnerActions,
+  analysisId,
+  initialIsPublic,
+}: ReportViewProps) {
   const isDemoMode = Boolean(isDemo);
   const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
@@ -56,6 +68,30 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
   const [copiedFix, setCopiedFix] = useState<string | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isPublic, setIsPublic] = useState(Boolean(initialIsPublic));
+  const [sharing, setSharing] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  async function handleShare() {
+    if (!analysisId || sharing) return;
+    setSharing(true);
+    try {
+      if (!isPublic) {
+        const res = await fetch(`/api/analyses/${analysisId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isPublic: true }),
+        });
+        if (!res.ok) return; // leave isPublic/copy state untouched on failure
+        setIsPublic(true);
+      }
+      await navigator.clipboard.writeText(`${window.location.origin}/report/${analysisId}`);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } finally {
+      setSharing(false);
+    }
+  }
 
   const filteredIssues =
     activeFilter === 'all'
@@ -293,9 +329,27 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
                 <Download className="size-4" />
                 Export PDF
               </Button>
-              <Button className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold">
-                <Share2 className="size-4" />
-                Share Report
+              <Button
+                onClick={handleShare}
+                disabled={sharing || !analysisId}
+                className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold"
+              >
+                {linkCopied ? (
+                  <>
+                    <Check className="size-4" />
+                    Link copied
+                  </>
+                ) : isPublic ? (
+                  <>
+                    <Copy className="size-4" />
+                    Copy link
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="size-4" />
+                    {sharing ? 'Sharing...' : 'Share Report'}
+                  </>
+                )}
               </Button>
             </footer>
           )}
