@@ -21,7 +21,12 @@ export function ScrollToTopButton() {
     <button
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       aria-label="Scroll to top"
-      className="fixed right-margin bottom-margin z-50 flex size-11 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface text-text-primary shadow-2xl transition-colors hover:bg-surface-hover"
+      // Bottom-left, not bottom-right — the SpeedDial FAB (New
+      // analysis/New project, authenticated pages only) already owns the
+      // bottom-right corner; this button is global (every page, including
+      // marketing), so it needs its own corner rather than conditionally
+      // avoiding the FAB.
+      className="fixed bottom-margin left-margin z-50 flex size-11 cursor-pointer items-center justify-center rounded-xl border border-border-strong bg-surface text-text-primary shadow-2xl transition-colors hover:bg-surface-hover"
     >
       <ArrowUp className="size-5" strokeWidth={2} />
     </button>
