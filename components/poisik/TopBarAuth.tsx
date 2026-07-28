@@ -15,9 +15,10 @@ interface TopBarAuthProps {
   userName?: string | null;
   userImage?: string | null;
   usage: { remaining: number | null; limit: number | null; plan: string };
+  projects: { id: string; name: string }[];
 }
 
-export function TopBarAuth({ userName, userImage, usage }: TopBarAuthProps) {
+export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = () => setMobileOpen(false);
 
@@ -116,7 +117,7 @@ export function TopBarAuth({ userName, userImage, usage }: TopBarAuthProps) {
                 </button>
               </div>
               <div className="flex flex-1 flex-col justify-between">
-                <SidebarNav usage={usage} onNavigate={closeMobile} />
+                <SidebarNav usage={usage} projects={projects} onNavigate={closeMobile} />
               </div>
             </motion.div>
           </>

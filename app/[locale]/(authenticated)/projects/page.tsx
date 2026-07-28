@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { CreateProjectForm, ProjectsGrid, type ProjectGridItem } from '@/components/poisik';
@@ -49,5 +50,9 @@ export default async function ProjectsPage() {
     };
   });
 
-  return <ProjectsGrid projects={items} />;
+  return (
+    <Suspense fallback={null}>
+      <ProjectsGrid projects={items} />
+    </Suspense>
+  );
 }

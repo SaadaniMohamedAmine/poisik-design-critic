@@ -16,6 +16,7 @@ interface ShellData {
   gettingStartedItems: GettingStartedItem[];
   gettingStartedDismissed: boolean;
   onboardingShow: boolean;
+  projects: { id: string; name: string }[];
 }
 
 // Shared by AppShell (dashboard/projects, requires auth) and the report
@@ -28,7 +29,7 @@ export async function loadShellData(session: Session): Promise<ShellData> {
   const plan = ((session.user as { plan?: string }).plan ?? 'FREE') as
     'FREE' | 'PRO' | 'ENTERPRISE';
 
-  const [usage, projectCount, analysisCount, me] = await Promise.all([
+  const [usage, projectCount, analysisCount, me, projects] = await Promise.all([
     getCurrentUsage(userId, plan).then((u) => ({ ...u, plan })),
     prisma.project.count({ where: { userId } }),
     prisma.analysis.count({ where: { project: { userId } } }),
@@ -40,6 +41,13 @@ export async function loadShellData(session: Session): Promise<ShellData> {
         projectsOverviewViewedAt: true,
         gettingStartedDismissedAt: true,
       },
+    }),
+    // Lightweight (id + name only) — feeds the sidebar's Projects dropdown,
+    // which just needs to list + link to projects, not their analyses.
+    prisma.project.findMany({
+      where: { userId },
+      select: { id: true, name: true },
+      orderBy: { updatedAt: 'desc' },
     }),
   ]);
 
@@ -75,6 +83,7 @@ export async function loadShellData(session: Session): Promise<ShellData> {
     gettingStartedItems,
     gettingStartedDismissed: !!me?.gettingStartedDismissedAt,
     onboardingShow: !me?.onboardingCompletedAt,
+    projects,
   };
 }
 
@@ -92,7 +101,8 @@ export function AppShellChrome({
   shellData: ShellData;
   children: React.ReactNode;
 }) {
-  const { usage, gettingStartedItems, gettingStartedDismissed, onboardingShow } = shellData;
+  const { usage, gettingStartedItems, gettingStartedDismissed, onboardingShow, projects } =
+    shellData;
 
   return (
     <GettingStartedProvider items={gettingStartedItems} initialDismissed={gettingStartedDismissed}>
@@ -101,9 +111,14 @@ export function AppShellChrome({
           <WelcomeToast />
         </Suspense>
         <OnboardingFlow show={onboardingShow} />
-        <TopBarAuth userName={session.user!.name} userImage={session.user!.image} usage={usage} />
+        <TopBarAuth
+          userName={session.user!.name}
+          userImage={session.user!.image}
+          usage={usage}
+          projects={projects}
+        />
         <div className="flex pt-20">
-          <Sidebar usage={usage} />
+          <Sidebar usage={usage} projects={projects} />
           <main className="flex-1 p-md lg:ml-64 lg:p-xl">
             <div className="mx-auto max-w-7xl">{children}</div>
           </main>

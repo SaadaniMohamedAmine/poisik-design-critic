@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Search, FolderOpen, Clock, BarChart3, PlusCircle } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { CreateProjectForm } from './CreateProjectForm';
@@ -38,7 +39,11 @@ function timeAgo(dateStr: string): string {
 // worse than not having one.
 export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
   const [query, setQuery] = useState('');
-  const [creating, setCreating] = useState(false);
+  // The sidebar's "New project" quick action links here with ?new=true so
+  // it actually opens the create form instead of just landing on a page
+  // where the user has to find and click the tile themselves.
+  const searchParams = useSearchParams();
+  const [creating, setCreating] = useState(searchParams.get('new') === 'true');
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
