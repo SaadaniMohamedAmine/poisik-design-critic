@@ -108,10 +108,20 @@ export function NotificationBell() {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
-  function handleToggle() {
+  async function handleToggle() {
     const next = !open;
     setOpen(next);
-    if (next) load();
+    if (next) {
+      await load();
+      // Opening the panel counts as having seen the notifications — reset
+      // the badge immediately instead of waiting for the user to click each
+      // item (or the header's "Mark all as read") individually. Runs after
+      // `load()` resolves so the fresh (still-unread) server response can't
+      // race this and flip the badge back on.
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      setUnreadCount(0);
+      fetch('/api/notifications/read-all', { method: 'PATCH' }).catch(() => {});
+    }
   }
 
   function handleItemClick(item: NotificationItem) {
@@ -132,14 +142,18 @@ export function NotificationBell() {
 
   return (
     <div className="relative" ref={ref}>
+      {/* Style adapted from a Tailwind "cart with badge" button pattern
+          (swapped the cart icon for our existing Bell, colors mapped to our
+          theme tokens): transparent-until-hover chrome instead of the
+          always-visible bordered chip used elsewhere in the topbar. */}
       <button
         onClick={handleToggle}
         aria-label="Notifications"
-        className="relative flex size-9 items-center justify-center rounded-full border border-border bg-bg-elevated text-text-secondary transition-colors hover:text-text-primary"
+        className="relative rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
       >
-        <Bell className="size-4" strokeWidth={1.5} />
+        <Bell className="size-5" strokeWidth={1.5} />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-accent-signal text-[10px] font-bold text-white">
+          <span className="absolute top-0 right-0 -mt-1 -mr-1 inline-flex items-center justify-center rounded-full border-2 border-bg-base bg-accent-signal px-1.5 py-0.5 text-[10px] leading-4 font-bold text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
