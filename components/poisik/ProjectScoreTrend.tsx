@@ -22,6 +22,7 @@ const RANGES = [
 // scores, so the same visual matches without shipping a dead control.
 export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
   const [range, setRange] = useState<'30D' | '90D'>('90D');
+  const [now] = useState(() => Date.now());
 
   const sorted = useMemo(
     () =>
@@ -53,7 +54,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
   const delta = latest.score - previous.score;
 
   const windowDays = RANGES.find((r) => r.id === range)!.days;
-  const cutoff = Date.now() - windowDays * 24 * 60 * 60 * 1000;
+  const cutoff = now - windowDays * 24 * 60 * 60 * 1000;
   const windowed = sorted.filter((a) => new Date(a.createdAt).getTime() >= cutoff);
 
   return (
@@ -126,7 +127,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
                       })
                     : '';
                 }}
-                formatter={(value: number) => [`${value}/100`, 'Score']}
+                formatter={(value) => [`${value}/100`, 'Score']}
               />
               <Area
                 type="monotone"
