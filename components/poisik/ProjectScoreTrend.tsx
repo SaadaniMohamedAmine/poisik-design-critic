@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { BarChart, Bar, ResponsiveContainer, YAxis, Cell } from 'recharts';
+import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 import { TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 
 interface ScorePoint {
@@ -102,18 +102,42 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
       {windowed.length > 0 ? (
         <div className="mt-md h-48 flex-1">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={windowed} margin={{ top: 8, right: 0, bottom: 0, left: 0 }}>
+            <AreaChart data={windowed} margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+              <defs>
+                <linearGradient id="projectScoreTrendFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="var(--color-accent-signal)" stopOpacity={0.35} />
+                  <stop offset="100%" stopColor="var(--color-accent-signal)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <YAxis domain={[0, 100]} hide />
-              <Bar dataKey="score" radius={[4, 4, 0, 0]}>
-                {windowed.map((point) => (
-                  <Cell
-                    key={point.id}
-                    fill="var(--color-accent-signal)"
-                    fillOpacity={point.id === latest.id ? 1 : 0.3}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
+              <Tooltip
+                contentStyle={{
+                  background: 'var(--color-bg-elevated)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
+                labelFormatter={(_, payload) => {
+                  const point = payload?.[0]?.payload as { createdAt?: string } | undefined;
+                  return point?.createdAt
+                    ? new Date(point.createdAt).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                      })
+                    : '';
+                }}
+                formatter={(value: number) => [`${value}/100`, 'Score']}
+              />
+              <Area
+                type="monotone"
+                dataKey="score"
+                stroke="var(--color-accent-signal)"
+                strokeWidth={2}
+                fill="url(#projectScoreTrendFill)"
+                dot={{ r: 3, fill: 'var(--color-accent-signal)', strokeWidth: 0 }}
+                activeDot={{ r: 5 }}
+              />
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       ) : (
