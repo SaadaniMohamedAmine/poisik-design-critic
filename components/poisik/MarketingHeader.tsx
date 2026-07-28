@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSession } from 'next-auth/react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Command as CommandIcon } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { PoisikLogo } from './PoisikLogo';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { UserDropdown } from './UserDropdown';
 import { NotificationBell } from './NotificationBell';
+import { openCommandPalette } from './CommandPalette';
 
 export function MarketingHeader() {
   const n = useTranslations('Navigation');
@@ -58,6 +59,15 @@ export function MarketingHeader() {
           </div>
 
           <div className="hidden items-center gap-md md:flex">
+            <button
+              onClick={openCommandPalette}
+              aria-label="Open command palette"
+              title="Search (⌘K)"
+              className="flex items-center gap-xs rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
+            >
+              <CommandIcon className="size-5" strokeWidth={1.5} />
+              <span className="text-label-sm text-text-muted">⌘K</span>
+            </button>
             <LanguageSwitcher />
             {session?.user ? (
               <>
@@ -166,6 +176,16 @@ export function MarketingHeader() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-md">
                     <LanguageSwitcher />
+                    <button
+                      onClick={() => {
+                        closeMobile();
+                        openCommandPalette();
+                      }}
+                      aria-label="Open command palette"
+                      className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
+                    >
+                      <CommandIcon className="size-5" strokeWidth={1.5} />
+                    </button>
                     {session?.user && <NotificationBell />}
                   </div>
                   {session?.user && (

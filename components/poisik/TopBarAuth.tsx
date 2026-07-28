@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Command as CommandIcon } from 'lucide-react';
 import { PoisikLogo } from '@/components/poisik/PoisikLogo';
 import { LanguageSwitcher } from '@/components/poisik/LanguageSwitcher';
 import { UserDropdown } from '@/components/poisik/UserDropdown';
 import { NotificationBell } from '@/components/poisik/NotificationBell';
 import { SidebarNav } from '@/components/poisik/SidebarNav';
+import { openCommandPalette } from '@/components/poisik/CommandPalette';
 import { Link } from '@/i18n/navigation';
 
 interface TopBarAuthProps {
@@ -39,6 +40,22 @@ export function TopBarAuth({ userName, userImage, usage }: TopBarAuthProps) {
             </Link>
 
             <div className="flex items-center gap-md">
+              <button
+                onClick={openCommandPalette}
+                aria-label="Open command palette"
+                title="Search (⌘K)"
+                className="hidden items-center gap-xs rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:flex"
+              >
+                <CommandIcon className="size-5" strokeWidth={1.5} />
+                <span className="text-label-sm text-text-muted">⌘K</span>
+              </button>
+              <button
+                onClick={openCommandPalette}
+                aria-label="Open command palette"
+                className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:hidden"
+              >
+                <CommandIcon className="size-5" strokeWidth={1.5} />
+              </button>
               <NotificationBell />
               <div className="hidden lg:block">
                 <LanguageSwitcher />
@@ -77,7 +94,19 @@ export function TopBarAuth({ userName, userImage, usage }: TopBarAuthProps) {
               className="fixed top-0 right-0 z-70 flex h-full w-72 max-w-[85%] flex-col overflow-y-auto border-l border-border bg-surface px-md py-lg lg:hidden"
             >
               <div className="mb-lg flex items-center justify-between">
-                <LanguageSwitcher />
+                <div className="flex items-center gap-md">
+                  <LanguageSwitcher />
+                  <button
+                    onClick={() => {
+                      closeMobile();
+                      openCommandPalette();
+                    }}
+                    aria-label="Open command palette"
+                    className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
+                  >
+                    <CommandIcon className="size-5" strokeWidth={1.5} />
+                  </button>
+                </div>
                 <button
                   onClick={closeMobile}
                   aria-label="Close menu"
