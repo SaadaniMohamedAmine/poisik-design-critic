@@ -8,6 +8,8 @@ import {
   BookOpen,
   Settings,
   ChevronDown,
+  FileText,
+  LifeBuoy,
 } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { GettingStartedPill } from './GettingStartedPill';
@@ -203,6 +205,25 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             </div>
           )}
         </Link>
+
+        <div className="mt-lg space-y-xs border-t border-border pt-md">
+          <Link
+            href="/knowledge-base"
+            onClick={handleNavigate}
+            className="flex items-center gap-sm px-md py-xs text-label-sm text-text-muted transition-colors hover:text-text-secondary"
+          >
+            <FileText className="size-3.5" strokeWidth={1.5} />
+            Documentation
+          </Link>
+          <Link
+            href="/support"
+            onClick={handleNavigate}
+            className="flex items-center gap-sm px-md py-xs text-label-sm text-text-muted transition-colors hover:text-text-secondary"
+          >
+            <LifeBuoy className="size-3.5" strokeWidth={1.5} />
+            Support
+          </Link>
+        </div>
       </div>
     </>
   );
