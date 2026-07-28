@@ -66,7 +66,7 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
             <DialogTitle className="text-headline-md font-bold text-accent-signal">
               You&apos;ve used all {currentLimit} analyses this month
             </DialogTitle>
-            <DialogDescription className="mx-auto max-w-sm text-body-md text-text-secondary">
+            <DialogDescription className="mx-auto max-w-[320px] text-body-md text-text-secondary">
               Upgrade to {PLAN_LABELS[nextPlan]} to keep auditing.
             </DialogDescription>
           </DialogHeader>
