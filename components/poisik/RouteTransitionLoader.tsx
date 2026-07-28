@@ -37,16 +37,30 @@ export function RouteTransitionLoader() {
       setTimeout(() => setLoading(true), 0);
     }
 
+    // Next calls pushState/replaceState even when the target URL is the one
+    // already on screen (e.g. clicking a sidebar link to the current page).
+    // That's not a real navigation — pathname/searchParams never change, so
+    // the effect below (which is the only place that turns `loading` back
+    // off) never fires, leaving the overlay stuck on screen indefinitely.
+    // Only start the loader when the destination actually differs.
+    function isRealNavigation(url: string | URL | null | undefined): boolean {
+      if (!url) return false;
+      const target = new URL(url, window.location.href);
+      return (
+        target.pathname !== window.location.pathname || target.search !== window.location.search
+      );
+    }
+
     window.history.pushState = function patchedPushState(
       ...args: Parameters<typeof window.history.pushState>
     ) {
-      startLoading();
+      if (isRealNavigation(args[2])) startLoading();
       return originalPushState(...args);
     };
     window.history.replaceState = function patchedReplaceState(
       ...args: Parameters<typeof window.history.replaceState>
     ) {
-      startLoading();
+      if (isRealNavigation(args[2])) startLoading();
       return originalReplaceState(...args);
     };
 
