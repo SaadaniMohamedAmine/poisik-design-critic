@@ -97,7 +97,16 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
   };
 
   let tooltipStyle: CSSProperties = { position: 'fixed', zIndex: 97, width: 320 };
-  if (step === 1 || step === 2) {
+  if (step === 1) {
+    // Anchor is now the floating SpeedDial FAB (bottom-right corner), not a
+    // sidebar row — there's no room to its right or below, so the tooltip
+    // opens to its left instead, bottom-aligned with the button.
+    tooltipStyle = {
+      ...tooltipStyle,
+      right: window.innerWidth - rect.left + 24,
+      bottom: window.innerHeight - rect.bottom,
+    };
+  } else if (step === 2) {
     tooltipStyle = { ...tooltipStyle, left: rect.right + 24, top: rect.top };
   } else if (step === 3) {
     tooltipStyle = {

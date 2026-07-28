@@ -7,12 +7,7 @@ import {
   History,
   BookOpen,
   Settings,
-  Plus,
-  X,
-  Upload,
-  FolderPlus,
   ChevronDown,
-  Lock,
 } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { GettingStartedPill } from './GettingStartedPill';
@@ -46,14 +41,11 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
   // a dead-end click.
   const isAtLimit = usage.limit !== null && usage.remaining === 0;
 
-  const [dialOpen, setDialOpen] = useState(false);
-  const dialRef = useRef<HTMLDivElement>(null);
   const [projectsOpen, setProjectsOpen] = useState(false);
   const projectsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (dialRef.current && !dialRef.current.contains(e.target as Node)) setDialOpen(false);
       if (projectsRef.current && !projectsRef.current.contains(e.target as Node)) {
         setProjectsOpen(false);
       }
@@ -74,7 +66,6 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
   const projectsActive = pathname.startsWith('/projects');
 
   function handleNavigate() {
-    setDialOpen(false);
     setProjectsOpen(false);
     onNavigate?.();
   }
@@ -82,71 +73,9 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
   return (
     <>
       <div>
-        {/* Design reference: a mobile "speed dial" FAB pattern the user
-            provided (collapsed "+" circle that expands into a small stack of
-            labeled actions, closed via an "X"). Adapted to the sidebar's
-            fixed-width column: instead of a floating overlay, the two
-            actions render inline as regular nav-style rows directly below
-            the toggle, pushing the rest of the nav down rather than
-            overlapping it — simpler and safer in a narrow 256px column than
-            an absolutely-positioned popover. At-limit state keeps the
-            original single lock button (nothing to "dial" if every action
-            just bounces to /pricing anyway). */}
-        <div ref={dialRef} className="mb-lg">
-          {isAtLimit ? (
-            <Link
-              id="tour-new-analysis"
-              href="/pricing"
-              title="You're out of analyses this month — upgrade to keep going"
-              onClick={handleNavigate}
-              className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal px-md py-md font-bold text-white transition-opacity hover:opacity-90"
-            >
-              <Lock className="size-4" strokeWidth={1.5} />
-              Upgrade to analyze
-            </Link>
-          ) : (
-            <>
-              <button
-                id="tour-new-analysis"
-                onClick={() => setDialOpen((prev) => !prev)}
-                aria-label={dialOpen ? 'Close quick actions' : 'Open quick actions'}
-                aria-expanded={dialOpen}
-                className={`flex size-11 items-center justify-center rounded-full transition-colors ${
-                  dialOpen
-                    ? 'border border-border-strong bg-bg-elevated text-text-primary'
-                    : 'bg-accent-signal text-white hover:opacity-90'
-                }`}
-              >
-                {dialOpen ? (
-                  <X className="size-5" strokeWidth={1.5} />
-                ) : (
-                  <Plus className="size-5" strokeWidth={2} />
-                )}
-              </button>
-              {dialOpen && (
-                <div className="mt-sm space-y-xs">
-                  <Link
-                    href="/projects/new-analysis"
-                    onClick={handleNavigate}
-                    className="flex items-center gap-md rounded-xl px-md py-md text-label-md text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                  >
-                    <Upload className="size-4" strokeWidth={1.5} />
-                    New analysis
-                  </Link>
-                  <Link
-                    href="/projects?new=true"
-                    onClick={handleNavigate}
-                    className="flex items-center gap-md rounded-xl px-md py-md text-label-md text-text-secondary transition-colors hover:bg-surface-hover hover:text-text-primary"
-                  >
-                    <FolderPlus className="size-4" strokeWidth={1.5} />
-                    New project
-                  </Link>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-
+        {/* The old full-width "New Analysis" button used to sit here — it's
+            now the floating SpeedDial (bottom-right FAB, mounted once in
+            AppShellChrome), so the nav list starts right at the top. */}
         <nav className="space-y-xs">
           <Link
             href="/dashboard"

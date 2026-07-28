@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUsage } from '@/lib/usage';
 import { TopBarAuth } from './TopBarAuth';
 import { Sidebar } from './Sidebar';
+import { SpeedDial } from './SpeedDial';
 import { WelcomeToast } from './WelcomeToast';
 import { OnboardingFlow } from './OnboardingFlow';
 import { GettingStartedProvider, type GettingStartedItem } from './GettingStartedContext';
@@ -111,6 +112,7 @@ export function AppShellChrome({
           <WelcomeToast />
         </Suspense>
         <OnboardingFlow show={onboardingShow} />
+        <SpeedDial usage={usage} />
         <TopBarAuth
           userName={session.user!.name}
           userImage={session.user!.image}
