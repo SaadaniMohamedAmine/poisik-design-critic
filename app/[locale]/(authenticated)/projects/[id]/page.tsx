@@ -71,14 +71,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <div className="flex flex-col gap-sm sm:flex-row sm:justify-center">
               <Link
                 href={`/projects/${project.id}/analyze`}
-                className="inline-flex items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-xs rounded-lg bg-accent-signal px-md py-sm text-label-sm font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
               >
-                <Plus className="size-4" strokeWidth={2} />
+                <Plus className="size-3.5" strokeWidth={2} />
                 Run first analysis
               </Link>
               <Link
                 href="/demo"
-                className="inline-flex items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-md text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover"
+                className="inline-flex items-center justify-center gap-xs rounded-lg border border-border-strong px-md py-sm text-label-sm font-bold whitespace-nowrap text-text-primary transition-colors hover:bg-surface-hover"
               >
                 View sample report
               </Link>
