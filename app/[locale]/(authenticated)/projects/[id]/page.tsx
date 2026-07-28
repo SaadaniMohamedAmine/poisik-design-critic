@@ -57,7 +57,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <ProjectHeader projectId={project.id} initialName={project.name} analysisCount={0} />
         <div className="relative overflow-hidden">
           <div className="pointer-events-none absolute -top-24 -right-24 size-64 rounded-full bg-accent-signal/5 blur-[100px]" />
-          <div className="relative z-10 mx-auto w-full max-w-md rounded-xl border border-border bg-surface p-lg text-center shadow-2xl">
+          <div className="relative z-10 mx-auto w-full max-w-[448px] rounded-xl border border-border bg-surface p-lg text-center shadow-2xl">
             <div className="mx-auto mb-md flex size-20 items-center justify-center rounded-2xl border border-border bg-bg-elevated shadow-[0_0_40px_-8px_var(--color-accent-glow)]">
               <FolderOpen className="size-9 text-accent-signal" strokeWidth={1.5} />
             </div>
