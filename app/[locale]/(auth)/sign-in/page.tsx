@@ -156,10 +156,10 @@ export default function SignInPage() {
               className="flex flex-1 items-center justify-center gap-sm rounded-lg border border-border-strong bg-bg-elevated px-md py-2 text-label-sm text-text-secondary transition-colors hover:bg-surface-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
               {googleLoading ? (
-                <>
-                  <span className="size-4 animate-spin rounded-full border-2 border-accent-signal border-t-transparent" />
-                  {t('connectingToGoogle')}
-                </>
+                <span
+                  className="size-4 animate-spin rounded-full border-2 border-accent-signal border-t-transparent"
+                  aria-label={t('connectingToGoogle')}
+                />
               ) : (
                 <>
                   <svg className="w-4 h-4" viewBox="0 0 24 24">
