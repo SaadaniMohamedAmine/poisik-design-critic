@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useRouter } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
 
 export default function SignUpPage() {
+  const t = useTranslations('SignUp');
   const glowRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const locale = useLocale();
@@ -23,7 +24,7 @@ export default function SignUpPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('errorPasswordMismatch'));
       return;
     }
 
@@ -37,7 +38,7 @@ export default function SignUpPage() {
     const data = await res.json();
 
     if (!res.ok) {
-      setError(data.error ?? 'Something went wrong.');
+      setError(data.error ?? t('errorGeneric'));
       setLoading(false);
       return;
     }
@@ -71,16 +72,14 @@ export default function SignUpPage() {
         <div className="w-full max-w-110 z-10">
           <div className="rounded-xl border border-border bg-surface p-lg shadow-2xl md:p-xl">
             <div className="text-center">
-              <h1 className="text-3xl font-bold text-text-primary">Create your account</h1>
-              <p className="mt-xs text-base text-text-secondary">
-                Expert AI auditing for modern interfaces.
-              </p>
+              <h1 className="text-3xl font-bold text-text-primary">{t('title')}</h1>
+              <p className="mt-xs text-base text-text-secondary">{t('subtitle')}</p>
             </div>
 
             <form className="mt-lg flex flex-col gap-md" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-xs">
                 <label htmlFor="email" className="ml-xs text-label-md text-text-secondary">
-                  Email address
+                  {t('email')}
                 </label>
                 <div className="relative">
                   <Mail className="absolute left-md top-1/2 size-5 -translate-y-1/2 text-text-muted" />
@@ -97,7 +96,7 @@ export default function SignUpPage() {
 
               <div className="flex flex-col gap-xs">
                 <label htmlFor="password" className="ml-xs text-label-md text-text-secondary">
-                  Password
+                  {t('password')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-md top-1/2 size-5 -translate-y-1/2 text-text-muted" />
@@ -117,7 +116,7 @@ export default function SignUpPage() {
                   htmlFor="confirm-password"
                   className="ml-xs text-label-md text-text-secondary"
                 >
-                  Confirm Password
+                  {t('confirmPassword')}
                 </label>
                 <div className="relative">
                   <Lock className="absolute left-md top-1/2 size-5 -translate-y-1/2 text-text-muted" />
@@ -139,14 +138,14 @@ export default function SignUpPage() {
                 disabled={loading}
                 className="mt-sm rounded-lg bg-accent-signal py-sm px-md text-label-md font-bold uppercase tracking-wider text-white transition-all active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {loading ? 'Signing up...' : 'Sign Up'}
+                {loading ? t('signingUp') : t('signUp')}
               </button>
             </form>
 
             <div className="relative mt-lg flex items-center">
               <div className="flex-grow border-t border-border" />
               <span className="flex-shrink mx-md text-label-sm uppercase tracking-widest text-text-secondary">
-                or sign up with
+                {t('orSignUpWith')}
               </span>
               <div className="flex-grow border-t border-border" />
             </div>
@@ -175,7 +174,7 @@ export default function SignUpPage() {
                     fill="#EA4335"
                   />
                 </svg>
-                <span className="text-label-sm text-text-secondary">Google</span>
+                <span className="text-label-sm text-text-secondary">{t('google')}</span>
               </button>
               {FACEBOOK_AUTH_ENABLED ? (
                 <button
@@ -186,7 +185,7 @@ export default function SignUpPage() {
                   <svg className="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
-                  <span className="text-label-sm text-text-secondary">Facebook</span>
+                  <span className="text-label-sm text-text-secondary">{t('facebook')}</span>
                 </button>
               ) : (
                 <button
@@ -201,18 +200,18 @@ export default function SignUpPage() {
                   >
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
-                  <span className="text-label-sm text-text-secondary">Facebook</span>
+                  <span className="text-label-sm text-text-secondary">{t('facebook')}</span>
                   <span className="absolute right-3 rounded-full bg-border-strong px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-text-muted uppercase">
-                    Soon
+                    {t('soon')}
                   </span>
                 </button>
               )}
             </div>
 
             <p className="mt-sm text-center text-label-md text-text-secondary">
-              Already have an account?{' '}
+              {t('haveAccount')}{' '}
               <Link href="/sign-in" className="text-accent-signal hover:underline transition-all">
-                Log In
+                {t('logIn')}
               </Link>
             </p>
           </div>

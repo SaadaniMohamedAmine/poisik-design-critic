@@ -181,5 +181,38 @@
   "Common": {
     "madeWith": "Créé avec {name}",
     "duplicateAnalysis": "Dupliquer cette analyse"
+  },
+  "SignIn": {
+    "title": "Content de vous revoir",
+    "subtitle": "Connectez-vous à votre tableau de bord d'audit IA",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "forgot": "Oublié ?",
+    "signIn": "Se connecter",
+    "signingIn": "Connexion...",
+    "orContinueWith": "ou continuer avec",
+    "google": "Google",
+    "facebook": "Facebook",
+    "soon": "Bientôt",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "getStarted": "Commencer",
+    "errorInvalidCredentials": "E-mail ou mot de passe incorrect."
+  },
+  "SignUp": {
+    "title": "Créez votre compte",
+    "subtitle": "Un audit IA expert pour des interfaces modernes.",
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "signUp": "S'inscrire",
+    "signingUp": "Inscription...",
+    "orSignUpWith": "ou inscrivez-vous avec",
+    "google": "Google",
+    "facebook": "Facebook",
+    "soon": "Bientôt",
+    "haveAccount": "Vous avez déjà un compte ?",
+    "logIn": "Se connecter",
+    "errorPasswordMismatch": "Les mots de passe ne correspondent pas.",
+    "errorGeneric": "Une erreur est survenue."
   }
 }

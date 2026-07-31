@@ -181,5 +181,38 @@
   "Common": {
     "madeWith": "Made with {name}",
     "duplicateAnalysis": "Duplicate this analysis"
+  },
+  "SignIn": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to your AI auditing dashboard",
+    "email": "Email address",
+    "password": "Password",
+    "forgot": "Forgot?",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "orContinueWith": "or continue with",
+    "google": "Google",
+    "facebook": "Facebook",
+    "soon": "Soon",
+    "noAccount": "Don't have an account?",
+    "getStarted": "Get Started",
+    "errorInvalidCredentials": "Incorrect email or password."
+  },
+  "SignUp": {
+    "title": "Create your account",
+    "subtitle": "Expert AI auditing for modern interfaces.",
+    "email": "Email address",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "signUp": "Sign Up",
+    "signingUp": "Signing up...",
+    "orSignUpWith": "or sign up with",
+    "google": "Google",
+    "facebook": "Facebook",
+    "soon": "Soon",
+    "haveAccount": "Already have an account?",
+    "logIn": "Log In",
+    "errorPasswordMismatch": "Passwords do not match.",
+    "errorGeneric": "Something went wrong."
   }
 }

@@ -3,12 +3,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useRouter } from '@/i18n/navigation';
 import { signIn } from 'next-auth/react';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
 
 export default function SignInPage() {
+  const t = useTranslations('SignIn');
   const glowRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const locale = useLocale();
@@ -24,7 +25,7 @@ export default function SignInPage() {
     const res = await signIn('credentials', { email, password, redirect: false });
     setLoading(false);
     if (res?.error) {
-      setError('Incorrect email or password.');
+      setError(t('errorInvalidCredentials'));
       return;
     }
     router.push('/dashboard?welcome=1');
@@ -55,14 +56,14 @@ export default function SignInPage() {
       <main className="relative flex min-h-screen items-center justify-center px-margin pt-20">
         <div className="w-full max-w-[440px] rounded-xl border border-border bg-surface p-lg shadow-2xl transition-colors hover:border-border-strong md:p-xl">
           <div className="mb-xl text-center">
-            <h1 className="mb-xs text-3xl font-bold text-text-primary">Welcome back</h1>
-            <p className="text-base text-text-secondary">Sign in to your AI auditing dashboard</p>
+            <h1 className="mb-xs text-3xl font-bold text-text-primary">{t('title')}</h1>
+            <p className="text-base text-text-secondary">{t('subtitle')}</p>
           </div>
 
           <form className="space-y-lg" onSubmit={handleSubmit}>
             <div className="space-y-sm">
               <label htmlFor="email" className="block text-label-md text-text-secondary">
-                Email address
+                {t('email')}
               </label>
               <div className="relative">
                 <Mail className="absolute left-md top-1/2 size-5 -translate-y-1/2 text-text-muted" />
@@ -80,13 +81,13 @@ export default function SignInPage() {
             <div className="space-y-sm">
               <div className="flex justify-between items-center">
                 <label htmlFor="password" className="block text-label-md text-text-secondary">
-                  Password
+                  {t('password')}
                 </label>
                 <a
                   href="#"
                   className="text-label-sm text-accent-signal hover:underline transition-all"
                 >
-                  Forgot?
+                  {t('forgot')}
                 </a>
               </div>
               <div className="relative">
@@ -109,7 +110,7 @@ export default function SignInPage() {
               disabled={loading}
               className="w-full h-12 rounded-lg bg-accent-signal text-label-md font-bold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? t('signingIn') : t('signIn')}
             </button>
           </form>
 
@@ -118,7 +119,7 @@ export default function SignInPage() {
               <div className="w-full border-t border-border" />
             </div>
             <div className="relative flex justify-center text-label-sm">
-              <span className="bg-surface px-md text-text-secondary">or continue with</span>
+              <span className="bg-surface px-md text-text-secondary">{t('orContinueWith')}</span>
             </div>
           </div>
 
@@ -146,7 +147,7 @@ export default function SignInPage() {
                   fill="#EA4335"
                 />
               </svg>
-              Google
+              {t('google')}
             </button>
             {FACEBOOK_AUTH_ENABLED ? (
               <button
@@ -157,7 +158,7 @@ export default function SignInPage() {
                 <svg className="w-4 h-4 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
-                Facebook
+                {t('facebook')}
               </button>
             ) : (
               <button
@@ -172,9 +173,9 @@ export default function SignInPage() {
                 >
                   <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                 </svg>
-                <span>Facebook</span>
+                <span>{t('facebook')}</span>
                 <span className="absolute right-3 rounded-full bg-border-strong px-1.5 py-0.5 text-[10px] font-semibold tracking-wide text-text-muted uppercase">
-                  Soon
+                  {t('soon')}
                 </span>
               </button>
             )}
@@ -182,12 +183,12 @@ export default function SignInPage() {
 
           <div className="mt-lg text-center">
             <p className="text-label-md text-text-secondary">
-              Don&apos;t have an account?{' '}
+              {t('noAccount')}{' '}
               <Link
                 href="/sign-up"
                 className="font-bold text-accent-signal hover:underline transition-all"
               >
-                Get Started
+                {t('getStarted')}
               </Link>
             </p>
           </div>
