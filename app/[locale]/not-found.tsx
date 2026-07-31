@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Home, HelpCircle, History, BookOpen, Search } from 'lucide-react';
 // See app/not-found.tsx for why these are imported directly instead of
@@ -11,6 +12,7 @@ import { MarketingHeader } from '@/components/poisik/MarketingHeader';
 import { MarketingFooter } from '@/components/poisik/MarketingFooter';
 
 export default function LocaleNotFound() {
+  const t = useTranslations('NotFound');
   const glowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,11 +44,8 @@ export default function LocaleNotFound() {
           <GlitchText text="404" />
 
           <div className="mb-xl space-y-4">
-            <h2 className="text-3xl font-bold text-text-primary">Resource Not Found</h2>
-            <p className="text-base leading-relaxed text-text-secondary">
-              The requested audit cannot be located. This path may have expired or been moved by the
-              system administrator.
-            </p>
+            <h2 className="text-3xl font-bold text-text-primary">{t('title')}</h2>
+            <p className="text-base leading-relaxed text-text-secondary">{t('description')}</p>
           </div>
 
           <div className="flex flex-col items-center gap-md sm:flex-row">
@@ -55,11 +54,11 @@ export default function LocaleNotFound() {
               className="inline-flex items-center gap-sm rounded-xl bg-accent-signal px-xl py-md text-label-md font-medium text-white transition-all hover:opacity-90 active:scale-95"
             >
               <Home className="size-4" />
-              Return to Home
+              {t('returnHome')}
             </Link>
             <button className="inline-flex items-center gap-sm rounded-xl border border-border px-xl py-md text-label-md font-medium text-text-secondary transition-all hover:bg-surface">
               <HelpCircle className="size-4" />
-              Contact Support
+              {t('contactSupport')}
             </button>
           </div>
         </div>
@@ -68,29 +67,23 @@ export default function LocaleNotFound() {
           <div className="rounded-xl border border-border bg-surface/50 p-lg backdrop-blur-sm">
             <div className="mb-sm flex items-center gap-sm text-accent-signal">
               <History className="size-4" />
-              <span className="text-label-md font-medium">Audit Logs</span>
+              <span className="text-label-md font-medium">{t('auditLogsLabel')}</span>
             </div>
-            <p className="text-label-sm text-text-secondary">
-              Check your recent activity logs to see if the session was recently closed.
-            </p>
+            <p className="text-label-sm text-text-secondary">{t('auditLogsDesc')}</p>
           </div>
           <div className="rounded-xl border border-border bg-surface/50 p-lg backdrop-blur-sm">
             <div className="mb-sm flex items-center gap-sm text-accent-signal">
               <BookOpen className="size-4" />
-              <span className="text-label-md font-medium">Knowledge Base</span>
+              <span className="text-label-md font-medium">{t('knowledgeBaseLabel')}</span>
             </div>
-            <p className="text-label-sm text-text-secondary">
-              Explore documentation on how Poisik handles resource expiration.
-            </p>
+            <p className="text-label-sm text-text-secondary">{t('knowledgeBaseDesc')}</p>
           </div>
           <div className="rounded-xl border border-border bg-surface/50 p-lg backdrop-blur-sm">
             <div className="mb-sm flex items-center gap-sm text-accent-signal">
               <Search className="size-4" />
-              <span className="text-label-md font-medium">Search Dashboard</span>
+              <span className="text-label-md font-medium">{t('searchDashboardLabel')}</span>
             </div>
-            <p className="text-label-sm text-text-secondary">
-              Use our global search to find the audit by Project ID or Timestamp.
-            </p>
+            <p className="text-label-sm text-text-secondary">{t('searchDashboardDesc')}</p>
           </div>
         </div>
       </main>

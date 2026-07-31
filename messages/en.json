@@ -119,7 +119,8 @@
     "outOfCredits": "You're out of credits",
     "analysisFailed": "Analysis failed",
     "upgradeToPro": "Upgrade to Pro",
-    "retryAnalysis": "Retry analysis"
+    "retryAnalysis": "Retry analysis",
+    "imageType": "{type} Image"
   },
   "Report": {
     "overallScore": "Overall Design Score",
@@ -490,7 +491,20 @@
   },
   "Common": {
     "madeWith": "Made with {name}",
-    "duplicateAnalysis": "Duplicate this analysis"
+    "duplicateAnalysis": "Duplicate this analysis",
+    "close": "Close"
+  },
+  "NotFound": {
+    "title": "Resource Not Found",
+    "description": "The requested audit cannot be located. This path may have expired or been moved by the system administrator.",
+    "returnHome": "Return to Home",
+    "contactSupport": "Contact Support",
+    "auditLogsLabel": "Audit Logs",
+    "auditLogsDesc": "Check your recent activity logs to see if the session was recently closed.",
+    "knowledgeBaseLabel": "Knowledge Base",
+    "knowledgeBaseDesc": "Explore documentation on how Poisik handles resource expiration.",
+    "searchDashboardLabel": "Search Dashboard",
+    "searchDashboardDesc": "Use our global search to find the audit by Project ID or Timestamp."
   },
   "SignIn": {
     "title": "Welcome back",

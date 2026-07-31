@@ -119,7 +119,8 @@
     "outOfCredits": "Vous n'avez plus de crédits",
     "analysisFailed": "L'analyse a échoué",
     "upgradeToPro": "Passer à Pro",
-    "retryAnalysis": "Réessayer l'analyse"
+    "retryAnalysis": "Réessayer l'analyse",
+    "imageType": "Image {type}"
   },
   "Report": {
     "overallScore": "Score global de design",
@@ -490,7 +491,20 @@
   },
   "Common": {
     "madeWith": "Créé avec {name}",
-    "duplicateAnalysis": "Dupliquer cette analyse"
+    "duplicateAnalysis": "Dupliquer cette analyse",
+    "close": "Fermer"
+  },
+  "NotFound": {
+    "title": "Ressource introuvable",
+    "description": "L'audit demandé est introuvable. Ce chemin a peut-être expiré ou a été déplacé par l'administrateur système.",
+    "returnHome": "Retour à l'accueil",
+    "contactSupport": "Contacter le support",
+    "auditLogsLabel": "Journal d'audit",
+    "auditLogsDesc": "Consultez votre journal d'activité récent pour voir si la session a été récemment fermée.",
+    "knowledgeBaseLabel": "Base de connaissances",
+    "knowledgeBaseDesc": "Explorez la documentation sur la gestion des expirations de ressources par Poisik.",
+    "searchDashboardLabel": "Rechercher dans le tableau de bord",
+    "searchDashboardDesc": "Utilisez notre recherche globale pour trouver l'audit par ID de projet ou horodatage."
   },
   "SignIn": {
     "title": "Content de vous revoir",
