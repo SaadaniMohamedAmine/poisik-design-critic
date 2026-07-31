@@ -29,11 +29,11 @@ export async function ProjectActionBar({
           {t('activeProject')} <span className="font-bold text-text-primary">{projectName}</span>
         </span>
       </div>
-      <div className="flex gap-sm">
+      <div className="flex flex-col gap-sm sm:flex-row">
         {showCompare && (
           <Link
             href={`/projects/${projectId}/compare`}
-            className="flex flex-1 items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover sm:flex-none"
+            className="flex w-full items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold whitespace-nowrap text-text-primary transition-colors hover:bg-surface-hover sm:w-auto"
           >
             <GitCompare className="size-4" strokeWidth={1.5} />
             {t('compare')}
@@ -41,7 +41,7 @@ export async function ProjectActionBar({
         )}
         <Link
           href={`/projects/${projectId}/analyze`}
-          className="flex flex-1 items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 sm:flex-none"
+          className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90 sm:w-auto"
         >
           <Plus className="size-4" strokeWidth={2} />
           {t('newAnalysis')}

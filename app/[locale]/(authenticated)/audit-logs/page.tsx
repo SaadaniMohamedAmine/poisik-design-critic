@@ -57,11 +57,11 @@ export default async function AuditLogsPage() {
 
   return (
     <div>
-      <div className="mb-xl flex items-center gap-md">
+      <div className="mb-xl flex items-start gap-md">
         <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-bg-elevated">
           <History className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
-        <div>
+        <div className="min-w-0">
           <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
           <p className="mt-xs text-body-md text-text-secondary">
             {t('subtitle', { auditCount: analyses.length, projectCount })}

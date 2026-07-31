@@ -139,11 +139,11 @@ export function SettingsView({
 
   return (
     <div>
-      <div className="mb-xl flex items-center gap-md">
+      <div className="mb-xl flex items-start gap-md">
         <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-bg-elevated">
           <SettingsIcon className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
-        <div>
+        <div className="min-w-0">
           <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
           <p className="mt-xs text-body-md text-text-secondary">{t('subtitle')}</p>
         </div>
@@ -182,7 +182,12 @@ export function SettingsView({
                 <div className="size-16 shrink-0 overflow-hidden rounded-full border border-border bg-accent-soft-bg">
                   {image ? (
                     // eslint-disable-next-line @next/next/no-img-element -- OAuth-provider avatar URL, not a static local asset
-                    <img src={image} alt="" className="size-full object-cover" />
+                    <img
+                      src={image}
+                      alt=""
+                      className="size-full object-cover"
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <span className="flex size-full items-center justify-center text-headline-md text-text-primary">
                       {(savedName || email)[0]?.toUpperCase()}

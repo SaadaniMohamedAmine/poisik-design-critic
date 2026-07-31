@@ -52,9 +52,9 @@ export async function AuditLogsList({ items }: { items: AuditLogItem[] }) {
           <Link
             key={item.id}
             href={`/report/${item.id}`}
-            className="group flex items-center gap-lg rounded-xl border border-border bg-surface p-md transition-all hover:border-accent-signal/30 hover:bg-surface-hover"
+            className="group flex items-center gap-sm rounded-xl border border-border bg-surface p-sm transition-all hover:border-accent-signal/30 hover:bg-surface-hover sm:gap-lg sm:p-md"
           >
-            <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-elevated">
+            <div className="h-12 w-16 shrink-0 overflow-hidden rounded-lg border border-border bg-bg-elevated sm:h-16 sm:w-24">
               {/* eslint-disable-next-line @next/next/no-img-element -- arbitrary UploadThing-hosted URL, not a static local asset */}
               <img src={item.imageUrl} alt="" className="size-full object-cover" />
             </div>
@@ -75,13 +75,13 @@ export async function AuditLogsList({ items }: { items: AuditLogItem[] }) {
               </p>
             </div>
 
-            <div className="flex shrink-0 items-center gap-lg">
+            <div className="flex shrink-0 items-center gap-sm sm:gap-lg">
               <span className="hidden text-label-sm text-text-secondary sm:block">
                 {t('scoreLabel', { score: item.score ?? '—' })}
                 {item.score !== undefined && <span className="text-text-muted">/100</span>}
               </span>
               <span
-                className={`rounded-full border px-md py-1 text-label-sm font-bold ${status.badgeClass}`}
+                className={`rounded-full border px-sm py-1 text-label-sm font-bold whitespace-nowrap sm:px-md ${status.badgeClass}`}
               >
                 {status.label}
               </span>
