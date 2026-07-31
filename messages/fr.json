@@ -741,5 +741,10 @@
     "section5Body": "Poisik est fourni « en l'état ». Bien que nous travaillions à maintenir le service disponible et fiable, nous ne garantissons pas un accès ininterrompu et ne sommes pas responsables des pertes résultant d'interruptions ou de temps d'indisponibilité du service.",
     "section6Title": "6. Modifications de ces conditions",
     "section6Body": "Nous pouvons mettre à jour ces conditions à mesure que le produit évolue. La poursuite de l'utilisation de Poisik après une mise à jour vaut acceptation des conditions révisées."
+  },
+  "Demo": {
+    "eyebrow": "Exemple en direct",
+    "title": "Voyez une vraie analyse Poisik",
+    "subtitle": "Aucun import nécessaire — c'est un vrai rapport d'audit, exactement ce que vous obtiendrez en quelques secondes en analysant votre propre design."
   }
 }

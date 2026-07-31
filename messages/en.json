@@ -741,5 +741,10 @@
     "section5Body": "Poisik is provided on an \"as is\" basis. While we work to keep the service available and reliable, we do not guarantee uninterrupted access and are not liable for losses resulting from downtime or service interruptions.",
     "section6Title": "6. Changes to these terms",
     "section6Body": "We may update these terms as the product evolves. Continued use of Poisik after an update constitutes acceptance of the revised terms."
+  },
+  "Demo": {
+    "eyebrow": "Live Example",
+    "title": "See a real Poisik analysis",
+    "subtitle": "No upload needed — this is a real audit report, exactly what you'll get in seconds once you analyze your own design."
   }
 }
