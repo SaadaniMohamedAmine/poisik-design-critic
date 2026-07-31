@@ -1,55 +1,45 @@
 import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
 
-export const metadata: Metadata = {
-  title: 'About',
-  description: 'The story and mission behind Poisik, the AI-powered design audit platform.',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'About' });
+  return { title: t('metaTitle'), description: t('metaDescription') };
+}
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const t = await getTranslations('About');
   return (
     <main className="mx-auto max-w-4xl px-margin pt-32 pb-xxl">
-      <h1 className="mb-md text-display-lg font-semibold text-text-primary">About Poisik</h1>
-      <p className="mb-xl text-body-lg text-text-secondary">
-        Poisik was built on a simple belief: every product deserves an expert design review, not
-        just the ones with a design team on staff.
-      </p>
+      <h1 className="mb-md text-display-lg font-semibold text-text-primary">{t('title')}</h1>
+      <p className="mb-xl text-body-lg text-text-secondary">{t('intro')}</p>
 
       <div className="space-y-lg text-body-md text-text-secondary">
-        <p>
-          Great UX/UI design is judged on hundreds of small decisions — contrast ratios, spacing
-          rhythm, type hierarchy, accessibility affordances — that are easy to get wrong and
-          expensive to get reviewed. Most teams either skip that review entirely or wait weeks for a
-          senior designer&apos;s attention.
-        </p>
-        <p>
-          We built Poisik to close that gap. Upload a screenshot or point us at a live URL, and our
-          AI design auditor delivers the kind of structured, actionable critique a senior product
-          designer would give — visual hierarchy, contrast, spacing, typography, consistency, and
-          accessibility — usually in under a minute.
-        </p>
-        <p>
-          Poisik isn&apos;t meant to replace designers. It&apos;s meant to give every team,
-          regardless of size or budget, a fast first pass so the humans in the room can spend their
-          time on the decisions that actually need judgment.
-        </p>
+        <p>{t('p1')}</p>
+        <p>{t('p2')}</p>
+        <p>{t('p3')}</p>
       </div>
 
       <div className="mt-xxl border-t border-border pt-xl">
         <h2 className="mb-md text-headline-md font-semibold text-text-primary">
-          What we care about
+          {t('careAboutTitle')}
         </h2>
         <ul className="space-y-md text-body-md text-text-secondary">
           <li>
-            <span className="font-semibold text-text-primary">Speed.</span> Design feedback is most
-            useful before you&apos;ve shipped, not after.
+            <span className="font-semibold text-text-primary">{t('speedLabel')}</span>{' '}
+            {t('speedDesc')}
           </li>
           <li>
-            <span className="font-semibold text-text-primary">Specificity.</span> Generic advice
-            doesn&apos;t fix anything — every finding comes with a concrete recommendation.
+            <span className="font-semibold text-text-primary">{t('specificityLabel')}</span>{' '}
+            {t('specificityDesc')}
           </li>
           <li>
-            <span className="font-semibold text-text-primary">Accessibility.</span> A design that
-            only works for some users isn&apos;t a finished design.
+            <span className="font-semibold text-text-primary">{t('accessibilityLabel')}</span>{' '}
+            {t('accessibilityDesc')}
           </li>
         </ul>
       </div>

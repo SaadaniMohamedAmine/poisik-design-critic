@@ -10,7 +10,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { PLAN_LABELS, PLAN_LIMITS, NEXT_PLAN, type Plan } from '@/lib/plans';
+import { PLAN_LABEL_KEYS, PLAN_LIMITS, NEXT_PLAN, type Plan } from '@/lib/plans';
 
 interface UpgradeModalProps {
   open: boolean;
@@ -30,6 +30,7 @@ interface UpgradeModalProps {
 // repeating the pricing page's "Unlimited" claim for Pro.
 export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
   const t = useTranslations('UpgradeModal');
+  const tPricing = useTranslations('Pricing');
   const [loading, setLoading] = useState(false);
   const nextPlan = NEXT_PLAN[plan];
   const currentLimit = PLAN_LIMITS[plan];
@@ -75,21 +76,21 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
               {t('usedAllTitle', { limit: currentLimit ?? 0 })}
             </DialogTitle>
             <DialogDescription className="mx-auto max-w-[320px] text-body-md text-text-secondary">
-              {t('upgradeDesc', { plan: PLAN_LABELS[nextPlan] })}
+              {t('upgradeDesc', { plan: tPricing(PLAN_LABEL_KEYS[nextPlan]) })}
             </DialogDescription>
           </DialogHeader>
 
           <div className="relative z-10 mt-lg grid grid-cols-2 gap-md">
             <div className="rounded-xl border border-border bg-bg-elevated p-lg text-center">
               <p className="text-label-sm text-text-muted uppercase tracking-wider">
-                {PLAN_LABELS[plan]}
+                {t(PLAN_LABEL_KEYS[plan])}
               </p>
               <p className="mt-xs text-headline-md font-bold text-text-primary">{currentLimit}</p>
               <p className="text-label-sm text-text-muted">{t('analysesPerMonth')}</p>
             </div>
             <div className="rounded-xl border border-accent-signal/40 bg-accent-soft-bg p-lg text-center">
               <p className="text-label-sm text-accent-signal uppercase tracking-wider">
-                {PLAN_LABELS[nextPlan]}
+                {tPricing(PLAN_LABEL_KEYS[nextPlan])}
               </p>
               <p className="mt-xs text-headline-md font-bold text-accent-signal">
                 {nextLimit === null ? t('unlimited') : nextLimit}
@@ -108,7 +109,7 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
                 t('redirecting')
               ) : (
                 <>
-                  {t('upgradeToPlan', { plan: PLAN_LABELS[nextPlan] })}
+                  {t('upgradeToPlan', { plan: tPricing(PLAN_LABEL_KEYS[nextPlan]) })}
                   <ArrowRight className="size-4" strokeWidth={2} />
                 </>
               )}

@@ -2,64 +2,73 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PLAN_LIMITS } from '@/lib/plans';
 
-type Plan = {
-  name: string;
-  key: 'FREE' | 'PRO' | 'ENTERPRISE';
+type PlanKey = 'FREE' | 'PRO' | 'ENTERPRISE';
+
+type PlanMeta = {
+  nameKey: 'free' | 'pro' | 'team';
+  key: PlanKey;
   price: string;
-  description: string;
-  features: string[];
+  descKey: 'freeDesc' | 'proDesc' | 'teamDesc';
+  featureKeys: (
+    { key: 'analyses'; params: { count: number } } | { key: string; params?: undefined }
+  )[];
   popular?: boolean;
   team?: boolean;
 };
 
-const PLANS: Plan[] = [
+const PLANS: PlanMeta[] = [
   {
-    name: 'Free',
+    nameKey: 'free',
     key: 'FREE',
     price: '0',
-    description: 'For quick design checks',
-    features: ['5 analyses/month', 'PDF Export with watermark', 'Basic analysis'],
+    descKey: 'freeDesc',
+    featureKeys: [
+      { key: 'analyses', params: { count: PLAN_LIMITS.FREE! } },
+      { key: 'pdfExportWithWatermark' },
+      { key: 'basicAnalysis' },
+    ],
   },
   {
-    name: 'Pro',
+    nameKey: 'pro',
     key: 'PRO',
     price: '19',
-    description: 'For serious design teams',
-    // Was "Unlimited analyses" — PLAN_LIMITS.PRO is actually 100/month
-    // (only ENTERPRISE/"Team" is truly uncapped). Sourced from the same
-    // constant the usage-limit check enforces, so this can't drift out of
-    // sync with what the API actually allows again.
-    features: [
-      `${PLAN_LIMITS.PRO} analyses/month`,
-      'PDF Export without watermark',
-      'Comparison mode',
-      'Priority AI routing',
+    descKey: 'proDesc',
+    // PLAN_LIMITS.PRO is 100/month (only ENTERPRISE/"Team" is truly
+    // uncapped) — sourced from the same constant the usage-limit check
+    // enforces, so this can't drift out of sync with what the API allows.
+    featureKeys: [
+      { key: 'analyses', params: { count: PLAN_LIMITS.PRO! } },
+      { key: 'pdfExportNoWatermark' },
+      { key: 'comparison' },
+      { key: 'priorityAi' },
     ],
     popular: true,
   },
   {
-    name: 'Team',
+    nameKey: 'team',
     key: 'ENTERPRISE',
     price: '39',
-    description: 'For growing design orgs',
-    features: [
-      'Unlimited analyses',
-      'PDF Export without watermark',
-      'Comparison mode',
-      'Priority AI routing',
-      'Team workspace',
-      'Advanced analytics',
+    descKey: 'teamDesc',
+    featureKeys: [
+      { key: 'unlimitedAnalyses' },
+      { key: 'pdfExportNoWatermark' },
+      { key: 'comparison' },
+      { key: 'priorityAi' },
+      { key: 'teamWorkspace' },
+      { key: 'advancedAnalytics' },
     ],
     team: true,
   },
 ];
 
 export default function PricingPage() {
+  const t = useTranslations('Pricing');
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState<string | null>(null);
   const currentPlan = (session?.user as { plan?: string } | undefined)?.plan ?? 'FREE';
@@ -87,8 +96,8 @@ export default function PricingPage() {
   return (
     <main className="mx-auto max-w-6xl px-margin pt-32 pb-xxl">
       <div className="mb-xl text-center">
-        <h1 className="mb-md text-headline-lg font-semibold text-text-primary">Pricing</h1>
-        <p className="text-body-md text-text-secondary">Choose the plan that fits your workflow</p>
+        <h1 className="mb-md text-headline-lg font-semibold text-text-primary">{t('title')}</h1>
+        <p className="text-body-md text-text-secondary">{t('subtitle')}</p>
       </div>
 
       <div className="grid gap-lg md:grid-cols-3">
@@ -96,47 +105,51 @@ export default function PricingPage() {
           const isCurrent = status === 'authenticated' && currentPlan === plan.key;
           return (
             <div
-              key={plan.name}
+              key={plan.key}
               className={`relative cursor-pointer rounded-xl border p-xl ${
                 plan.popular ? 'border-accent-signal bg-surface' : 'border-border bg-surface'
               }`}
             >
               {plan.popular && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent-signal px-md py-1 text-label-sm font-bold text-white">
-                  Most Popular
+                  {t('mostPopular')}
                 </span>
               )}
               <div className="mb-lg">
-                <h2 className="text-headline-md font-semibold text-text-primary">{plan.name}</h2>
-                <p className="mt-1 text-label-md text-text-secondary">{plan.description}</p>
+                <h2 className="text-headline-md font-semibold text-text-primary">
+                  {t(plan.nameKey)}
+                </h2>
+                <p className="mt-1 text-label-md text-text-secondary">{t(plan.descKey)}</p>
                 <div className="mt-md flex items-baseline gap-1">
                   <span className="text-[48px] font-bold text-text-primary">${plan.price}</span>
-                  <span className="text-label-md text-text-muted">/month</span>
+                  <span className="text-label-md text-text-muted">{t('perMonth')}</span>
                 </div>
               </div>
               <ul className="mb-lg space-y-md">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-md">
+                {plan.featureKeys.map((feature) => (
+                  <li key={feature.key} className="flex items-center gap-md">
                     <Check className="size-4 flex-shrink-0 text-accent-signal" />
-                    <span className="text-body-md text-text-secondary">{feature}</span>
+                    <span className="text-body-md text-text-secondary">
+                      {feature.params ? t(feature.key, feature.params) : t(feature.key)}
+                    </span>
                   </li>
                 ))}
               </ul>
               {isCurrent ? (
                 <Button className="w-full" variant="secondary" disabled>
-                  Current plan
+                  {t('currentPlan')}
                 </Button>
               ) : plan.key === 'FREE' ? (
                 status === 'authenticated' ? (
                   <Button className="w-full" variant="secondary" disabled>
-                    Included
+                    {t('included')}
                   </Button>
                 ) : (
                   <Link
                     href="/sign-up"
                     className="inline-flex w-full items-center justify-center rounded-lg border border-border bg-background px-2.5 py-2 text-sm font-medium whitespace-nowrap transition-all hover:bg-muted hover:text-foreground"
                   >
-                    Get Started
+                    {t('getStarted')}
                   </Link>
                 )
               ) : status === 'authenticated' ? (
@@ -146,14 +159,14 @@ export default function PricingPage() {
                   onClick={() => handleCheckout(plan.key)}
                   disabled={loading === plan.key}
                 >
-                  {loading === plan.key ? 'Loading...' : 'Upgrade'}
+                  {loading === plan.key ? t('loading') : t('upgrade')}
                 </Button>
               ) : (
                 <Link
                   href="/sign-up"
                   className="inline-flex w-full items-center justify-center rounded-lg bg-accent-signal px-2.5 py-2 text-sm font-bold text-white whitespace-nowrap transition-all hover:opacity-90"
                 >
-                  Get Started
+                  {t('getStarted')}
                 </Link>
               )}
             </div>

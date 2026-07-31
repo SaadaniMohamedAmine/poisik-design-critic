@@ -21,7 +21,7 @@ import {
 import { Link } from '@/i18n/navigation';
 import { ComparePicker } from '@/components/poisik';
 import type { Category } from '@/lib/schemas';
-import { CATEGORY_LABELS } from '@/lib/categories';
+import { CATEGORY_LABEL_KEYS } from '@/lib/categories';
 
 // The `result` Json column always holds an AnalysisResultSchema-shaped object
 // (see app/api/projects/[id]/analyses/route.ts), but we only need these two
@@ -62,6 +62,7 @@ export default async function ProjectComparePage({
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
   const t = await getTranslations('Compare');
+  const tReport = await getTranslations('Report');
   const locale = await getLocale();
 
   const project = await prisma.project.findFirst({
@@ -144,7 +145,7 @@ export default async function ProjectComparePage({
     if (sA === undefined || sB === undefined) return null;
     return {
       key,
-      label: CATEGORY_LABELS[key] || key,
+      label: CATEGORY_LABEL_KEYS[key] ? tReport(CATEGORY_LABEL_KEYS[key]) : key,
       icon: CATEGORY_ICONS[key],
       scoreA: sA,
       scoreB: sB,

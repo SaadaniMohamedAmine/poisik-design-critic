@@ -18,7 +18,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import type { AnalysisResult } from '@/lib/schemas';
-import { CATEGORY_LABELS } from '@/lib/categories';
+import { CATEGORY_LABELS, CATEGORY_LABEL_KEYS } from '@/lib/categories';
 
 interface ReportViewProps {
   result: AnalysisResult;
@@ -67,6 +67,8 @@ export function ReportView({
     warning: t('warning'),
     suggestion: t('suggestion'),
   };
+  const categoryLabel = (key: string) =>
+    CATEGORY_LABEL_KEYS[key] ? t(CATEGORY_LABEL_KEYS[key]) : CATEGORY_LABELS[key] || key;
   const isDemoMode = Boolean(isDemo);
   const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
@@ -315,7 +317,7 @@ export function ReportView({
 
             <div className="mb-xl space-y-md">
               {Object.entries(result.category_scores).map(([key, value]) => (
-                <CategoryScoreBar key={key} label={CATEGORY_LABELS[key] || key} value={value} />
+                <CategoryScoreBar key={key} label={categoryLabel(key)} value={value} />
               ))}
             </div>
 
@@ -326,7 +328,7 @@ export function ReportView({
                   onClick={() => handleChipClick(cat)}
                   className="rounded-full border border-border px-md py-1.5 text-label-sm text-text-secondary transition-colors hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal"
                 >
-                  {cat === 'all' ? t('all') : CATEGORY_LABELS[cat] || cat}
+                  {categoryLabel(cat)}
                 </button>
               ))}
             </div>
@@ -403,9 +405,7 @@ export function ReportView({
         <DialogContent className="max-h-[80vh] w-full max-w-2xl overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>
-              {activeFilter === 'all'
-                ? t('allIssuesTitle')
-                : CATEGORY_LABELS[activeFilter] || activeFilter}
+              {activeFilter === 'all' ? t('allIssuesTitle') : categoryLabel(activeFilter)}
             </DialogTitle>
             <DialogDescription>
               {t('issuesFoundInCategory', { count: filteredIssues.length })}

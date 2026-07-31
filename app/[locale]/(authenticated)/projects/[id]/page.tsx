@@ -11,7 +11,7 @@ import {
   ProjectActionBar,
 } from '@/components/poisik';
 import type { AnalysisResult, Category } from '@/lib/schemas';
-import { CATEGORY_LABELS } from '@/lib/categories';
+import { CATEGORY_LABEL_KEYS } from '@/lib/categories';
 
 function scoreOf(result: unknown): number | undefined {
   return (result as { overall_score?: number } | null)?.overall_score;
@@ -40,6 +40,7 @@ function scoreOf(result: unknown): number | undefined {
 //   same visual treatment, no fabricated scheduling claim.
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const t = await getTranslations('ProjectDetail');
+  const tReport = await getTranslations('Report');
   const { id } = await params;
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
@@ -183,7 +184,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <p className="text-label-md font-bold text-accent-signal">{t('priorityFocusArea')}</p>
               <p className="mt-xs text-label-sm text-text-secondary">
                 {t('priorityFocusDesc', {
-                  category: CATEGORY_LABELS[priorityCategory[0]] || priorityCategory[0],
+                  category: CATEGORY_LABEL_KEYS[priorityCategory[0]]
+                    ? tReport(CATEGORY_LABEL_KEYS[priorityCategory[0]])
+                    : priorityCategory[0],
                   score: priorityCategory[1],
                 })}
               </p>
