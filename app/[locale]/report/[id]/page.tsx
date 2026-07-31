@@ -47,6 +47,8 @@ export default async function ReportPage({
         result={analysis.result as AnalysisResult}
         imageUrl={analysis.imageUrl}
         showOwnerActions={isOwner}
+        analysisId={analysis.id}
+        initialIsPublic={analysis.isPublic}
       />
     </>
   );

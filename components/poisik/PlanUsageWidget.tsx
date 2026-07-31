@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Zap } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { UpgradeModal } from './UpgradeModal';
 import type { Plan } from '@/lib/plans';
@@ -13,6 +14,7 @@ interface PlanUsageWidgetProps {
 }
 
 export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps) {
+  const t = useTranslations('PlanUsageWidget');
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const isUnlimited = limit === null;
   const remainingCount = remaining ?? 0;
@@ -39,18 +41,18 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
           <Zap className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <h3 className="mb-xs text-headline-sm font-bold text-text-primary">
-          {isUnlimited ? 'Unlimited analyses' : isAtLimit ? "You're out of credits" : 'Monthly quota'}
+          {isUnlimited ? t('unlimitedAnalyses') : isAtLimit ? t('outOfCredits') : t('monthlyQuota')}
         </h3>
         <p className="text-label-md text-text-secondary">
           {isUnlimited
-            ? "You're on a plan with no monthly analysis cap."
+            ? t('unlimitedDesc')
             : isAtLimit
-              ? "You've used all your analyses for this month — upgrade to keep auditing."
+              ? t('outOfCreditsDesc')
               : // "Remaining", not "used" — matches the Sidebar footer and
                 // the dashboard's "Analyses left" stat card, so the same
                 // number reads the same way everywhere on the page instead
                 // of requiring a subtraction to reconcile "used" vs "left".
-                `You have ${remainingCount} of ${limit} analyses left this month.`}
+                t('remainingDesc', { remaining: remainingCount, limit: limit ?? 0 })}
         </p>
       </div>
 
@@ -58,13 +60,16 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
         {!isUnlimited && (
           <>
             <div className="mb-xs flex justify-between text-label-sm text-text-secondary">
-              <span>Analysis credits</span>
+              <span>{t('analysisCredits')}</span>
               <span className="text-text-primary">
-                {remainingCount} / {limit} left
+                {t('leftCount', { remaining: remainingCount, limit: limit ?? 0 })}
               </span>
             </div>
             <div className="mb-lg h-2 w-full overflow-hidden rounded-full border border-border bg-bg-elevated">
-              <div className="h-full bg-accent-signal transition-all" style={{ width: `${pct}%` }} />
+              <div
+                className="h-full bg-accent-signal transition-all"
+                style={{ width: `${pct}%` }}
+              />
             </div>
           </>
         )}
@@ -80,7 +85,7 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
               className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white shadow-lg shadow-accent-signal/30 transition-opacity hover:opacity-90"
             >
               <Zap className="size-4" strokeWidth={2} />
-              {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}
+              {plan === 'FREE' ? t('upgradeToPro') : t('upgradePlan')}
             </button>
           ) : (
             <Link
@@ -88,7 +93,7 @@ export function PlanUsageWidget({ plan, remaining, limit }: PlanUsageWidgetProps
               className="flex w-full items-center justify-center gap-sm rounded-xl bg-accent-signal py-md text-label-md font-bold text-white transition-opacity hover:opacity-90"
             >
               <Zap className="size-4" strokeWidth={2} />
-              {plan === 'FREE' ? 'Upgrade to Pro' : 'Upgrade plan'}
+              {plan === 'FREE' ? t('upgradeToPro') : t('upgradePlan')}
             </Link>
           ))}
       </div>

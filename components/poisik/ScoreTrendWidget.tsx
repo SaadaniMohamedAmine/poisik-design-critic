@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 import { TrendingUp, TrendingDown, LineChart as LineChartIcon } from 'lucide-react';
 
@@ -8,10 +9,8 @@ interface ScoreTrendWidgetProps {
   subtitle?: string;
 }
 
-export function ScoreTrendWidget({
-  scores,
-  subtitle = 'Performance progression across all projects',
-}: ScoreTrendWidgetProps) {
+export function ScoreTrendWidget({ scores, subtitle }: ScoreTrendWidgetProps) {
+  const t = useTranslations('ScoreTrendWidget');
   const hasData = scores.length > 0;
   // A line chart with exactly one point renders nothing (dot={false}, and a
   // line needs 2+ points) — a near-empty box that reads as broken, not as
@@ -24,8 +23,8 @@ export function ScoreTrendWidget({
     <div className="flex h-full flex-col rounded-xl border border-border bg-surface p-lg">
       <div className="mb-lg flex items-start justify-between">
         <div>
-          <h3 className="text-headline-sm font-bold text-text-primary">Score trend</h3>
-          <p className="mt-xs text-label-sm text-text-secondary">{subtitle}</p>
+          <h3 className="text-headline-sm font-bold text-text-primary">{t('title')}</h3>
+          <p className="mt-xs text-label-sm text-text-secondary">{subtitle ?? t('subtitle')}</p>
         </div>
         {hasTrend && (
           <div
@@ -84,18 +83,14 @@ export function ScoreTrendWidget({
             {scores[0].score}
             <span className="text-headline-sm font-medium text-text-muted">/100</span>
           </span>
-          <p className="text-body-md text-text-secondary">Your first score is in</p>
-          <p className="text-label-sm text-text-muted">
-            Run one more analysis to start seeing a trend line.
-          </p>
+          <p className="text-body-md text-text-secondary">{t('firstScoreIn')}</p>
+          <p className="text-label-sm text-text-muted">{t('runOneMore')}</p>
         </div>
       ) : (
         <div className="flex h-64 flex-1 flex-col items-center justify-center gap-sm text-center">
           <LineChartIcon className="size-8 text-text-muted" strokeWidth={1.5} />
-          <p className="text-body-md text-text-secondary">No scored analyses yet</p>
-          <p className="text-label-sm text-text-muted">
-            Run your first analysis to start tracking your score over time.
-          </p>
+          <p className="text-body-md text-text-secondary">{t('noScoredAnalyses')}</p>
+          <p className="text-label-sm text-text-muted">{t('runFirstAnalysis')}</p>
         </div>
       )}
     </div>

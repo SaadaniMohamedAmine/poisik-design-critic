@@ -1,11 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { PoisikLogo } from './PoisikLogo';
 
 const DURATION_MS = 1400;
 
 export function SplashScreen() {
+  const t = useTranslations('SplashScreen');
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(true);
   const [fadingOut, setFadingOut] = useState(false);
@@ -64,7 +66,7 @@ export function SplashScreen() {
           className="font-black capitalize text-accent-signal sm:text-display-lg"
         />
         <p className="text-label-sm uppercase tracking-[0.1em] text-text-secondary sm:tracking-[0.2em]">
-          Design and passion, with poise.
+          {t('tagline')}
         </p>
       </div>
 
@@ -76,7 +78,7 @@ export function SplashScreen() {
           />
         </div>
         <div className="mt-xs flex items-center justify-between text-label-sm uppercase tracking-widest text-text-muted">
-          <span>Loading</span>
+          <span>{t('loading')}</span>
           <span>{progress}%</span>
         </div>
       </div>

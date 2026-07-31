@@ -10,3 +10,16 @@ export const CATEGORY_LABELS: Record<string, string> = {
   accessibility: 'Accessibility',
   consistency: 'Consistency',
 };
+
+// Maps a category (or 'all') to its key in the `Report` next-intl namespace,
+// which already carries these same six labels + 'all' — callers translate
+// via `t(CATEGORY_LABEL_KEYS[key])` instead of reading the English map above.
+export const CATEGORY_LABEL_KEYS: Record<string, string> = {
+  all: 'all',
+  visual_hierarchy: 'visualHierarchy',
+  contrast: 'contrast',
+  spacing: 'spacing',
+  typography: 'typography',
+  accessibility: 'accessibility',
+  consistency: 'consistency',
+};

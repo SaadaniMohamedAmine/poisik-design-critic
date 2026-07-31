@@ -1,6 +1,7 @@
 'use client';
 
 import { ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
 import { useGettingStarted } from './GettingStartedContext';
 
@@ -11,6 +12,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 // the same widget as GettingStartedWidget.tsx. Lives in the Sidebar footer;
 // clicking it re-expands the full checklist card back on the dashboard.
 export function GettingStartedPill() {
+  const t = useTranslations('GettingStartedPill');
   const gs = useGettingStarted();
   const router = useRouter();
   if (!gs || gs.dismissed || !gs.minimized) return null;
@@ -50,7 +52,7 @@ export function GettingStartedPill() {
           />
         </svg>
         <span className="text-label-md whitespace-nowrap text-accent-signal">
-          Getting started · {doneCount}/{total}
+          {t('progress', { done: doneCount, total })}
         </span>
       </div>
       <ChevronRight className="size-4 text-accent-signal" strokeWidth={2} />

@@ -172,7 +172,7 @@ export function UploadDropzone({ onAnalyze, className }: UploadDropzoneProps) {
                   </p>
                   <p className="text-label-sm text-text-muted">
                     {formatSize(filePreview.file.size)} •{' '}
-                    {filePreview.file.type.split('/')[1].toUpperCase()} Image
+                    {t('imageType', { type: filePreview.file.type.split('/')[1].toUpperCase() })}
                   </p>
                 </div>
                 <button

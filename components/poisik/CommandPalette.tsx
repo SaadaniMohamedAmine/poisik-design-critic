@@ -2,18 +2,94 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { Command } from 'cmdk';
-import { Search, Upload, History, DollarSign, Eye, Languages } from 'lucide-react';
+import {
+  Search,
+  Upload,
+  FolderOpen,
+  LayoutDashboard,
+  GitCompare,
+  Settings,
+  LogOut,
+  Sparkles,
+  Layers,
+  DollarSign,
+  Eye,
+  LogIn,
+  UserPlus,
+  Languages,
+  type LucideIcon,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
 
-const ACTIONS = [
-  { id: 'upload', label: 'New analysis', icon: Upload, href: '/projects/new-analysis' },
-  { id: 'history', label: 'Go to Projects', icon: History, href: '/projects' },
-  { id: 'pricing', label: 'Go to Pricing', icon: DollarSign, href: '/pricing' },
-  { id: 'demo', label: 'Go to Demo', icon: Eye, href: '/demo' },
+interface Action {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  href?: string;
+  run?: () => void;
+}
+
+interface ActionMeta {
+  id: string;
+  labelKey: string;
+  icon: LucideIcon;
+  href: string;
+}
+
+function switchLanguage() {
+  const current = window.location.pathname;
+  const newLocale = current.startsWith('/fr') ? 'en' : 'fr';
+  window.location.href = current.replace(/^\/(en|fr)/, `/${newLocale}`);
+}
+
+// Only the actions a signed-in user can actually reach — everything here
+// lives under the (authenticated) route group. "Compare" has no standalone
+// route (it's always /projects/[id]/compare), so it sends you to the
+// project picker instead of a dead link.
+const AUTH_ACTIONS: ActionMeta[] = [
+  { id: 'dashboard', labelKey: 'authDashboard', icon: LayoutDashboard, href: '/dashboard' },
+  { id: 'new-analysis', labelKey: 'authNewAnalysis', icon: Upload, href: '/projects/new-analysis' },
+  { id: 'projects', labelKey: 'authProjects', icon: FolderOpen, href: '/projects' },
+  { id: 'compare', labelKey: 'authCompare', icon: GitCompare, href: '/projects' },
+  { id: 'settings', labelKey: 'authSettings', icon: Settings, href: '/settings' },
+  { id: 'pricing', labelKey: 'authPricing', icon: DollarSign, href: '/pricing' },
 ];
 
-export function CommandPalette() {
+// What an anonymous visitor sees instead — the same links the marketing
+// header itself offers, not app routes that would just bounce them to
+// sign-in.
+const PUBLIC_ACTIONS: ActionMeta[] = [
+  { id: 'features', labelKey: 'publicFeatures', icon: Sparkles, href: '/#features' },
+  {
+    id: 'beyond-critique',
+    labelKey: 'publicBeyondCritique',
+    icon: Layers,
+    href: '/#beyond-critique',
+  },
+  { id: 'pricing', labelKey: 'publicPricing', icon: DollarSign, href: '/pricing' },
+  { id: 'demo', labelKey: 'publicDemo', icon: Eye, href: '/demo' },
+  { id: 'sign-in', labelKey: 'publicSignIn', icon: LogIn, href: '/sign-in' },
+  { id: 'sign-up', labelKey: 'publicSignUp', icon: UserPlus, href: '/sign-up' },
+];
+
+// A visible trigger (topbar button) needs to open this same palette instance
+// without lifting `open` state into a shared store — a plain window event is
+// enough for a single global palette mounted once in the root layout.
+const OPEN_EVENT = 'poisik:open-command-palette';
+
+export function openCommandPalette() {
+  window.dispatchEvent(new Event(OPEN_EVENT));
+}
+
+interface CommandPaletteProps {
+  isAuthenticated?: boolean;
+}
+
+export function CommandPalette({ isAuthenticated = false }: CommandPaletteProps) {
+  const t = useTranslations('CommandPalette');
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -28,19 +104,30 @@ export function CommandPalette() {
     return () => document.removeEventListener('keydown', down);
   }, []);
 
+  useEffect(() => {
+    const openHandler = () => setOpen(true);
+    window.addEventListener(OPEN_EVENT, openHandler);
+    return () => window.removeEventListener(OPEN_EVENT, openHandler);
+  }, []);
+
   const runAction = useCallback(
-    (action: (typeof ACTIONS)[0]) => {
+    (action: Action) => {
       setOpen(false);
-      if (action.id === 'lang') {
-        const current = window.location.pathname;
-        const newLocale = current.startsWith('/fr') ? 'en' : 'fr';
-        window.location.href = current.replace(/^\/(en|fr)/, `/${newLocale}`);
+      if (action.run) {
+        action.run();
         return;
       }
       router.push(action.href || '');
     },
     [router]
   );
+
+  const actions: Action[] = (isAuthenticated ? AUTH_ACTIONS : PUBLIC_ACTIONS).map((a) => ({
+    id: a.id,
+    label: t(a.labelKey),
+    icon: a.icon,
+    href: a.href,
+  }));
 
   return (
     <div
@@ -60,15 +147,15 @@ export function CommandPalette() {
           <div className="flex items-center border-b border-border px-md">
             <Search className="mr-2 size-4 text-text-muted" />
             <Command.Input
-              placeholder="Type a command or search..."
+              placeholder={t('searchPlaceholder')}
               className="flex-1 bg-transparent py-3 text-body-md text-text-primary placeholder:text-text-muted focus:outline-none"
             />
           </div>
           <Command.List className="max-h-64 overflow-y-auto p-2">
             <Command.Empty className="py-6 text-center text-label-md text-text-muted">
-              No results found.
+              {t('noResults')}
             </Command.Empty>
-            {ACTIONS.map((action) => (
+            {actions.map((action) => (
               <Command.Item
                 key={action.id}
                 onSelect={() => runAction(action)}
@@ -79,17 +166,25 @@ export function CommandPalette() {
               </Command.Item>
             ))}
             <Command.Item
-              onSelect={() => {
-                setOpen(false);
-                const current = window.location.pathname;
-                const newLocale = current.startsWith('/fr') ? 'en' : 'fr';
-                window.location.href = current.replace(/^\/(en|fr)/, `/${newLocale}`);
-              }}
+              onSelect={() =>
+                runAction({ id: 'lang', label: '', icon: Languages, run: switchLanguage })
+              }
               className="flex cursor-pointer items-center gap-md rounded-lg px-md py-2 text-label-md text-text-primary data-[selected=true]:bg-accent-soft-bg data-[selected=true]:text-accent-signal"
             >
               <Languages className="size-4 text-text-muted" />
-              Switch language
+              {t('switchLanguage')}
             </Command.Item>
+            {isAuthenticated && (
+              <Command.Item
+                onSelect={() =>
+                  runAction({ id: 'sign-out', label: '', icon: LogOut, run: () => signOut() })
+                }
+                className="flex cursor-pointer items-center gap-md rounded-lg px-md py-2 text-label-md text-text-primary data-[selected=true]:bg-accent-soft-bg data-[selected=true]:text-accent-signal"
+              >
+                <LogOut className="size-4 text-text-muted" />
+                {t('signOut')}
+              </Command.Item>
+            )}
           </Command.List>
         </Command>
       </div>

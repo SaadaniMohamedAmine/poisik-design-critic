@@ -1,6 +1,7 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
+import { getTranslations, getLocale } from 'next-intl/server';
 import {
   GitCompare,
   TrendingUp,
@@ -20,7 +21,7 @@ import {
 import { Link } from '@/i18n/navigation';
 import { ComparePicker } from '@/components/poisik';
 import type { Category } from '@/lib/schemas';
-import { CATEGORY_LABELS } from '@/lib/categories';
+import { CATEGORY_LABEL_KEYS } from '@/lib/categories';
 
 // The `result` Json column always holds an AnalysisResultSchema-shaped object
 // (see app/api/projects/[id]/analyses/route.ts), but we only need these two
@@ -60,6 +61,9 @@ export default async function ProjectComparePage({
   const { a, b } = await searchParams;
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
+  const t = await getTranslations('Compare');
+  const tReport = await getTranslations('Report');
+  const locale = await getLocale();
 
   const project = await prisma.project.findFirst({
     where: { id, userId },
@@ -89,26 +93,20 @@ export default async function ProjectComparePage({
             <GitCompare className="size-5 text-accent-signal" strokeWidth={1.5} />
           </div>
           <div>
-            <h1 className="text-headline-lg font-bold text-text-primary">
-              Select analyses to compare
-            </h1>
-            <p className="mt-xs text-body-md text-text-secondary">
-              Choose exactly 2 audits to see the visual and score diff.
-            </p>
+            <h1 className="text-headline-lg font-bold text-text-primary">{t('pickerTitle')}</h1>
+            <p className="mt-xs text-body-md text-text-secondary">{t('pickerSubtitle')}</p>
           </div>
         </div>
 
         {project.analyses.length < 2 ? (
           <div className="flex flex-col items-center gap-sm rounded-xl border border-border bg-surface py-xxl text-center">
             <GitCompare className="size-8 text-text-muted" strokeWidth={1.5} />
-            <p className="text-body-md text-text-secondary">
-              You need at least 2 analyses on this project to compare.
-            </p>
+            <p className="text-body-md text-text-secondary">{t('notEnoughAnalyses')}</p>
             <Link
               href={`/projects/${project.id}`}
               className="mt-sm text-label-md font-bold text-accent-signal hover:underline"
             >
-              Back to project
+              {t('backToProject')}
             </Link>
           </div>
         ) : (
@@ -147,7 +145,7 @@ export default async function ProjectComparePage({
     if (sA === undefined || sB === undefined) return null;
     return {
       key,
-      label: CATEGORY_LABELS[key] || key,
+      label: CATEGORY_LABEL_KEYS[key] ? tReport(CATEGORY_LABEL_KEYS[key]) : key,
       icon: CATEGORY_ICONS[key],
       scoreA: sA,
       scoreB: sB,
@@ -168,20 +166,22 @@ export default async function ProjectComparePage({
             <GitCompare className="size-5 text-accent-signal" strokeWidth={1.5} />
           </div>
           <div>
-            <h1 className="text-headline-lg font-bold text-text-primary">Comparing 2 audits</h1>
+            <h1 className="text-headline-lg font-bold text-text-primary">{t('comparingTitle')}</h1>
             <p className="mt-xs text-body-md text-text-secondary">
-              Audit #{indexA} ({analysisA.createdAt.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
+              {t('auditsVersus', {
+                indexA,
+                indexB,
+                dateA: analysisA.createdAt.toLocaleDateString(locale, {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }),
+                dateB: analysisB.createdAt.toLocaleDateString(locale, {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                }),
               })}
-              ) vs Audit #{indexB} (
-              {analysisB.createdAt.toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-              })}
-              )
             </p>
           </div>
         </div>
@@ -189,7 +189,7 @@ export default async function ProjectComparePage({
         {liftPct !== undefined && (
           <div className="flex shrink-0 items-center gap-sm self-start rounded-xl border border-border bg-surface px-md py-sm md:self-auto">
             <span className="text-label-sm text-text-muted uppercase tracking-wider">
-              Score lift
+              {t('scoreLift')}
             </span>
             <span
               className={`flex items-center gap-1 text-label-md font-bold ${liftPct > 0 ? 'text-accent-signal' : 'text-text-secondary'}`}
@@ -213,7 +213,7 @@ export default async function ProjectComparePage({
         {/* Before card */}
         <div className="group relative overflow-hidden rounded-xl border border-border bg-surface">
           <div className="absolute top-md left-md z-10 rounded border border-border bg-bg-base/80 px-sm py-xs text-label-sm font-bold text-text-secondary uppercase tracking-wide backdrop-blur-md">
-            Before
+            {t('beforeLabel')}
           </div>
           <div className="absolute top-md right-md z-10 flex size-12 items-center justify-center rounded-full border border-border bg-bg-base/80 backdrop-blur-md">
             <span className="text-headline-md font-bold text-text-primary">{scoreA ?? '—'}</span>
@@ -228,20 +228,23 @@ export default async function ProjectComparePage({
           </div>
           <div className="flex items-center justify-between border-t border-border p-lg">
             <div>
-              <p className="text-label-md font-bold text-text-primary">Audit #{indexA}</p>
+              <p className="text-label-md font-bold text-text-primary">
+                {t('auditLabel', { index: indexA })}
+              </p>
               <p className="text-label-sm text-text-muted">
-                Captured{' '}
-                {analysisA.createdAt.toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
+                {t('capturedAt', {
+                  date: analysisA.createdAt.toLocaleDateString(locale, {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }),
                 })}
               </p>
             </div>
             <Link
               href={`/report/${analysisA.id}`}
-              aria-label="View full report for audit A"
+              aria-label={t('viewReportAriaA')}
               className="rounded-lg p-xs text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary"
             >
               <History className="size-4" strokeWidth={1.5} />
@@ -253,7 +256,7 @@ export default async function ProjectComparePage({
         <div className="group relative overflow-hidden rounded-xl border border-accent-signal/30 bg-surface">
           <div className="pointer-events-none absolute -top-16 -right-16 size-32 rounded-full bg-accent-signal/10 blur-[60px]" />
           <div className="absolute top-md left-md z-10 rounded bg-accent-signal px-sm py-xs text-label-sm font-bold text-white uppercase tracking-wide">
-            After
+            {t('afterLabel')}
           </div>
           <div className="absolute top-md right-md z-10 flex size-12 items-center justify-center rounded-full border border-accent-signal/40 bg-accent-soft-bg backdrop-blur-md">
             <span className="text-headline-md font-bold text-accent-signal">{scoreB ?? '—'}</span>
@@ -268,14 +271,17 @@ export default async function ProjectComparePage({
           </div>
           <div className="relative flex items-center justify-between border-t border-border p-lg">
             <div>
-              <p className="text-label-md font-bold text-accent-signal">Audit #{indexB}</p>
+              <p className="text-label-md font-bold text-accent-signal">
+                {t('auditLabel', { index: indexB })}
+              </p>
               <p className="text-label-sm text-text-muted">
-                Captured{' '}
-                {analysisB.createdAt.toLocaleDateString(undefined, {
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
+                {t('capturedAt', {
+                  date: analysisB.createdAt.toLocaleDateString(locale, {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }),
                 })}
               </p>
             </div>
@@ -284,8 +290,8 @@ export default async function ProjectComparePage({
                 <Sparkles className="size-4" strokeWidth={1.5} />
                 <span className="text-label-sm font-bold">
                   {issuesResolved > 0
-                    ? `${issuesResolved} issue${issuesResolved === 1 ? '' : 's'} resolved`
-                    : `${Math.abs(issuesResolved)} new issue${Math.abs(issuesResolved) === 1 ? '' : 's'}`}
+                    ? t('issuesResolved', { count: issuesResolved })
+                    : t('newIssues', { count: Math.abs(issuesResolved) })}
                 </span>
               </div>
             )}
@@ -299,21 +305,19 @@ export default async function ProjectComparePage({
           <div className="flex items-center justify-between border-b border-border bg-bg-elevated px-lg py-md">
             <h2 className="flex items-center gap-sm text-label-md font-bold text-text-primary">
               <BarChart3 className="size-4 text-accent-signal" strokeWidth={1.5} />
-              Category Delta Analysis
+              {t('categoryDeltaTitle')}
             </h2>
-            <span className="hidden text-label-sm text-text-muted sm:inline">
-              Delta values represent point change
-            </span>
+            <span className="hidden text-label-sm text-text-muted sm:inline">{t('deltaHint')}</span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
                 <tr className="border-b border-border text-label-sm text-text-muted">
-                  <th className="px-lg py-md font-semibold">Category</th>
-                  <th className="px-lg py-md font-semibold">Previous</th>
-                  <th className="px-lg py-md font-semibold">New</th>
-                  <th className="px-lg py-md font-semibold">Improvement</th>
-                  <th className="px-lg py-md text-right font-semibold">Trend</th>
+                  <th className="px-lg py-md font-semibold">{t('tableCategory')}</th>
+                  <th className="px-lg py-md font-semibold">{t('tablePrevious')}</th>
+                  <th className="px-lg py-md font-semibold">{t('tableNew')}</th>
+                  <th className="px-lg py-md font-semibold">{t('tableImprovement')}</th>
+                  <th className="px-lg py-md text-right font-semibold">{t('tableTrend')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -364,18 +368,18 @@ export default async function ProjectComparePage({
           <Sparkles className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <div className="flex-1 text-center md:text-left">
-          <h3 className="text-label-md font-bold text-accent-signal">Key improvements</h3>
+          <h3 className="text-label-md font-bold text-accent-signal">{t('keyImprovements')}</h3>
           <p className="mt-xs text-body-md text-text-secondary">
             {topGains.length > 0 ? (
               <>
-                The biggest gains were in{' '}
+                {t('biggestGainsPrefix')}{' '}
                 <strong className="text-text-primary">
-                  {topGains.map((g) => `${g.label} (+${g.diff})`).join(' and ')}
+                  {topGains.map((g) => `${g.label} (+${g.diff})`).join(t('gainsJoiner'))}
                 </strong>
                 .
               </>
             ) : (
-              'No category improved between these two audits.'
+              t('noCategoryImproved')
             )}
           </p>
         </div>
@@ -383,7 +387,7 @@ export default async function ProjectComparePage({
           href={`/report/${analysisB.id}`}
           className="shrink-0 rounded-xl bg-accent-signal px-lg py-md text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
         >
-          View full report
+          {t('viewFullReport')}
         </Link>
       </div>
     </div>

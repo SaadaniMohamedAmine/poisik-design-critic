@@ -2,8 +2,15 @@
 
 import { useState } from 'react';
 import { Sparkles, ArrowRight, ShieldCheck, RotateCcw } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { PLAN_LABELS, PLAN_LIMITS, NEXT_PLAN, type Plan } from '@/lib/plans';
+import { useTranslations } from 'next-intl';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { PLAN_LABEL_KEYS, PLAN_LIMITS, NEXT_PLAN, type Plan } from '@/lib/plans';
 
 interface UpgradeModalProps {
   open: boolean;
@@ -22,6 +29,8 @@ interface UpgradeModalProps {
 // (PLAN_LIMITS for the current plan vs. the next tier up) instead of
 // repeating the pricing page's "Unlimited" claim for Pro.
 export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
+  const t = useTranslations('UpgradeModal');
+  const tPricing = useTranslations('Pricing');
   const [loading, setLoading] = useState(false);
   const nextPlan = NEXT_PLAN[plan];
   const currentLimit = PLAN_LIMITS[plan];
@@ -64,29 +73,29 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
               <Sparkles className="size-5 text-accent-signal" strokeWidth={1.5} />
             </div>
             <DialogTitle className="text-headline-md font-bold text-accent-signal">
-              You&apos;ve used all {currentLimit} analyses this month
+              {t('usedAllTitle', { limit: currentLimit ?? 0 })}
             </DialogTitle>
-            <DialogDescription className="mx-auto max-w-sm text-body-md text-text-secondary">
-              Upgrade to {PLAN_LABELS[nextPlan]} to keep auditing.
+            <DialogDescription className="mx-auto max-w-[320px] text-body-md text-text-secondary">
+              {t('upgradeDesc', { plan: tPricing(PLAN_LABEL_KEYS[nextPlan]) })}
             </DialogDescription>
           </DialogHeader>
 
           <div className="relative z-10 mt-lg grid grid-cols-2 gap-md">
             <div className="rounded-xl border border-border bg-bg-elevated p-lg text-center">
               <p className="text-label-sm text-text-muted uppercase tracking-wider">
-                {PLAN_LABELS[plan]}
+                {t(PLAN_LABEL_KEYS[plan])}
               </p>
               <p className="mt-xs text-headline-md font-bold text-text-primary">{currentLimit}</p>
-              <p className="text-label-sm text-text-muted">analyses / month</p>
+              <p className="text-label-sm text-text-muted">{t('analysesPerMonth')}</p>
             </div>
             <div className="rounded-xl border border-accent-signal/40 bg-accent-soft-bg p-lg text-center">
               <p className="text-label-sm text-accent-signal uppercase tracking-wider">
-                {PLAN_LABELS[nextPlan]}
+                {tPricing(PLAN_LABEL_KEYS[nextPlan])}
               </p>
               <p className="mt-xs text-headline-md font-bold text-accent-signal">
-                {nextLimit === null ? 'Unlimited' : nextLimit}
+                {nextLimit === null ? t('unlimited') : nextLimit}
               </p>
-              <p className="text-label-sm text-text-secondary">analyses / month</p>
+              <p className="text-label-sm text-text-secondary">{t('analysesPerMonth')}</p>
             </div>
           </div>
 
@@ -97,10 +106,10 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
               className="flex h-14 w-full items-center justify-center gap-sm rounded-xl bg-accent-signal text-label-md font-bold text-white transition-all hover:brightness-110 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
-                'Redirecting...'
+                t('redirecting')
               ) : (
                 <>
-                  Upgrade to {PLAN_LABELS[nextPlan]}
+                  {t('upgradeToPlan', { plan: tPricing(PLAN_LABEL_KEYS[nextPlan]) })}
                   <ArrowRight className="size-4" strokeWidth={2} />
                 </>
               )}
@@ -109,18 +118,22 @@ export function UpgradeModal({ open, onOpenChange, plan }: UpgradeModalProps) {
               onClick={() => onOpenChange(false)}
               className="py-sm text-label-md text-text-secondary transition-colors hover:text-text-primary"
             >
-              Maybe later
+              {t('maybeLater')}
             </button>
           </div>
 
           <div className="relative z-10 mt-lg flex items-center justify-center gap-xl text-text-muted opacity-60">
             <div className="flex items-center gap-xs">
               <ShieldCheck className="size-4" strokeWidth={1.5} />
-              <span className="text-[10px] font-bold tracking-widest uppercase">Secure payment</span>
+              <span className="text-[10px] font-bold tracking-widest uppercase">
+                {t('securePayment')}
+              </span>
             </div>
             <div className="flex items-center gap-xs">
               <RotateCcw className="size-4" strokeWidth={1.5} />
-              <span className="text-[10px] font-bold tracking-widest uppercase">Cancel anytime</span>
+              <span className="text-[10px] font-bold tracking-widest uppercase">
+                {t('cancelAnytime')}
+              </span>
             </div>
           </div>
         </div>

@@ -72,7 +72,7 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col">
         <SplashScreen />
         <JsonLd />
-        <CommandPalette />
+        <CommandPalette isAuthenticated={!!session?.user} />
         <SessionProvider session={session}>
           <TooltipProvider>{children}</TooltipProvider>
         </SessionProvider>

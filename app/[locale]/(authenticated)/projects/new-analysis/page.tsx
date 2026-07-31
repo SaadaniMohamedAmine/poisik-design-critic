@@ -1,12 +1,14 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { redirect } from '@/i18n/navigation';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { Sparkles, FolderOpen, BarChart3, ArrowRight } from 'lucide-react';
 import { CreateProjectForm } from '@/components/poisik';
 
 export default async function NewAnalysisPage() {
+  const t = await getTranslations('NewAnalysis');
+  const tProjects = await getTranslations('Projects');
   const session = await auth();
   const locale = await getLocale();
   if (!session?.user) {
@@ -27,12 +29,9 @@ export default async function NewAnalysisPage() {
           <Sparkles className="size-6 text-accent-signal" strokeWidth={1.5} />
         </div>
         <h1 className="mb-sm text-headline-lg font-bold text-text-primary">
-          Create your first project
+          {tProjects('emptyTitle')}
         </h1>
-        <p className="mb-lg text-body-md text-text-secondary">
-          A project groups every analysis you run on the same design, so you can track its progress
-          over time.
-        </p>
+        <p className="mb-lg text-body-md text-text-secondary">{tProjects('emptyDesc')}</p>
         <div className="rounded-xl border border-border bg-surface p-lg text-left shadow-lg">
           <CreateProjectForm />
         </div>
@@ -52,12 +51,8 @@ export default async function NewAnalysisPage() {
           <Sparkles className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <div>
-          <h1 className="text-headline-lg font-bold text-text-primary">
-            Which project is this for?
-          </h1>
-          <p className="mt-xs text-body-md text-text-secondary">
-            Pick a project to add this analysis to, or start a new one.
-          </p>
+          <h1 className="text-headline-lg font-bold text-text-primary">{t('whichProject')}</h1>
+          <p className="mt-xs text-body-md text-text-secondary">{t('pickProject')}</p>
         </div>
       </div>
 
@@ -78,7 +73,7 @@ export default async function NewAnalysisPage() {
               <div className="mt-xs flex items-center gap-xs text-text-secondary">
                 <BarChart3 className="size-3.5" strokeWidth={1.5} />
                 <span className="text-label-sm">
-                  {project._count.analyses} {project._count.analyses === 1 ? 'analysis' : 'analyses'}
+                  {t('analysesCount', { count: project._count.analyses })}
                 </span>
               </div>
             </div>
@@ -96,7 +91,7 @@ export default async function NewAnalysisPage() {
         </div>
         <div className="relative flex justify-center text-label-sm">
           <span className="bg-bg-base px-md text-text-secondary uppercase tracking-widest">
-            Or start a new project
+            {t('orStartNewProject')}
           </span>
         </div>
       </div>

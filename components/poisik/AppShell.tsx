@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import type { Session } from 'next-auth';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
@@ -7,6 +7,7 @@ import { prisma } from '@/lib/prisma';
 import { getCurrentUsage } from '@/lib/usage';
 import { TopBarAuth } from './TopBarAuth';
 import { Sidebar } from './Sidebar';
+import { SpeedDial } from './SpeedDial';
 import { WelcomeToast } from './WelcomeToast';
 import { OnboardingFlow } from './OnboardingFlow';
 import { GettingStartedProvider, type GettingStartedItem } from './GettingStartedContext';
@@ -16,6 +17,7 @@ interface ShellData {
   gettingStartedItems: GettingStartedItem[];
   gettingStartedDismissed: boolean;
   onboardingShow: boolean;
+  projects: { id: string; name: string }[];
 }
 
 // Shared by AppShell (dashboard/projects, requires auth) and the report
@@ -27,8 +29,9 @@ export async function loadShellData(session: Session): Promise<ShellData> {
   const userId = session.user!.id as string;
   const plan = ((session.user as { plan?: string }).plan ?? 'FREE') as
     'FREE' | 'PRO' | 'ENTERPRISE';
+  const t = await getTranslations('AppShell');
 
-  const [usage, projectCount, analysisCount, me] = await Promise.all([
+  const [usage, projectCount, analysisCount, me, projects] = await Promise.all([
     getCurrentUsage(userId, plan).then((u) => ({ ...u, plan })),
     prisma.project.count({ where: { userId } }),
     prisma.analysis.count({ where: { project: { userId } } }),
@@ -41,30 +44,37 @@ export async function loadShellData(session: Session): Promise<ShellData> {
         gettingStartedDismissedAt: true,
       },
     }),
+    // Lightweight (id + name only) — feeds the sidebar's Projects dropdown,
+    // which just needs to list + link to projects, not their analyses.
+    prisma.project.findMany({
+      where: { userId },
+      select: { id: true, name: true },
+      orderBy: { updatedAt: 'desc' },
+    }),
   ]);
 
   const gettingStartedItems: GettingStartedItem[] = [
     {
       key: 'project',
-      label: 'Create your first project',
+      label: t('projectItem'),
       done: projectCount > 0,
       href: '/dashboard',
     },
     {
       key: 'analysis',
-      label: 'Run your first analysis',
+      label: t('analysisItem'),
       done: analysisCount > 0,
       href: '/projects/new-analysis',
     },
     {
       key: 'report',
-      label: 'View your first report',
+      label: t('reportItem'),
       done: !!me?.firstReportViewedAt,
       href: '/projects/new-analysis',
     },
     {
       key: 'overview',
-      label: 'Explore your Projects overview',
+      label: t('overviewItem'),
       done: !!me?.projectsOverviewViewedAt,
       href: '/projects',
     },
@@ -75,6 +85,7 @@ export async function loadShellData(session: Session): Promise<ShellData> {
     gettingStartedItems,
     gettingStartedDismissed: !!me?.gettingStartedDismissedAt,
     onboardingShow: !me?.onboardingCompletedAt,
+    projects,
   };
 }
 
@@ -92,7 +103,8 @@ export function AppShellChrome({
   shellData: ShellData;
   children: React.ReactNode;
 }) {
-  const { usage, gettingStartedItems, gettingStartedDismissed, onboardingShow } = shellData;
+  const { usage, gettingStartedItems, gettingStartedDismissed, onboardingShow, projects } =
+    shellData;
 
   return (
     <GettingStartedProvider items={gettingStartedItems} initialDismissed={gettingStartedDismissed}>
@@ -101,9 +113,15 @@ export function AppShellChrome({
           <WelcomeToast />
         </Suspense>
         <OnboardingFlow show={onboardingShow} />
-        <TopBarAuth userName={session.user!.name} userImage={session.user!.image} usage={usage} />
+        <SpeedDial usage={usage} />
+        <TopBarAuth
+          userName={session.user!.name}
+          userImage={session.user!.image}
+          usage={usage}
+          projects={projects}
+        />
         <div className="flex pt-20">
-          <Sidebar usage={usage} />
+          <Sidebar usage={usage} projects={projects} />
           <main className="flex-1 p-md lg:ml-64 lg:p-xl">
             <div className="mx-auto max-w-7xl">{children}</div>
           </main>

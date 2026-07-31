@@ -13,6 +13,7 @@ import {
   ArrowDownCircle,
   type LucideIcon,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
 
 interface NotificationItem {
@@ -36,19 +37,20 @@ const ICONS: Record<string, LucideIcon> = {
   PLAN_DOWNGRADED: ArrowDownCircle,
 };
 
-function timeAgo(dateStr: string): string {
+function timeAgo(dateStr: string, t: ReturnType<typeof useTranslations>): string {
   const diffMs = Date.now() - new Date(dateStr).getTime();
   const minutes = Math.floor(diffMs / 60000);
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return t('justNow');
+  if (minutes < 60) return t('minutesAgo', { count: minutes });
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t('hoursAgo', { count: hours });
   const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7) return t('daysAgo', { count: days });
   return new Date(dateStr).toLocaleDateString();
 }
 
 export function NotificationBell() {
+  const t = useTranslations('Notifications');
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -108,10 +110,20 @@ export function NotificationBell() {
     return () => document.removeEventListener('click', handleClick);
   }, []);
 
-  function handleToggle() {
+  async function handleToggle() {
     const next = !open;
     setOpen(next);
-    if (next) load();
+    if (next) {
+      await load();
+      // Opening the panel counts as having seen the notifications — reset
+      // the badge immediately instead of waiting for the user to click each
+      // item (or the header's "Mark all as read") individually. Runs after
+      // `load()` resolves so the fresh (still-unread) server response can't
+      // race this and flip the badge back on.
+      setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+      setUnreadCount(0);
+      fetch('/api/notifications/read-all', { method: 'PATCH' }).catch(() => {});
+    }
   }
 
   function handleItemClick(item: NotificationItem) {
@@ -132,14 +144,18 @@ export function NotificationBell() {
 
   return (
     <div className="relative" ref={ref}>
+      {/* Style adapted from a Tailwind "cart with badge" button pattern
+          (swapped the cart icon for our existing Bell, colors mapped to our
+          theme tokens): transparent-until-hover chrome instead of the
+          always-visible bordered chip used elsewhere in the topbar. */}
       <button
         onClick={handleToggle}
-        aria-label="Notifications"
-        className="relative flex size-9 items-center justify-center rounded-full border border-border bg-bg-elevated text-text-secondary transition-colors hover:text-text-primary"
+        aria-label={t('title')}
+        className="relative rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
       >
-        <Bell className="size-4" strokeWidth={1.5} />
+        <Bell className="size-5" strokeWidth={1.5} />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-accent-signal text-[10px] font-bold text-white">
+          <span className="absolute top-0 right-0 -mt-1 -mr-1 inline-flex items-center justify-center rounded-full border-2 border-bg-base bg-accent-signal px-1.5 py-0.5 text-[10px] leading-4 font-bold text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -148,24 +164,26 @@ export function NotificationBell() {
       {open && (
         <div className="fixed inset-x-margin top-20 z-70 mt-2 overflow-hidden rounded-lg border border-border bg-surface shadow-2xl sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:w-80">
           <div className="flex items-center justify-between border-b border-border px-md py-sm">
-            <span className="text-label-md font-bold text-text-primary">Notifications</span>
+            <span className="text-label-md font-bold text-text-primary">{t('title')}</span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
                 className="text-label-sm text-accent-signal hover:underline"
               >
-                Mark all as read
+                {t('markAllRead')}
               </button>
             )}
           </div>
 
           <div className="max-h-96 overflow-y-auto">
             {loading && !loaded ? (
-              <div className="px-lg py-xl text-center text-label-sm text-text-muted">Loading…</div>
+              <div className="px-lg py-xl text-center text-label-sm text-text-muted">
+                {t('loading')}
+              </div>
             ) : notifications.length === 0 ? (
               <div className="flex flex-col items-center gap-sm px-lg py-xl text-center">
                 <Bell className="size-6 text-text-muted" strokeWidth={1.5} />
-                <p className="text-label-md text-text-secondary">No notifications yet</p>
+                <p className="text-label-md text-text-secondary">{t('empty')}</p>
               </div>
             ) : (
               notifications.map((item) => {
@@ -184,7 +202,9 @@ export function NotificationBell() {
                       <p className="mt-0.5 line-clamp-2 text-label-sm text-text-secondary">
                         {item.message}
                       </p>
-                      <p className="mt-1 text-[11px] text-text-muted">{timeAgo(item.createdAt)}</p>
+                      <p className="mt-1 text-[11px] text-text-muted">
+                        {timeAgo(item.createdAt, t)}
+                      </p>
                     </div>
                     {!item.read && (
                       <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-accent-signal" />

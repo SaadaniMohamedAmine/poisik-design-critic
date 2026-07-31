@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { CircularGauge } from '@/components/poisik/CircularGauge';
 import { AnnotationMarker } from '@/components/poisik/AnnotationMarker';
 import { CategoryScoreBar } from '@/components/poisik/CategoryScoreBar';
@@ -17,7 +18,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import type { AnalysisResult } from '@/lib/schemas';
-import { CATEGORY_LABELS } from '@/lib/categories';
+import { CATEGORY_LABELS, CATEGORY_LABEL_KEYS } from '@/lib/categories';
 
 interface ReportViewProps {
   result: AnalysisResult;
@@ -28,6 +29,11 @@ interface ReportViewProps {
   // anonymous visitor on a share link, or a different signed-in account)
   // sees the read-only public variant.
   showOwnerActions?: boolean;
+  // Only needed when showOwnerActions is true — the Share Report button
+  // uses these to flip Analysis.isPublic via PATCH /api/analyses/[id] and
+  // copy the real /report/[id] link.
+  analysisId?: string;
+  initialIsPublic?: boolean;
 }
 
 type Issue = AnalysisResult['issues'][number];
@@ -46,7 +52,23 @@ const severityStyles = {
 // analysis passes its own analysis.imageUrl down from the report page.
 const FALLBACK_IMAGE = '/demo-sample-ui.png';
 
-export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: ReportViewProps) {
+export function ReportView({
+  result,
+  imageUrl,
+  isDemo,
+  showOwnerActions,
+  analysisId,
+  initialIsPublic,
+}: ReportViewProps) {
+  const t = useTranslations('Report');
+  const tCommon = useTranslations('Common');
+  const severityLabels: Record<Issue['severity'], string> = {
+    critical: t('critical'),
+    warning: t('warning'),
+    suggestion: t('suggestion'),
+  };
+  const categoryLabel = (key: string) =>
+    CATEGORY_LABEL_KEYS[key] ? t(CATEGORY_LABEL_KEYS[key]) : CATEGORY_LABELS[key] || key;
   const isDemoMode = Boolean(isDemo);
   const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
@@ -56,6 +78,30 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
   const [copiedFix, setCopiedFix] = useState<string | null>(null);
   const [activeMarker, setActiveMarker] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [isPublic, setIsPublic] = useState(Boolean(initialIsPublic));
+  const [sharing, setSharing] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
+
+  async function handleShare() {
+    if (!analysisId || sharing) return;
+    setSharing(true);
+    try {
+      if (!isPublic) {
+        const res = await fetch(`/api/analyses/${analysisId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ isPublic: true }),
+        });
+        if (!res.ok) return; // leave isPublic/copy state untouched on failure
+        setIsPublic(true);
+      }
+      await navigator.clipboard.writeText(`${window.location.origin}/report/${analysisId}`);
+      setLinkCopied(true);
+      setTimeout(() => setLinkCopied(false), 2000);
+    } finally {
+      setSharing(false);
+    }
+  }
 
   const filteredIssues =
     activeFilter === 'all'
@@ -91,11 +137,11 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
       }`}
     >
       <div className="mb-md flex items-start justify-between">
-        <span className={severityStyles[issue.severity]}>{issue.severity}</span>
+        <span className={severityStyles[issue.severity]}>{severityLabels[issue.severity]}</span>
         <button
           onClick={() => setActiveMarker(issue.id)}
           className="text-text-secondary transition-colors hover:text-accent-signal"
-          title="Locate on image"
+          title={t('locateOnImage')}
         >
           <MapPin className="size-4" />
         </button>
@@ -107,11 +153,13 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
           onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
           className="text-label-md font-medium text-accent-signal hover:underline"
         >
-          {expandedIssue === issue.id ? 'Hide recommendation' : 'Show recommendation'}
+          {expandedIssue === issue.id ? t('hideRecommendation') : t('showRecommendation')}
         </button>
         {expandedIssue === issue.id && (
           <div className="mt-md rounded-lg border-l-4 border-accent-signal bg-surface p-md">
-            <p className="mb-1 text-label-md font-medium text-accent-signal">Recommendation:</p>
+            <p className="mb-1 text-label-md font-medium text-accent-signal">
+              {t('recommendation')}:
+            </p>
             <p className="text-body-md text-text-primary">{issue.recommendation}</p>
           </div>
         )}
@@ -122,14 +170,14 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
             onClick={() => setExpandedFix(expandedFix === issue.id ? null : issue.id)}
             className="text-label-md font-medium text-accent-signal hover:underline"
           >
-            {expandedFix === issue.id ? 'Hide fix' : 'View fix'}
+            {expandedFix === issue.id ? t('hideFix') : t('viewFix')}
           </button>
           {expandedFix === issue.id && (
             <div className="mt-md space-y-md">
               {issue.code_fix.before && issue.code_fix.after && (
                 <div className="flex items-center gap-lg">
                   <div className="flex items-center gap-md">
-                    <span className="text-label-sm text-text-muted">Before</span>
+                    <span className="text-label-sm text-text-muted">{t('beforeLabel')}</span>
                     <div
                       className="size-8 rounded border border-border"
                       style={{ backgroundColor: issue.code_fix.before }}
@@ -140,7 +188,7 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
                   </div>
                   <span className="text-text-muted">&rarr;</span>
                   <div className="flex items-center gap-md">
-                    <span className="text-label-sm text-text-muted">After</span>
+                    <span className="text-label-sm text-text-muted">{t('afterLabel')}</span>
                     <div
                       className="size-8 rounded border border-border"
                       style={{ backgroundColor: issue.code_fix.after }}
@@ -245,27 +293,31 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
             <div className="mb-xl flex flex-col items-center">
               <CircularGauge value={result.overall_score} />
               <h2 className="mt-md text-headline-md font-medium text-text-primary">
-                Overall Design Score
+                {t('overallScore')}
               </h2>
               {(() => {
                 const cmp = getClosestBenchmark(result.overall_score);
                 if (!cmp) return null;
                 const { benchmark, diff, isAbove } = cmp;
-                let text = '';
-                if (diff <= 2) {
-                  text = `${result.overall_score} — comparable to ${benchmark.name} (${benchmark.score})`;
-                } else if (isAbove) {
-                  text = `${result.overall_score} — ahead of ${benchmark.name} (${benchmark.score}) by ${diff} pts`;
-                } else {
-                  text = `${result.overall_score} — ${benchmark.name} (${benchmark.score}) is ${diff} pts ahead`;
-                }
+                const params = {
+                  score: result.overall_score,
+                  name: benchmark.name,
+                  benchmarkScore: benchmark.score,
+                  diff,
+                };
+                const text =
+                  diff <= 2
+                    ? t('benchmarkComparable', params)
+                    : isAbove
+                      ? t('benchmarkAhead', params)
+                      : t('benchmarkBehind', params);
                 return <p className="mt-2 text-label-sm text-text-muted">{text}</p>;
               })()}
             </div>
 
             <div className="mb-xl space-y-md">
               {Object.entries(result.category_scores).map(([key, value]) => (
-                <CategoryScoreBar key={key} label={CATEGORY_LABELS[key] || key} value={value} />
+                <CategoryScoreBar key={key} label={categoryLabel(key)} value={value} />
               ))}
             </div>
 
@@ -276,12 +328,12 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
                   onClick={() => handleChipClick(cat)}
                   className="rounded-full border border-border px-md py-1.5 text-label-sm text-text-secondary transition-colors hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal"
                 >
-                  {CATEGORY_LABELS[cat] || cat}
+                  {categoryLabel(cat)}
                 </button>
               ))}
             </div>
 
-            <p className="mt-md text-label-sm text-text-muted">Tap a category to see its issues.</p>
+            <p className="mt-md text-label-sm text-text-muted">{t('tapCategoryHint')}</p>
           </div>
 
           {showOwnerActions && (
@@ -291,23 +343,41 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
                 className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold"
               >
                 <Download className="size-4" />
-                Export PDF
+                {t('exportPdf')}
               </Button>
-              <Button className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold">
-                <Share2 className="size-4" />
-                Share Report
+              <Button
+                onClick={handleShare}
+                disabled={sharing || !analysisId}
+                className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold"
+              >
+                {linkCopied ? (
+                  <>
+                    <Check className="size-4" />
+                    {t('linkCopied')}
+                  </>
+                ) : isPublic ? (
+                  <>
+                    <Copy className="size-4" />
+                    {t('copyLink')}
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="size-4" />
+                    {sharing ? t('sharing') : t('shareReport')}
+                  </>
+                )}
               </Button>
             </footer>
           )}
 
           {isDemoMode && (
             <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
-              <p className="text-label-md text-text-secondary">This was a sample analysis</p>
+              <p className="text-label-md text-text-secondary">{t('sampleAnalysis')}</p>
               <Link
                 href="/sign-up"
                 className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
               >
-                Analyze your own design
+                {t('analyzeOwnDesign')}
               </Link>
             </footer>
           )}
@@ -315,7 +385,7 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
           {isPublicShare && (
             <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
               <p className="text-label-sm text-text-muted">
-                Made with{' '}
+                {t('madeWithPrefix')}{' '}
                 <Link href="/" className="text-accent-signal hover:underline">
                   poisik
                 </Link>
@@ -324,7 +394,7 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
                 href="/projects/new-analysis"
                 className="text-label-md font-medium text-accent-signal hover:underline"
               >
-                Duplicate this analysis
+                {tCommon('duplicateAnalysis')}
               </Link>
             </footer>
           )}
@@ -335,19 +405,16 @@ export function ReportView({ result, imageUrl, isDemo, showOwnerActions }: Repor
         <DialogContent className="max-h-[80vh] w-full max-w-2xl overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
             <DialogTitle>
-              {activeFilter === 'all'
-                ? 'All Issues'
-                : CATEGORY_LABELS[activeFilter] || activeFilter}
+              {activeFilter === 'all' ? t('allIssuesTitle') : categoryLabel(activeFilter)}
             </DialogTitle>
             <DialogDescription>
-              {filteredIssues.length} issue{filteredIssues.length !== 1 ? 's' : ''} found in this
-              category.
+              {t('issuesFoundInCategory', { count: filteredIssues.length })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-lg">
             {filteredIssues.length === 0 ? (
               <p className="py-lg text-center text-body-md text-text-secondary">
-                No issues detected in this category — nice work.
+                {t('noIssuesInCategory')}
               </p>
             ) : (
               filteredIssues.map((issue, index) => renderIssueCard(issue, index))

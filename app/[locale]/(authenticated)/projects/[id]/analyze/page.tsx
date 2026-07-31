@@ -38,7 +38,7 @@ export default function ProjectAnalyzePage() {
   async function createAnalysis(imageUrl: string) {
     setLoading(true);
     setError(null);
-    const toastId = toast.loading('Running your AI audit...');
+    const toastId = toast.loading(t('toastRunning'));
     const res = await fetch(`/api/projects/${params.id}/analyses`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -50,9 +50,7 @@ export default function ProjectAnalyzePage() {
       const isLimit = data.error === 'MONTHLY_LIMIT_REACHED';
       // The API route already sanitizes this — never the raw provider
       // error body.
-      const message = isLimit
-        ? "You've reached your monthly analysis limit — upgrade to keep auditing."
-        : (data.error ?? "The analysis didn't come back as expected — try again.");
+      const message = isLimit ? t('errorLimitReached') : (data.error ?? t('errorGeneric'));
       toast.update(toastId, { render: message, type: 'error', isLoading: false, autoClose: 5000 });
       // The toast auto-closes and is easy to miss; a failure also lands in
       // the notification bell (ANALYSIS_FAILED), but a persistent inline
@@ -64,7 +62,7 @@ export default function ProjectAnalyzePage() {
     }
     const analysis = await res.json();
     toast.update(toastId, {
-      render: 'Analysis complete — your report is ready.',
+      render: t('toastComplete'),
       type: 'success',
       isLoading: false,
       autoClose: 4000,
@@ -85,21 +83,21 @@ export default function ProjectAnalyzePage() {
 
         <div className="mb-lg flex rounded-lg border border-border bg-surface p-1">
           <button className="flex-1 rounded-md bg-accent-signal px-4 py-2 text-label-md font-medium text-white transition-colors">
-            Upload screenshot
+            {t('uploadTab')}
           </button>
           <button
             disabled
-            title="Coming soon — live URL analysis needs a screenshot-capture step that isn't wired up yet"
+            title={t('urlTabTooltip')}
             className="flex flex-1 cursor-not-allowed items-center justify-center gap-2 rounded-md px-4 py-2 text-label-md font-medium text-text-muted opacity-50"
           >
             <Link2 className="size-4" />
-            Analyze a URL — coming soon
+            {t('urlTab')}
           </button>
         </div>
 
         <div className="rounded-xl border border-border bg-surface p-lg shadow-[inset_0_0_20px_rgba(98,148,218,0.05)]">
           <UploadDropzone onAnalyze={createAnalysis} />
-          {loading && <p className="mt-md text-label-md text-text-secondary">Analyzing...</p>}
+          {loading && <p className="mt-md text-label-md text-text-secondary">{t('analyzing')}</p>}
         </div>
 
         {error && (
@@ -123,7 +121,7 @@ export default function ProjectAnalyzePage() {
             </div>
             <div className="flex-1">
               <h3 className="text-label-md font-bold text-text-primary">
-                {error.kind === 'limit' ? "You're out of credits" : 'Analysis failed'}
+                {error.kind === 'limit' ? t('outOfCredits') : t('analysisFailed')}
               </h3>
               <p className="mt-xs text-body-md text-text-secondary">{error.message}</p>
             </div>
@@ -132,7 +130,7 @@ export default function ProjectAnalyzePage() {
                 onClick={() => setUpgradeOpen(true)}
                 className="shrink-0 self-start rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
               >
-                Upgrade to Pro
+                {t('upgradeToPro')}
               </button>
             ) : (
               <button
@@ -141,7 +139,7 @@ export default function ProjectAnalyzePage() {
                 className="flex shrink-0 items-center justify-center gap-sm self-start rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
                 <RefreshCw className="size-4" strokeWidth={2} />
-                Retry analysis
+                {t('retryAnalysis')}
               </button>
             )}
           </div>
