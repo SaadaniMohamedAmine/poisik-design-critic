@@ -153,14 +153,13 @@ export default function PricingPage() {
                   </Link>
                 )
               ) : status === 'authenticated' ? (
-                <Button
-                  className="w-full"
-                  variant={plan.popular ? 'default' : 'secondary'}
+                <button
                   onClick={() => handleCheckout(plan.key)}
                   disabled={loading === plan.key}
+                  className="flex w-full items-center justify-center rounded-lg bg-accent-signal px-2.5 py-2 text-sm font-bold whitespace-nowrap text-white shadow-lg shadow-accent-signal/20 transition-all hover:opacity-90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {loading === plan.key ? t('loading') : t('upgrade')}
-                </Button>
+                </button>
               ) : (
                 <Link
                   href="/sign-up"

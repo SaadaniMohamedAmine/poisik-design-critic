@@ -4,6 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 const MIN_VISIBLE_MS = 500;
+// Belt-and-suspenders: this component has twice now gotten stuck showing
+// forever because some navigation path started the loader without ever
+// producing a pathname/searchParams change to clear it. Rather than chase
+// every possible such path individually, force-clear after a generous
+// timeout no legitimate navigation should ever take.
+const MAX_VISIBLE_MS = 8000;
 
 /**
  * Brief branded loader shown while navigating between pages (client-side
@@ -64,12 +70,27 @@ export function RouteTransitionLoader() {
       return originalReplaceState(...args);
     };
 
-    window.addEventListener('popstate', startLoading);
+    // Unlike pushState/replaceState (intercepted before the URL changes),
+    // popstate fires after window.location already reflects the
+    // destination — so "is this a real navigation" here means comparing
+    // against the last known route, not against window.location itself.
+    // Without this guard, a back/forward that lands on a URL matching
+    // currentKeyRef.current (e.g. a history entry that doesn't change
+    // pathname/searchParams) starts the loader but the effect that's
+    // supposed to clear it never fires, since it only fires on a key
+    // change — leaving the overlay stuck on screen indefinitely.
+    function startLoadingOnPopstate() {
+      const newKey = `${window.location.pathname}?${new URLSearchParams(window.location.search).toString()}`;
+      if (newKey === currentKeyRef.current) return;
+      startLoading();
+    }
+
+    window.addEventListener('popstate', startLoadingOnPopstate);
 
     return () => {
       window.history.pushState = originalPushState;
       window.history.replaceState = originalReplaceState;
-      window.removeEventListener('popstate', startLoading);
+      window.removeEventListener('popstate', startLoadingOnPopstate);
     };
   }, []);
 
@@ -94,6 +115,15 @@ export function RouteTransitionLoader() {
 
     return () => clearTimeout(timer);
   }, [pathname, searchParams]);
+
+  useEffect(() => {
+    if (!loading) return;
+    const safety = setTimeout(() => {
+      setLoading(false);
+      shownAtRef.current = null;
+    }, MAX_VISIBLE_MS);
+    return () => clearTimeout(safety);
+  }, [loading]);
 
   if (!loading) return null;
 

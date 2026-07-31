@@ -45,11 +45,11 @@ export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
   return (
     <div>
       <div className="mb-xl flex flex-col gap-md md:flex-row md:items-end md:justify-between">
-        <div className="flex items-center gap-md">
+        <div className="flex items-start gap-md">
           <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border bg-bg-elevated">
             <FolderOpen className="size-5 text-accent-signal" strokeWidth={1.5} />
           </div>
-          <div>
+          <div className="min-w-0">
             <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
             <p className="mt-xs text-body-md text-text-secondary">{t('subtitle')}</p>
           </div>

@@ -4,8 +4,6 @@ import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { JsonLd } from '@/components/poisik/JsonLd';
-import { CommandPalette } from '@/components/poisik/CommandPalette';
-import { SplashScreen } from '@/components/poisik/SplashScreen';
 import './globals.css';
 
 const inter = Inter({
@@ -70,9 +68,7 @@ export default async function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <SplashScreen />
         <JsonLd />
-        <CommandPalette isAuthenticated={!!session?.user} />
         <SessionProvider session={session}>
           <TooltipProvider>{children}</TooltipProvider>
         </SessionProvider>

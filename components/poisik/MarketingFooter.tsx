@@ -38,9 +38,9 @@ export function MarketingFooter() {
               </Link>
             </li>
             <li>
-              <a href="#" className="transition-colors hover:text-accent-signal">
+              <Link href="/api-docs" className="transition-colors hover:text-accent-signal">
                 {t('footerApiDocsLink')}
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

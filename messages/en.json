@@ -520,7 +520,10 @@
     "soon": "Soon",
     "noAccount": "Don't have an account?",
     "getStarted": "Get Started",
-    "errorInvalidCredentials": "Incorrect email or password."
+    "errorInvalidCredentials": "Incorrect email or password.",
+    "connectingToGoogle": "Redirecting to Google...",
+    "errorMissingFields": "Please enter your email and password.",
+    "errorInvalidEmail": "Please enter a valid email address."
   },
   "Dashboard": {
     "emptyTitle": "Create your first project",
@@ -663,7 +666,11 @@
     "haveAccount": "Already have an account?",
     "logIn": "Log In",
     "errorPasswordMismatch": "Passwords do not match.",
-    "errorGeneric": "Something went wrong."
+    "errorGeneric": "Something went wrong.",
+    "connectingToGoogle": "Redirecting to Google...",
+    "errorMissingFields": "Please enter your email and password.",
+    "errorInvalidEmail": "Please enter a valid email address.",
+    "errorPasswordTooShort": "Password must be at least 8 characters."
   },
   "About": {
     "metaTitle": "About",
@@ -755,6 +762,33 @@
     "section5Body": "Poisik is provided on an \"as is\" basis. While we work to keep the service available and reliable, we do not guarantee uninterrupted access and are not liable for losses resulting from downtime or service interruptions.",
     "section6Title": "6. Changes to these terms",
     "section6Body": "We may update these terms as the product evolves. Continued use of Poisik after an update constitutes acceptance of the revised terms."
+  },
+  "ApiDocs": {
+    "metaTitle": "API Docs",
+    "metaDescription": "Programmatic access to Poisik's AI design analysis engine.",
+    "title": "API Docs",
+    "subtitle": "Programmatic access to Poisik's AI design analysis engine.",
+    "authTitle": "Authentication",
+    "authBody": "Requests are authenticated with an API key, sent via the x-api-key request header. Access is currently available by request — reach out via Support to get one.",
+    "endpointTitle": "Analyze a design",
+    "endpointDesc": "Submit a screenshot (as a URL or base64) and get back the same structured audit Poisik generates in the app — an overall score, per-category scores, and a list of issues with recommendations and, where possible, a ready-to-use code fix.",
+    "requestBodyTitle": "Request body",
+    "requestBodyIntro": "Provide one of:",
+    "imageUrlDesc": "A publicly reachable image URL. Poisik downloads and resizes it server-side.",
+    "imageBase64Desc": "A base64-encoded image, sent directly. Pair with an optional mimeType (defaults to image/png).",
+    "modelDesc": "Optional — \"groq\" (default) or \"gemini\", which AI provider to use.",
+    "exampleRequestTitle": "Example request",
+    "exampleResponseTitle": "Example response",
+    "errorsTitle": "Errors",
+    "errorStatusHeader": "Status",
+    "errorMeaningHeader": "Meaning",
+    "error400": "Missing imageUrl or imageBase64",
+    "error401": "Missing or invalid API key",
+    "error502": "Couldn't fetch the image at imageUrl",
+    "error500": "Analysis failed",
+    "needKeyTitle": "Need a key?",
+    "needKeyDesc": "API access is available by request — reach out via Support to get one.",
+    "contactSupportCta": "Contact Support"
   },
   "Demo": {
     "eyebrow": "Live Example",

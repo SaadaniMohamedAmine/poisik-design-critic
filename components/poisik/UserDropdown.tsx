@@ -14,6 +14,10 @@ interface UserDropdownProps {
 export function UserDropdown({ name, image }: UserDropdownProps) {
   const t = useTranslations('UserDropdown');
   const [open, setOpen] = useState(false);
+  // OAuth-provider avatar URLs sometimes 404/expire — without this, a
+  // broken <img> (alt="") just renders as an empty circle instead of
+  // falling back to the initial.
+  const [imageFailed, setImageFailed] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -50,9 +54,19 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
         onClick={() => setOpen((o) => !o)}
         className="size-9 overflow-hidden rounded-full border border-border bg-accent-soft-bg"
       >
-        {image ? (
+        {image && !imageFailed ? (
           // eslint-disable-next-line @next/next/no-img-element -- avatar source is an arbitrary external OAuth-provider URL, not a static local asset
-          <img src={image} alt="" className="size-full object-cover" />
+          <img
+            src={image}
+            alt=""
+            className="size-full object-cover"
+            // Google's lh3.googleusercontent.com avatar URLs frequently
+            // reject the request when the browser sends a Referer header
+            // (esp. from a localhost/dev origin) — suppressing it is the
+            // standard fix, not just a defensive measure.
+            referrerPolicy="no-referrer"
+            onError={() => setImageFailed(true)}
+          />
         ) : (
           <span className="flex size-full items-center justify-center text-label-sm text-text-primary">
             {name?.[0]?.toUpperCase() ?? 'U'}
