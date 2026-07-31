@@ -520,7 +520,8 @@
     "soon": "Bientôt",
     "noAccount": "Vous n'avez pas de compte ?",
     "getStarted": "Commencer",
-    "errorInvalidCredentials": "E-mail ou mot de passe incorrect."
+    "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
+    "connectingToGoogle": "Redirection vers Google..."
   },
   "Dashboard": {
     "emptyTitle": "Créez votre premier projet",
@@ -663,7 +664,8 @@
     "haveAccount": "Vous avez déjà un compte ?",
     "logIn": "Se connecter",
     "errorPasswordMismatch": "Les mots de passe ne correspondent pas.",
-    "errorGeneric": "Une erreur est survenue."
+    "errorGeneric": "Une erreur est survenue.",
+    "connectingToGoogle": "Redirection vers Google..."
   },
   "About": {
     "metaTitle": "À propos",

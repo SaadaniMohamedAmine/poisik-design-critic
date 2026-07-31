@@ -520,7 +520,8 @@
     "soon": "Soon",
     "noAccount": "Don't have an account?",
     "getStarted": "Get Started",
-    "errorInvalidCredentials": "Incorrect email or password."
+    "errorInvalidCredentials": "Incorrect email or password.",
+    "connectingToGoogle": "Redirecting to Google..."
   },
   "Dashboard": {
     "emptyTitle": "Create your first project",
@@ -663,7 +664,8 @@
     "haveAccount": "Already have an account?",
     "logIn": "Log In",
     "errorPasswordMismatch": "Passwords do not match.",
-    "errorGeneric": "Something went wrong."
+    "errorGeneric": "Something went wrong.",
+    "connectingToGoogle": "Redirecting to Google..."
   },
   "About": {
     "metaTitle": "About",
