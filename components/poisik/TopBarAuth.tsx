@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, Command as CommandIcon } from 'lucide-react';
+import { Menu, X, Search } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { PoisikLogo } from '@/components/poisik/PoisikLogo';
 import { LanguageSwitcher } from '@/components/poisik/LanguageSwitcher';
@@ -49,7 +49,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                 title={t('searchTitle')}
                 className="hidden items-center gap-xs rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:flex"
               >
-                <CommandIcon className="size-5" strokeWidth={1.5} />
+                <Search className="size-5" strokeWidth={1.5} />
                 <span className="text-label-sm text-text-muted">⌘K</span>
               </button>
               <button
@@ -57,7 +57,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                 aria-label={t('openCommandPaletteAria')}
                 className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:hidden"
               >
-                <CommandIcon className="size-5" strokeWidth={1.5} />
+                <Search className="size-5" strokeWidth={1.5} />
               </button>
               <NotificationBell />
               <div className="hidden lg:block">
@@ -107,7 +107,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                     aria-label={t('openCommandPaletteAria')}
                     className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
                   >
-                    <CommandIcon className="size-5" strokeWidth={1.5} />
+                    <Search className="size-5" strokeWidth={1.5} />
                   </button>
                 </div>
                 <button
