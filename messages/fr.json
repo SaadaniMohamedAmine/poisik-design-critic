@@ -521,7 +521,9 @@
     "noAccount": "Vous n'avez pas de compte ?",
     "getStarted": "Commencer",
     "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
-    "connectingToGoogle": "Redirection vers Google..."
+    "connectingToGoogle": "Redirection vers Google...",
+    "errorMissingFields": "Veuillez saisir votre e-mail et votre mot de passe.",
+    "errorInvalidEmail": "Veuillez saisir une adresse e-mail valide."
   },
   "Dashboard": {
     "emptyTitle": "Créez votre premier projet",
@@ -665,7 +667,10 @@
     "logIn": "Se connecter",
     "errorPasswordMismatch": "Les mots de passe ne correspondent pas.",
     "errorGeneric": "Une erreur est survenue.",
-    "connectingToGoogle": "Redirection vers Google..."
+    "connectingToGoogle": "Redirection vers Google...",
+    "errorMissingFields": "Veuillez saisir votre e-mail et votre mot de passe.",
+    "errorInvalidEmail": "Veuillez saisir une adresse e-mail valide.",
+    "errorPasswordTooShort": "Le mot de passe doit contenir au moins 8 caractères."
   },
   "About": {
     "metaTitle": "À propos",

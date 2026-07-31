@@ -521,7 +521,9 @@
     "noAccount": "Don't have an account?",
     "getStarted": "Get Started",
     "errorInvalidCredentials": "Incorrect email or password.",
-    "connectingToGoogle": "Redirecting to Google..."
+    "connectingToGoogle": "Redirecting to Google...",
+    "errorMissingFields": "Please enter your email and password.",
+    "errorInvalidEmail": "Please enter a valid email address."
   },
   "Dashboard": {
     "emptyTitle": "Create your first project",
@@ -665,7 +667,10 @@
     "logIn": "Log In",
     "errorPasswordMismatch": "Passwords do not match.",
     "errorGeneric": "Something went wrong.",
-    "connectingToGoogle": "Redirecting to Google..."
+    "connectingToGoogle": "Redirecting to Google...",
+    "errorMissingFields": "Please enter your email and password.",
+    "errorInvalidEmail": "Please enter a valid email address.",
+    "errorPasswordTooShort": "Password must be at least 8 characters."
   },
   "About": {
     "metaTitle": "About",

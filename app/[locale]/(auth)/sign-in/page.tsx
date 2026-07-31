@@ -7,6 +7,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function SignInPage() {
   const t = useTranslations('SignIn');
@@ -21,8 +22,21 @@ export default function SignInPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+
+    // Client-side gate — no point round-tripping to the credentials
+    // provider (and logging a CredentialsSignin error server-side) for
+    // input that's obviously incomplete or malformed.
+    if (!email.trim() || !password) {
+      setError(t('errorMissingFields'));
+      return;
+    }
+    if (!EMAIL_PATTERN.test(email.trim())) {
+      setError(t('errorInvalidEmail'));
+      return;
+    }
+
+    setLoading(true);
     const res = await signIn('credentials', { email, password, redirect: false });
     if (res?.error) {
       setLoading(false);
@@ -79,6 +93,7 @@ export default function SignInPage() {
                 <input
                   id="email"
                   type="email"
+                  required
                   placeholder="name@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -104,6 +119,7 @@ export default function SignInPage() {
                 <input
                   id="password"
                   type="password"
+                  required
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

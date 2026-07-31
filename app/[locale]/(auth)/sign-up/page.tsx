@@ -7,6 +7,8 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Mail, Lock } from 'lucide-react';
 
 const FACEBOOK_AUTH_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === 'true';
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MIN_PASSWORD_LENGTH = 8;
 
 export default function SignUpPage() {
   const t = useTranslations('SignUp');
@@ -24,6 +26,21 @@ export default function SignUpPage() {
     e.preventDefault();
     setError(null);
 
+    // Client-side gate — matches the /api/register rules (email present,
+    // password >= 8 chars) so obviously-invalid input never round-trips
+    // to the server at all.
+    if (!email.trim() || !password) {
+      setError(t('errorMissingFields'));
+      return;
+    }
+    if (!EMAIL_PATTERN.test(email.trim())) {
+      setError(t('errorInvalidEmail'));
+      return;
+    }
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(t('errorPasswordTooShort'));
+      return;
+    }
     if (password !== confirmPassword) {
       setError(t('errorPasswordMismatch'));
       return;
@@ -94,6 +111,7 @@ export default function SignUpPage() {
                   <input
                     id="email"
                     type="email"
+                    required
                     placeholder="name@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -111,6 +129,8 @@ export default function SignUpPage() {
                   <input
                     id="password"
                     type="password"
+                    required
+                    minLength={MIN_PASSWORD_LENGTH}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -131,6 +151,7 @@ export default function SignUpPage() {
                   <input
                     id="confirm-password"
                     type="password"
+                    required
                     placeholder="••••••••"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
