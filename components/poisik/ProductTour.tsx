@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import { ArrowRight, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export type TourStep = 1 | 2 | 3 | 4;
 
@@ -22,23 +23,11 @@ const ANCHOR_IDS: Record<TourStep, string> = {
   4: 'tour-avatar',
 };
 
-const CONTENT: Record<TourStep, { title: string; body: string }> = {
-  1: {
-    title: 'Start your first audit',
-    body: 'Upload a screenshot or paste a live URL — your AI critique is ready in seconds.',
-  },
-  2: {
-    title: 'Everything lives in a project',
-    body: 'Group every analysis under a project to track its score over time.',
-  },
-  3: {
-    title: 'Keep an eye on your quota',
-    body: 'Track your monthly analysis credits here, and upgrade anytime.',
-  },
-  4: {
-    title: 'Your account, one click away',
-    body: 'Manage your profile, plan, and billing from here.',
-  },
+const CONTENT_KEYS: Record<TourStep, { titleKey: string; bodyKey: string }> = {
+  1: { titleKey: 'step1Title', bodyKey: 'step1Body' },
+  2: { titleKey: 'step2Title', bodyKey: 'step2Body' },
+  3: { titleKey: 'step3Title', bodyKey: 'step3Body' },
+  4: { titleKey: 'step4Title', bodyKey: 'step4Body' },
 };
 
 // Design reference: design_v3/product_tour_step_1..4 (Stitch LOT B) — the
@@ -55,6 +44,10 @@ function useAnchorRect(id: string) {
   }, [id]);
 
   useEffect(() => {
+    // Initial measurement genuinely requires a DOM read (getBoundingClientRect),
+    // unavailable until after mount; no cascading loop since `measure` only
+    // changes when `id` does.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     measure();
     window.addEventListener('resize', measure);
     window.addEventListener('scroll', measure, true);
@@ -72,6 +65,7 @@ function useAnchorRect(id: string) {
 }
 
 export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps) {
+  const t = useTranslations('ProductTour');
   const rect = useAnchorRect(ANCHOR_IDS[step]);
 
   // Null on the server (see useAnchorRect) and on mobile, where the sidebar
@@ -80,7 +74,7 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
   // last-resort guard.
   if (!rect) return null;
 
-  const { title, body } = CONTENT[step];
+  const { titleKey, bodyKey } = CONTENT_KEYS[step];
   const pad = 8;
 
   const spotlightStyle: CSSProperties = {
@@ -116,7 +110,11 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
       transform: 'translateY(-100%)',
     };
   } else {
-    tooltipStyle = { ...tooltipStyle, top: rect.bottom + 16, right: window.innerWidth - rect.right };
+    tooltipStyle = {
+      ...tooltipStyle,
+      top: rect.bottom + 16,
+      right: window.innerWidth - rect.right,
+    };
   }
 
   return (
@@ -133,11 +131,11 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
       >
         <div className="flex items-center justify-between">
           <span className="text-label-sm font-semibold tracking-wider text-text-secondary uppercase">
-            Step {step} of 4
+            {t('stepOf', { step })}
           </span>
           <button
             onClick={onSkip}
-            aria-label="Close tour"
+            aria-label={t('closeTourAria')}
             className="text-text-secondary transition-colors hover:text-text-primary"
           >
             <X className="size-4" strokeWidth={1.5} />
@@ -145,8 +143,8 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
         </div>
 
         <div className="space-y-sm">
-          <h3 className="text-headline-sm font-bold text-text-primary">{title}</h3>
-          <p className="text-body-md leading-relaxed text-text-secondary">{body}</p>
+          <h3 className="text-headline-sm font-bold text-text-primary">{t(titleKey)}</h3>
+          <p className="text-body-md leading-relaxed text-text-secondary">{t(bodyKey)}</p>
         </div>
 
         <div className="flex flex-col gap-lg pt-sm">
@@ -169,13 +167,13 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
                   onClick={onSkip}
                   className="text-label-md text-text-secondary transition-colors hover:text-text-primary"
                 >
-                  Skip tour
+                  {t('skipTour')}
                 </button>
                 <button
                   onClick={onNext}
                   className="flex items-center gap-sm rounded-xl bg-accent-signal px-lg py-sm font-bold text-white shadow-lg shadow-accent-signal/10 transition-opacity hover:opacity-90"
                 >
-                  Next
+                  {t('next')}
                   <ArrowRight className="size-4" strokeWidth={2} />
                 </button>
               </>
@@ -184,7 +182,7 @@ export function ProductTour({ step, onNext, onSkip, onFinish }: ProductTourProps
                 onClick={onFinish}
                 className="ml-auto rounded-xl bg-accent-signal px-lg py-sm font-bold text-white transition-all hover:brightness-110 active:scale-95"
               >
-                Got it
+                {t('gotIt')}
               </button>
             )}
           </div>

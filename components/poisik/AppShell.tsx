@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getLocale } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import type { Session } from 'next-auth';
 import { auth } from '@/auth';
 import { redirect } from '@/i18n/navigation';
@@ -29,6 +29,7 @@ export async function loadShellData(session: Session): Promise<ShellData> {
   const userId = session.user!.id as string;
   const plan = ((session.user as { plan?: string }).plan ?? 'FREE') as
     'FREE' | 'PRO' | 'ENTERPRISE';
+  const t = await getTranslations('AppShell');
 
   const [usage, projectCount, analysisCount, me, projects] = await Promise.all([
     getCurrentUsage(userId, plan).then((u) => ({ ...u, plan })),
@@ -55,25 +56,25 @@ export async function loadShellData(session: Session): Promise<ShellData> {
   const gettingStartedItems: GettingStartedItem[] = [
     {
       key: 'project',
-      label: 'Create your first project',
+      label: t('projectItem'),
       done: projectCount > 0,
       href: '/dashboard',
     },
     {
       key: 'analysis',
-      label: 'Run your first analysis',
+      label: t('analysisItem'),
       done: analysisCount > 0,
       href: '/projects/new-analysis',
     },
     {
       key: 'report',
-      label: 'View your first report',
+      label: t('reportItem'),
       done: !!me?.firstReportViewedAt,
       href: '/projects/new-analysis',
     },
     {
       key: 'overview',
-      label: 'Explore your Projects overview',
+      label: t('overviewItem'),
       done: !!me?.projectsOverviewViewedAt,
       href: '/projects',
     },

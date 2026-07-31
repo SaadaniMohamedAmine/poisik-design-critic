@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Download, Share2, MapPin, Copy, Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { CircularGauge } from '@/components/poisik/CircularGauge';
 import { AnnotationMarker } from '@/components/poisik/AnnotationMarker';
 import { CategoryScoreBar } from '@/components/poisik/CategoryScoreBar';
@@ -59,6 +60,13 @@ export function ReportView({
   analysisId,
   initialIsPublic,
 }: ReportViewProps) {
+  const t = useTranslations('Report');
+  const tCommon = useTranslations('Common');
+  const severityLabels: Record<Issue['severity'], string> = {
+    critical: t('critical'),
+    warning: t('warning'),
+    suggestion: t('suggestion'),
+  };
   const isDemoMode = Boolean(isDemo);
   const isPublicShare = Boolean(!showOwnerActions && !isDemo);
 
@@ -127,11 +135,11 @@ export function ReportView({
       }`}
     >
       <div className="mb-md flex items-start justify-between">
-        <span className={severityStyles[issue.severity]}>{issue.severity}</span>
+        <span className={severityStyles[issue.severity]}>{severityLabels[issue.severity]}</span>
         <button
           onClick={() => setActiveMarker(issue.id)}
           className="text-text-secondary transition-colors hover:text-accent-signal"
-          title="Locate on image"
+          title={t('locateOnImage')}
         >
           <MapPin className="size-4" />
         </button>
@@ -143,11 +151,13 @@ export function ReportView({
           onClick={() => setExpandedIssue(expandedIssue === issue.id ? null : issue.id)}
           className="text-label-md font-medium text-accent-signal hover:underline"
         >
-          {expandedIssue === issue.id ? 'Hide recommendation' : 'Show recommendation'}
+          {expandedIssue === issue.id ? t('hideRecommendation') : t('showRecommendation')}
         </button>
         {expandedIssue === issue.id && (
           <div className="mt-md rounded-lg border-l-4 border-accent-signal bg-surface p-md">
-            <p className="mb-1 text-label-md font-medium text-accent-signal">Recommendation:</p>
+            <p className="mb-1 text-label-md font-medium text-accent-signal">
+              {t('recommendation')}:
+            </p>
             <p className="text-body-md text-text-primary">{issue.recommendation}</p>
           </div>
         )}
@@ -158,14 +168,14 @@ export function ReportView({
             onClick={() => setExpandedFix(expandedFix === issue.id ? null : issue.id)}
             className="text-label-md font-medium text-accent-signal hover:underline"
           >
-            {expandedFix === issue.id ? 'Hide fix' : 'View fix'}
+            {expandedFix === issue.id ? t('hideFix') : t('viewFix')}
           </button>
           {expandedFix === issue.id && (
             <div className="mt-md space-y-md">
               {issue.code_fix.before && issue.code_fix.after && (
                 <div className="flex items-center gap-lg">
                   <div className="flex items-center gap-md">
-                    <span className="text-label-sm text-text-muted">Before</span>
+                    <span className="text-label-sm text-text-muted">{t('beforeLabel')}</span>
                     <div
                       className="size-8 rounded border border-border"
                       style={{ backgroundColor: issue.code_fix.before }}
@@ -176,7 +186,7 @@ export function ReportView({
                   </div>
                   <span className="text-text-muted">&rarr;</span>
                   <div className="flex items-center gap-md">
-                    <span className="text-label-sm text-text-muted">After</span>
+                    <span className="text-label-sm text-text-muted">{t('afterLabel')}</span>
                     <div
                       className="size-8 rounded border border-border"
                       style={{ backgroundColor: issue.code_fix.after }}
@@ -281,20 +291,24 @@ export function ReportView({
             <div className="mb-xl flex flex-col items-center">
               <CircularGauge value={result.overall_score} />
               <h2 className="mt-md text-headline-md font-medium text-text-primary">
-                Overall Design Score
+                {t('overallScore')}
               </h2>
               {(() => {
                 const cmp = getClosestBenchmark(result.overall_score);
                 if (!cmp) return null;
                 const { benchmark, diff, isAbove } = cmp;
-                let text = '';
-                if (diff <= 2) {
-                  text = `${result.overall_score} — comparable to ${benchmark.name} (${benchmark.score})`;
-                } else if (isAbove) {
-                  text = `${result.overall_score} — ahead of ${benchmark.name} (${benchmark.score}) by ${diff} pts`;
-                } else {
-                  text = `${result.overall_score} — ${benchmark.name} (${benchmark.score}) is ${diff} pts ahead`;
-                }
+                const params = {
+                  score: result.overall_score,
+                  name: benchmark.name,
+                  benchmarkScore: benchmark.score,
+                  diff,
+                };
+                const text =
+                  diff <= 2
+                    ? t('benchmarkComparable', params)
+                    : isAbove
+                      ? t('benchmarkAhead', params)
+                      : t('benchmarkBehind', params);
                 return <p className="mt-2 text-label-sm text-text-muted">{text}</p>;
               })()}
             </div>
@@ -312,12 +326,12 @@ export function ReportView({
                   onClick={() => handleChipClick(cat)}
                   className="rounded-full border border-border px-md py-1.5 text-label-sm text-text-secondary transition-colors hover:border-accent-signal/50 hover:bg-surface hover:text-accent-signal"
                 >
-                  {CATEGORY_LABELS[cat] || cat}
+                  {cat === 'all' ? t('all') : CATEGORY_LABELS[cat] || cat}
                 </button>
               ))}
             </div>
 
-            <p className="mt-md text-label-sm text-text-muted">Tap a category to see its issues.</p>
+            <p className="mt-md text-label-sm text-text-muted">{t('tapCategoryHint')}</p>
           </div>
 
           {showOwnerActions && (
@@ -327,7 +341,7 @@ export function ReportView({
                 className="h-11 flex-1 gap-sm rounded-md text-label-md font-semibold"
               >
                 <Download className="size-4" />
-                Export PDF
+                {t('exportPdf')}
               </Button>
               <Button
                 onClick={handleShare}
@@ -337,17 +351,17 @@ export function ReportView({
                 {linkCopied ? (
                   <>
                     <Check className="size-4" />
-                    Link copied
+                    {t('linkCopied')}
                   </>
                 ) : isPublic ? (
                   <>
                     <Copy className="size-4" />
-                    Copy link
+                    {t('copyLink')}
                   </>
                 ) : (
                   <>
                     <Share2 className="size-4" />
-                    {sharing ? 'Sharing...' : 'Share Report'}
+                    {sharing ? t('sharing') : t('shareReport')}
                   </>
                 )}
               </Button>
@@ -356,12 +370,12 @@ export function ReportView({
 
           {isDemoMode && (
             <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
-              <p className="text-label-md text-text-secondary">This was a sample analysis</p>
+              <p className="text-label-md text-text-secondary">{t('sampleAnalysis')}</p>
               <Link
                 href="/sign-up"
                 className="rounded-md bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90"
               >
-                Analyze your own design
+                {t('analyzeOwnDesign')}
               </Link>
             </footer>
           )}
@@ -369,7 +383,7 @@ export function ReportView({
           {isPublicShare && (
             <footer className="flex flex-col items-center gap-md border-t border-border bg-surface p-lg">
               <p className="text-label-sm text-text-muted">
-                Made with{' '}
+                {t('madeWithPrefix')}{' '}
                 <Link href="/" className="text-accent-signal hover:underline">
                   poisik
                 </Link>
@@ -378,7 +392,7 @@ export function ReportView({
                 href="/projects/new-analysis"
                 className="text-label-md font-medium text-accent-signal hover:underline"
               >
-                Duplicate this analysis
+                {tCommon('duplicateAnalysis')}
               </Link>
             </footer>
           )}
@@ -390,18 +404,17 @@ export function ReportView({
           <DialogHeader>
             <DialogTitle>
               {activeFilter === 'all'
-                ? 'All Issues'
+                ? t('allIssuesTitle')
                 : CATEGORY_LABELS[activeFilter] || activeFilter}
             </DialogTitle>
             <DialogDescription>
-              {filteredIssues.length} issue{filteredIssues.length !== 1 ? 's' : ''} found in this
-              category.
+              {t('issuesFoundInCategory', { count: filteredIssues.length })}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-lg">
             {filteredIssues.length === 0 ? (
               <p className="py-lg text-center text-body-md text-text-secondary">
-                No issues detected in this category — nice work.
+                {t('noIssuesInCategory')}
               </p>
             ) : (
               filteredIssues.map((issue, index) => renderIssueCard(issue, index))

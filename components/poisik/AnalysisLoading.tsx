@@ -1,13 +1,8 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { useTranslations } from 'next-intl';
 import { PoisikLogo } from './PoisikLogo';
-
-const FALLBACK_TEXTS = [
-  'Scanning visual hierarchy\u2026',
-  'Calculating contrast ratios\u2026',
-  'Checking spacing consistency\u2026',
-];
 
 interface AnalysisLoadingProps {
   streamUrl?: string;
@@ -22,6 +17,8 @@ export function AnalysisLoading({
   imageBase64,
   mimeType,
 }: AnalysisLoadingProps) {
+  const t = useTranslations('Loading');
+  const FALLBACK_TEXTS = [t('scanning'), t('calculating'), t('checking')];
   const [narration, setNarration] = useState('');
   const [fallbackIndex, setFallbackIndex] = useState(0);
   const [hasStreamed, setHasStreamed] = useState(false);
@@ -75,7 +72,7 @@ export function AnalysisLoading({
   useEffect(() => {
     if (hasStreamed) return;
     const interval = setInterval(() => {
-      setFallbackIndex((prev) => (prev + 1) % FALLBACK_TEXTS.length);
+      setFallbackIndex((prev) => (prev + 1) % 3);
     }, 2500);
     return () => clearInterval(interval);
   }, [hasStreamed]);

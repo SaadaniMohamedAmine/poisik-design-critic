@@ -1,6 +1,7 @@
 'use client';
 
 import { CheckCircle2, Circle, ChevronRight, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { useGettingStarted } from './GettingStartedContext';
 
@@ -14,6 +15,7 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 // rather than deleting it outright; the real, permanent dismiss action only
 // appears once every step is done, as the "Dismiss" button.
 export function GettingStartedWidget() {
+  const t = useTranslations('GettingStartedWidget');
   const gs = useGettingStarted();
   if (!gs || gs.dismissed || gs.minimized) return null;
 
@@ -30,25 +32,23 @@ export function GettingStartedWidget() {
               <CheckCircle2 className="size-5 text-accent-signal" strokeWidth={1.5} />
             </div>
             <h2 className="text-label-md font-semibold text-text-primary">
-              You&apos;re fully set up
+              {t('fullySetUpTitle')}
             </h2>
           </div>
           <button
             onClick={gs.dismiss}
-            aria-label="Dismiss"
+            aria-label={t('dismiss')}
             className="text-text-muted transition-colors hover:text-text-primary"
           >
             <X className="size-5" strokeWidth={1.5} />
           </button>
         </div>
-        <p className="mb-md text-label-md text-text-muted">
-          All onboarding steps complete — happy auditing.
-        </p>
+        <p className="mb-md text-label-md text-text-muted">{t('fullySetUpDesc')}</p>
         <button
           onClick={gs.dismiss}
           className="h-11 w-full rounded-lg border border-border text-label-md text-text-primary opacity-80 transition-colors hover:bg-surface-hover hover:opacity-100"
         >
-          Dismiss
+          {t('dismiss')}
         </button>
       </div>
     );
@@ -61,9 +61,9 @@ export function GettingStartedWidget() {
       <div className="mb-lg flex items-start justify-between">
         <div>
           <h2 className="text-headline-sm font-bold tracking-tight text-text-primary">
-            Getting started
+            {t('gettingStartedTitle')}
           </h2>
-          <p className="mt-1 text-label-sm text-text-secondary">Complete your setup</p>
+          <p className="mt-1 text-label-sm text-text-secondary">{t('completeYourSetup')}</p>
         </div>
         <div className="flex items-center gap-md">
           <div className="relative flex size-12 items-center justify-center">
@@ -95,7 +95,7 @@ export function GettingStartedWidget() {
           </div>
           <button
             onClick={gs.minimize}
-            aria-label="Minimize"
+            aria-label={t('minimizeAria')}
             className="text-text-muted transition-colors hover:text-text-primary"
           >
             <X className="size-5" strokeWidth={1.5} />

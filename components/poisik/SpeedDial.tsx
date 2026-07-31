@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Plus, Upload, FolderPlus, Lock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 interface SpeedDialProps {
@@ -10,8 +11,8 @@ interface SpeedDialProps {
 }
 
 const ACTIONS = [
-  { id: 'new-analysis', label: 'New analysis', icon: Upload, href: '/projects/new-analysis' },
-  { id: 'new-project', label: 'New project', icon: FolderPlus, href: '/projects?new=true' },
+  { id: 'new-analysis', labelKey: 'newAnalysis', icon: Upload, href: '/projects/new-analysis' },
+  { id: 'new-project', labelKey: 'newProject', icon: FolderPlus, href: '/projects?new=true' },
 ] as const;
 
 // Floating action button, adapted from a mobile "speed dial" reference the
@@ -23,6 +24,7 @@ const ACTIONS = [
 // and independent of whether the desktop sidebar or the mobile drawer is
 // what's currently visible.
 export function SpeedDial({ usage }: SpeedDialProps) {
+  const t = useTranslations('SpeedDial');
   const isAtLimit = usage.limit !== null && usage.remaining === 0;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -40,7 +42,7 @@ export function SpeedDial({ usage }: SpeedDialProps) {
       <Link
         id="tour-new-analysis"
         href="/pricing"
-        title="You're out of analyses this month — upgrade to keep going"
+        title={t('outOfAnalysesTitle')}
         className="fixed right-xl bottom-xl z-50 flex size-14 items-center justify-center rounded-full bg-accent-signal text-white shadow-2xl transition-opacity hover:opacity-90"
       >
         <Lock className="size-5" strokeWidth={1.5} />
@@ -64,13 +66,13 @@ export function SpeedDial({ usage }: SpeedDialProps) {
               <Link
                 href={action.href}
                 onClick={() => setOpen(false)}
-                title={action.label}
+                title={t(action.labelKey)}
                 className="flex size-12 items-center justify-center rounded-full border border-border bg-surface text-text-primary shadow-lg transition-colors hover:border-accent-signal/40 hover:text-accent-signal"
               >
                 <action.icon className="size-5" strokeWidth={1.5} />
               </Link>
               <span className="rounded-md bg-bg-elevated px-xs py-0.5 text-[10px] font-bold whitespace-nowrap text-text-secondary shadow">
-                {action.label}
+                {t(action.labelKey)}
               </span>
             </motion.div>
           ))}
@@ -79,7 +81,7 @@ export function SpeedDial({ usage }: SpeedDialProps) {
       <button
         id="tour-new-analysis"
         onClick={() => setOpen((prev) => !prev)}
-        aria-label={open ? 'Close quick actions' : 'Open quick actions'}
+        aria-label={open ? t('closeQuickActions') : t('openQuickActions')}
         aria-expanded={open}
         className="flex size-14 items-center justify-center rounded-full bg-accent-signal text-white shadow-2xl transition-opacity hover:opacity-90"
       >

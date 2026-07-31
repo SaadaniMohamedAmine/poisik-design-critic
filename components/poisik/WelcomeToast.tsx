@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
 import { useRouter } from '@/i18n/navigation';
 
 // Fires the "welcome back" toast exactly once per login. Persistence of the
@@ -12,6 +13,7 @@ import { useRouter } from '@/i18n/navigation';
 // component only handles the ephemeral toast, driven by a `?welcome=1` flag
 // that sign-in/sign-up append to the post-login redirect.
 export function WelcomeToast() {
+  const t = useTranslations('WelcomeToast');
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const router = useRouter();
@@ -23,9 +25,9 @@ export function WelcomeToast() {
     firedRef.current = true;
 
     const name = session?.user?.name?.split(' ')[0] || session?.user?.email?.split('@')[0];
-    toast.success(`Welcome back to Poisik${name ? `, ${name}` : ''}!`);
+    toast.success(name ? t('welcomeBackNamed', { name }) : t('welcomeBackAnon'));
     router.replace('/dashboard');
-  }, [searchParams, session, router]);
+  }, [searchParams, session, router, t]);
 
   return null;
 }

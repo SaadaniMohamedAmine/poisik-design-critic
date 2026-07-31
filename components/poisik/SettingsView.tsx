@@ -3,15 +3,23 @@
 import { useState, type FormEvent } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
-import { User, CreditCard, ShieldAlert, Lock, Download, Settings as SettingsIcon } from 'lucide-react';
+import {
+  User,
+  CreditCard,
+  ShieldAlert,
+  Lock,
+  Download,
+  Settings as SettingsIcon,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { PlanUsageWidget } from './PlanUsageWidget';
 
 type Tab = 'profile' | 'billing' | 'danger';
 
-const TABS: { id: Tab; label: string; icon: typeof User }[] = [
-  { id: 'profile', label: 'Profile', icon: User },
-  { id: 'billing', label: 'Billing', icon: CreditCard },
-  { id: 'danger', label: 'Danger zone', icon: ShieldAlert },
+const TABS: { id: Tab; labelKey: string; icon: typeof User }[] = [
+  { id: 'profile', labelKey: 'tabProfile', icon: User },
+  { id: 'billing', labelKey: 'tabBilling', icon: CreditCard },
+  { id: 'danger', labelKey: 'tabDanger', icon: ShieldAlert },
 ];
 
 interface SettingsViewProps {
@@ -43,6 +51,7 @@ export function SettingsView({
   limit,
   hasStripeCustomer,
 }: SettingsViewProps) {
+  const t = useTranslations('Settings');
   const { update } = useSession();
   const [tab, setTab] = useState<Tab>('profile');
 
@@ -65,9 +74,9 @@ export function SettingsView({
       if (!res.ok) throw new Error();
       await update({ name: trimmed });
       setSavedName(trimmed);
-      toast.success('Profile updated.');
+      toast.success(t('toastProfileUpdated'));
     } catch {
-      toast.error("Couldn't save your name — please try again.");
+      toast.error(t('toastSaveNameFailed'));
     } finally {
       setSavingName(false);
     }
@@ -88,7 +97,7 @@ export function SettingsView({
       if (!res.ok || !data.url) throw new Error();
       window.location.assign(data.url);
     } catch {
-      toast.error("Couldn't open the billing portal — please try again.");
+      toast.error(t('toastPortalFailed'));
       setPortalLoading(false);
     }
   }
@@ -111,7 +120,7 @@ export function SettingsView({
       a.click();
       URL.revokeObjectURL(url);
     } catch {
-      toast.error('Could not export your data. Please try again.');
+      toast.error(t('toastExportFailed'));
     } finally {
       setExporting(false);
     }
@@ -122,7 +131,7 @@ export function SettingsView({
     const res = await fetch('/api/account', { method: 'DELETE' });
     if (!res.ok) {
       setDeleting(false);
-      toast.error('Something went wrong deleting your account. Please try again.');
+      toast.error(t('toastDeleteFailed'));
       return;
     }
     await signOut({ callbackUrl: '/' });
@@ -135,17 +144,15 @@ export function SettingsView({
           <SettingsIcon className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <div>
-          <h1 className="text-headline-lg font-bold text-text-primary">Settings</h1>
-          <p className="mt-xs text-body-md text-text-secondary">
-            Manage your profile, plan, and data.
-          </p>
+          <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
+          <p className="mt-xs text-body-md text-text-secondary">{t('subtitle')}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-lg lg:flex-row lg:gap-xl">
         {/* Horizontal scrollable pills on mobile, vertical list from lg up. */}
         <nav className="flex gap-xs overflow-x-auto pb-xs lg:w-56 lg:shrink-0 lg:flex-col lg:overflow-visible lg:pb-0">
-          {TABS.map(({ id, label, icon: Icon }) => (
+          {TABS.map(({ id, labelKey, icon: Icon }) => (
             <button
               key={id}
               onClick={() => setTab(id)}
@@ -156,7 +163,7 @@ export function SettingsView({
               }`}
             >
               <Icon className="size-4" strokeWidth={1.5} />
-              {label}
+              {t(labelKey)}
             </button>
           ))}
         </nav>
@@ -165,10 +172,10 @@ export function SettingsView({
           {tab === 'profile' && (
             <div className="space-y-lg rounded-xl border border-border bg-surface p-lg">
               <div>
-                <h2 className="text-headline-md font-bold text-text-primary">Profile</h2>
-                <p className="mt-xs text-label-md text-text-secondary">
-                  This is how you appear across Poisik.
-                </p>
+                <h2 className="text-headline-md font-bold text-text-primary">
+                  {t('profileTitle')}
+                </h2>
+                <p className="mt-xs text-label-md text-text-secondary">{t('profileDesc')}</p>
               </div>
 
               <div className="flex items-center gap-lg border-y border-border/60 py-lg">
@@ -184,7 +191,7 @@ export function SettingsView({
                 </div>
                 <div className="min-w-0">
                   <p className="truncate text-body-md font-bold text-text-primary">
-                    {savedName || 'Unnamed'}
+                    {savedName || t('unnamed')}
                   </p>
                   <span className="mt-xs inline-block rounded-full border border-border-strong px-md py-1 text-label-sm font-bold tracking-widest text-text-primary uppercase">
                     {plan}
@@ -195,19 +202,19 @@ export function SettingsView({
               <form onSubmit={handleSaveName} className="space-y-md">
                 <div className="space-y-xs">
                   <label htmlFor="full-name" className="text-label-md text-text-primary">
-                    Full name
+                    {t('fullNameLabel')}
                   </label>
                   <input
                     id="full-name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your full name"
+                    placeholder={t('fullNamePlaceholder')}
                     className="w-full rounded-xl border border-border bg-bg-elevated p-md text-body-md text-text-primary transition-colors focus:border-accent-signal focus:outline-none"
                   />
                 </div>
 
                 <div className="space-y-xs">
-                  <label className="text-label-md text-text-primary">Email address</label>
+                  <label className="text-label-md text-text-primary">{t('emailLabel')}</label>
                   <div className="relative">
                     <input
                       readOnly
@@ -219,9 +226,7 @@ export function SettingsView({
                       strokeWidth={1.5}
                     />
                   </div>
-                  <p className="text-label-sm text-text-muted">
-                    Email is tied to your sign-in method and can&apos;t be changed here.
-                  </p>
+                  <p className="text-label-sm text-text-muted">{t('emailHint')}</p>
                 </div>
 
                 <div className="flex justify-end">
@@ -230,7 +235,7 @@ export function SettingsView({
                     disabled={savingName || !name.trim() || name.trim() === savedName}
                     className="w-full rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-40 sm:w-auto"
                   >
-                    {savingName ? 'Saving...' : 'Save changes'}
+                    {savingName ? t('saving') : t('saveChanges')}
                   </button>
                 </div>
               </form>
@@ -240,10 +245,10 @@ export function SettingsView({
           {tab === 'billing' && (
             <div className="space-y-lg">
               <div className="rounded-xl border border-border bg-surface p-lg">
-                <h2 className="text-headline-md font-bold text-text-primary">Plan &amp; usage</h2>
-                <p className="mt-xs text-label-md text-text-secondary">
-                  Your current subscription and monthly analysis quota.
-                </p>
+                <h2 className="text-headline-md font-bold text-text-primary">
+                  {t('planUsageTitle')}
+                </h2>
+                <p className="mt-xs text-label-md text-text-secondary">{t('planUsageDesc')}</p>
               </div>
 
               <PlanUsageWidget plan={plan} remaining={remaining} limit={limit} />
@@ -251,18 +256,17 @@ export function SettingsView({
               {plan !== 'FREE' && hasStripeCustomer && (
                 <div className="rounded-xl border border-border bg-surface p-lg">
                   <h3 className="text-body-lg font-bold text-text-primary">
-                    Payments &amp; invoices
+                    {t('paymentsInvoicesTitle')}
                   </h3>
                   <p className="mt-xs text-label-md text-text-secondary">
-                    Update your payment method, download invoices, or cancel your plan securely
-                    through Stripe.
+                    {t('paymentsInvoicesDesc')}
                   </p>
                   <button
                     onClick={handleManageSubscription}
                     disabled={portalLoading}
                     className="mt-md w-full rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover disabled:opacity-50 sm:w-auto"
                   >
-                    {portalLoading ? 'Opening...' : 'Manage subscription'}
+                    {portalLoading ? t('opening') : t('manageSubscription')}
                   </button>
                 </div>
               )}
@@ -274,11 +278,9 @@ export function SettingsView({
               <div className="space-y-md rounded-xl border border-border bg-surface p-lg">
                 <div>
                   <h2 className="text-headline-md font-bold text-text-primary">
-                    Export your data
+                    {t('exportDataTitle')}
                   </h2>
-                  <p className="mt-xs text-label-md text-text-secondary">
-                    Download a JSON archive of your projects, analyses, and account details.
-                  </p>
+                  <p className="mt-xs text-label-md text-text-secondary">{t('exportDataDesc')}</p>
                 </div>
                 <button
                   onClick={handleExport}
@@ -286,16 +288,17 @@ export function SettingsView({
                   className="flex w-full items-center justify-center gap-sm rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover disabled:opacity-50 sm:w-auto"
                 >
                   <Download className="size-4" strokeWidth={1.5} />
-                  {exporting ? 'Preparing...' : 'Export my data'}
+                  {exporting ? t('preparing') : t('exportMyData')}
                 </button>
               </div>
 
               <div className="space-y-md rounded-xl border border-border-strong bg-surface p-lg">
                 <div>
-                  <h2 className="text-headline-md font-bold text-text-primary">Delete account</h2>
+                  <h2 className="text-headline-md font-bold text-text-primary">
+                    {t('deleteAccountTitle')}
+                  </h2>
                   <p className="mt-xs text-label-md text-text-secondary">
-                    This permanently deletes your account, projects, and analyses. This cannot be
-                    undone.
+                    {t('deleteAccountDesc')}
                   </p>
                 </div>
                 {!confirmOpen ? (
@@ -303,7 +306,7 @@ export function SettingsView({
                     onClick={() => setConfirmOpen(true)}
                     className="w-full rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-text-primary transition-colors hover:bg-surface-hover sm:w-auto"
                   >
-                    Delete my account
+                    {t('deleteMyAccount')}
                   </button>
                 ) : (
                   <div className="flex flex-col gap-md sm:flex-row sm:items-center">
@@ -312,13 +315,13 @@ export function SettingsView({
                       disabled={deleting}
                       className="rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                     >
-                      {deleting ? 'Deleting...' : 'Yes, permanently delete'}
+                      {deleting ? t('deleting') : t('yesPermanentlyDelete')}
                     </button>
                     <button
                       onClick={() => setConfirmOpen(false)}
                       className="text-label-md text-text-secondary hover:text-text-primary"
                     >
-                      Cancel
+                      {t('cancel')}
                     </button>
                   </div>
                 )}
