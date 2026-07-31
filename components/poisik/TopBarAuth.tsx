@@ -47,10 +47,9 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                 onClick={openCommandPalette}
                 aria-label={t('openCommandPaletteAria')}
                 title={t('searchTitle')}
-                className="hidden items-center gap-xs rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:flex"
+                className="hidden items-center gap-xs rounded-full border-2 border-transparent px-md py-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:flex"
               >
-                <Search className="size-5" strokeWidth={1.5} />
-                <span className="text-label-sm text-text-muted">⌘K</span>
+                <span className="text-label-sm font-medium text-text-muted">⌘K</span>
               </button>
               <button
                 onClick={openCommandPalette}

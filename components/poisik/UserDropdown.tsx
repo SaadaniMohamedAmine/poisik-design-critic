@@ -60,6 +60,11 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
             src={image}
             alt=""
             className="size-full object-cover"
+            // Google's lh3.googleusercontent.com avatar URLs frequently
+            // reject the request when the browser sends a Referer header
+            // (esp. from a localhost/dev origin) — suppressing it is the
+            // standard fix, not just a defensive measure.
+            referrerPolicy="no-referrer"
             onError={() => setImageFailed(true)}
           />
         ) : (
