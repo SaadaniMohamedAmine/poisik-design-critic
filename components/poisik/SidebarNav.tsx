@@ -11,14 +11,15 @@ import {
   FileText,
   LifeBuoy,
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { GettingStartedPill } from './GettingStartedPill';
 
 const NAV_LINKS = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, id: undefined },
-  { href: '/audit-logs', label: 'Audit Logs', icon: History, id: undefined },
-  { href: '/knowledge-base', label: 'Knowledge Base', icon: BookOpen, id: undefined },
-  { href: '/settings', label: 'Settings', icon: Settings, id: undefined },
+  { href: '/dashboard', labelKey: 'dashboard', icon: LayoutDashboard, id: undefined },
+  { href: '/audit-logs', labelKey: 'auditLogs', icon: History, id: undefined },
+  { href: '/knowledge-base', labelKey: 'knowledgeBase', icon: BookOpen, id: undefined },
+  { href: '/settings', labelKey: 'settings', icon: Settings, id: undefined },
 ] as const;
 
 interface Project {
@@ -36,6 +37,8 @@ interface SidebarNavProps {
 // left column, lg+) and the mobile drawer (TopBarAuth's burger menu, below
 // lg) — one definition so the two surfaces can't drift apart.
 export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
+  const n = useTranslations('Navigation');
+  const t = useTranslations('SidebarNav');
   const pathname = usePathname();
   // Redirect straight to /pricing instead of letting the user walk through
   // project selection only to hit the 402 at the very last step — the API
@@ -89,7 +92,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             }`}
           >
             <LayoutDashboard className="size-4" strokeWidth={1.5} />
-            Dashboard
+            {n('dashboard')}
           </Link>
 
           {/* Projects: not a plain link — toggles a dropdown ("All
@@ -110,7 +113,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             >
               <FolderKanban className="size-4 shrink-0" strokeWidth={1.5} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate">Projects</span>
+                <span className="block truncate">{t('projects')}</span>
                 {currentProject && (
                   <span className="block truncate text-label-sm text-text-muted">
                     {currentProject.name}
@@ -134,7 +137,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
                       : 'text-text-secondary hover:text-text-primary'
                   }`}
                 >
-                  All projects
+                  {t('allProjects')}
                 </Link>
                 {projects.map((project) => (
                   <Link
@@ -154,7 +157,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             )}
           </div>
 
-          {NAV_LINKS.slice(1).map(({ href, label, icon: Icon, id }) => {
+          {NAV_LINKS.slice(1).map(({ href, labelKey, icon: Icon, id }) => {
             const active = pathname.startsWith(href);
             return (
               <Link
@@ -169,7 +172,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
                 }`}
               >
                 <Icon className="size-4" strokeWidth={1.5} />
-                {label}
+                {n(labelKey)}
               </Link>
             );
           })}
@@ -188,11 +191,13 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
               : 'border-border hover:bg-surface-hover'
           }`}
         >
-          <p className="mb-xs text-label-sm text-text-secondary">{usage.plan} plan</p>
+          <p className="mb-xs text-label-sm text-text-secondary">
+            {t('planLabel', { plan: usage.plan })}
+          </p>
           <p className="mb-sm text-label-md text-text-primary">
             {usage.limit === null
-              ? 'Unlimited analyses'
-              : `${usage.remaining} of ${usage.limit} analyses left`}
+              ? t('unlimitedAnalyses')
+              : t('analysesLeft', { remaining: usage.remaining ?? 0, limit: usage.limit })}
           </p>
           {usage.limit !== null && (
             <div className="h-1.5 overflow-hidden rounded-full bg-border-strong">
@@ -213,7 +218,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             className="flex items-center gap-sm px-md py-xs text-label-sm text-text-muted transition-colors hover:text-text-secondary"
           >
             <FileText className="size-3.5" strokeWidth={1.5} />
-            Documentation
+            {t('documentation')}
           </Link>
           <Link
             href="/support"
@@ -221,7 +226,7 @@ export function SidebarNav({ usage, projects, onNavigate }: SidebarNavProps) {
             className="flex items-center gap-sm px-md py-xs text-label-sm text-text-muted transition-colors hover:text-text-secondary"
           >
             <LifeBuoy className="size-3.5" strokeWidth={1.5} />
-            Support
+            {t('support')}
           </Link>
         </div>
       </div>

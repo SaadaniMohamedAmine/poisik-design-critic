@@ -1,4 +1,5 @@
 import { History } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
 import { Link } from '@/i18n/navigation';
@@ -11,6 +12,7 @@ import type { AnalysisResult } from '@/lib/schemas';
 export default async function AuditLogsPage() {
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
+  const t = await getTranslations('AuditLogs');
 
   const analyses = await prisma.analysis.findMany({
     where: { project: { userId } },
@@ -24,16 +26,15 @@ export default async function AuditLogsPage() {
         <div className="mx-auto mb-lg flex size-14 items-center justify-center rounded-xl border border-border bg-bg-elevated">
           <History className="size-6 text-accent-signal" strokeWidth={1.5} />
         </div>
-        <h1 className="mb-sm text-headline-md font-semibold text-text-primary">No audits yet</h1>
-        <p className="mb-lg text-body-md text-text-secondary">
-          Every analysis you run, across every project, shows up here as a single chronological
-          log — run your first one to get started.
-        </p>
+        <h1 className="mb-sm text-headline-md font-semibold text-text-primary">
+          {t('emptyTitle')}
+        </h1>
+        <p className="mb-lg text-body-md text-text-secondary">{t('emptyDesc')}</p>
         <Link
           href="/projects/new-analysis"
           className="inline-flex items-center justify-center gap-sm rounded-xl bg-accent-signal px-lg py-md font-bold text-white transition-opacity hover:opacity-90"
         >
-          Run your first analysis
+          {t('runFirstAnalysis')}
         </Link>
       </div>
     );
@@ -61,10 +62,9 @@ export default async function AuditLogsPage() {
           <History className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <div>
-          <h1 className="text-headline-lg font-bold text-text-primary">Audit Logs</h1>
+          <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
           <p className="mt-xs text-body-md text-text-secondary">
-            {analyses.length} audit{analyses.length === 1 ? '' : 's'} across {projectCount}{' '}
-            project{projectCount === 1 ? '' : 's'} — newest first.
+            {t('subtitle', { auditCount: analyses.length, projectCount })}
           </p>
         </div>
       </div>

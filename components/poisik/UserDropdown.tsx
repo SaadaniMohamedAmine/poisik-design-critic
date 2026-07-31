@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { signOut } from 'next-auth/react';
 import { toast } from 'react-toastify';
+import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 
 interface UserDropdownProps {
@@ -11,6 +12,7 @@ interface UserDropdownProps {
 }
 
 export function UserDropdown({ name, image }: UserDropdownProps) {
+  const t = useTranslations('UserDropdown');
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -28,7 +30,7 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
   // signOut slightly lets the toast actually render before the page
   // navigates away.
   function handleSignOut() {
-    toast.info('See you soon!');
+    toast.info(t('signOutToast'));
     fetch('/api/notifications', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,13 +65,13 @@ export function UserDropdown({ name, image }: UserDropdownProps) {
             href="/settings"
             className="block px-md py-sm text-label-md text-text-primary hover:bg-surface-hover"
           >
-            Account
+            {t('account')}
           </Link>
           <button
             onClick={handleSignOut}
             className="block w-full px-md py-sm text-left text-label-md text-text-primary hover:bg-surface-hover"
           >
-            Sign out
+            {t('signOut')}
           </button>
         </div>
       )}

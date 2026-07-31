@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Check } from 'lucide-react';
+import { useTranslations, useLocale } from 'next-intl';
 import { Link, useRouter } from '@/i18n/navigation';
 
 export interface CompareAnalysisItem {
@@ -28,6 +29,8 @@ interface ComparePickerProps {
 // name or a change-log tag, so cards use the same "Audit #N" + real issue
 // count already established on the project page instead.
 export function ComparePicker({ projectId, analyses }: ComparePickerProps) {
+  const t = useTranslations('Compare');
+  const locale = useLocale();
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
   const [shakeId, setShakeId] = useState<string | null>(null);
@@ -79,14 +82,15 @@ export function ComparePicker({ projectId, analyses }: ComparePickerProps) {
               </div>
               <div className="p-md">
                 <div className="mb-xs flex items-start justify-between gap-sm">
-                  <h4 className="text-label-md font-bold text-text-primary">Audit #{a.index}</h4>
+                  <h4 className="text-label-md font-bold text-text-primary">
+                    {t('auditLabel', { index: a.index })}
+                  </h4>
                   <span className="shrink-0 rounded bg-bg-elevated px-sm py-0.5 text-[10px] font-bold tracking-wide text-text-secondary uppercase">
-                    {a.createdAt.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    {a.createdAt.toLocaleDateString(locale, { month: 'short', day: 'numeric' })}
                   </span>
                 </div>
                 <p className="truncate text-label-sm text-text-secondary">
-                  {a.score ?? '—'}/100 · {a.issuesCount} issue{a.issuesCount === 1 ? '' : 's'}{' '}
-                  flagged
+                  {a.score ?? '—'}/100 · {t('issuesFlagged', { count: a.issuesCount })}
                 </p>
               </div>
             </button>
@@ -96,14 +100,14 @@ export function ComparePicker({ projectId, analyses }: ComparePickerProps) {
 
       <div className="mt-lg flex items-center justify-between border-t border-border pt-lg">
         <p className="text-label-md text-text-secondary">
-          <span className="font-bold text-text-primary">{selected.length}</span> of 2 selected
+          {t('selectedOfTwo', { selected: selected.length })}
         </p>
         <div className="flex gap-md">
           <Link
             href={`/projects/${projectId}`}
             className="rounded-xl px-lg py-sm text-label-md text-text-primary transition-colors hover:bg-surface-hover"
           >
-            Cancel
+            {t('cancel')}
           </Link>
           <button
             disabled={selected.length !== 2}
@@ -115,13 +119,12 @@ export function ComparePicker({ projectId, analyses }: ComparePickerProps) {
               // the older audit instead of the newer one.
               const [first, second] = selected;
               const indexOf = (id: string) => analyses.find((x) => x.id === id)?.index ?? 0;
-              const [a, b] =
-                indexOf(first) <= indexOf(second) ? [first, second] : [second, first];
+              const [a, b] = indexOf(first) <= indexOf(second) ? [first, second] : [second, first];
               router.push(`/projects/${projectId}/compare?a=${a}&b=${b}`);
             }}
             className="rounded-xl bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            Compare
+            {t('compareCta')}
           </button>
         </div>
       </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, Command as CommandIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { PoisikLogo } from '@/components/poisik/PoisikLogo';
 import { LanguageSwitcher } from '@/components/poisik/LanguageSwitcher';
 import { UserDropdown } from '@/components/poisik/UserDropdown';
@@ -19,6 +20,7 @@ interface TopBarAuthProps {
 }
 
 export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthProps) {
+  const t = useTranslations('TopBarAuth');
   const [mobileOpen, setMobileOpen] = useState(false);
   const closeMobile = () => setMobileOpen(false);
 
@@ -43,8 +45,8 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
             <div className="flex items-center gap-md">
               <button
                 onClick={openCommandPalette}
-                aria-label="Open command palette"
-                title="Search (⌘K)"
+                aria-label={t('openCommandPaletteAria')}
+                title={t('searchTitle')}
                 className="hidden items-center gap-xs rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:flex"
               >
                 <CommandIcon className="size-5" strokeWidth={1.5} />
@@ -52,7 +54,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
               </button>
               <button
                 onClick={openCommandPalette}
-                aria-label="Open command palette"
+                aria-label={t('openCommandPaletteAria')}
                 className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none lg:hidden"
               >
                 <CommandIcon className="size-5" strokeWidth={1.5} />
@@ -64,7 +66,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
               <UserDropdown name={userName} image={userImage} />
               <button
                 onClick={() => setMobileOpen(true)}
-                aria-label="Open menu"
+                aria-label={t('openMenuAria')}
                 className="flex cursor-pointer items-center justify-center rounded-md p-sm text-text-primary lg:hidden"
               >
                 <Menu className="size-6" />
@@ -102,7 +104,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                       closeMobile();
                       openCommandPalette();
                     }}
-                    aria-label="Open command palette"
+                    aria-label={t('openCommandPaletteAria')}
                     className="flex items-center justify-center rounded-full border-2 border-transparent p-2 text-text-secondary transition duration-150 ease-in-out hover:text-text-primary focus:text-text-primary focus:outline-none"
                   >
                     <CommandIcon className="size-5" strokeWidth={1.5} />
@@ -110,7 +112,7 @@ export function TopBarAuth({ userName, userImage, usage, projects }: TopBarAuthP
                 </div>
                 <button
                   onClick={closeMobile}
-                  aria-label="Close menu"
+                  aria-label={t('closeMenuAria')}
                   className="flex cursor-pointer items-center justify-center rounded-md p-sm text-text-primary"
                 >
                   <X className="size-6" />
