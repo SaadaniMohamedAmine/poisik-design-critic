@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import { Plus, ArrowRight, FolderOpen, Sparkles } from 'lucide-react';
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
@@ -38,6 +39,7 @@ function scoreOf(result: unknown): number | undefined {
 //   latest analysis's actual category_scores (lowest-scoring category) —
 //   same visual treatment, no fabricated scheduling claim.
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations('ProjectDetail');
   const { id } = await params;
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
@@ -62,11 +64,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <FolderOpen className="size-9 text-accent-signal" strokeWidth={1.5} />
             </div>
             <h2 className="mb-sm text-headline-md font-bold text-text-primary">
-              No analyses yet
+              {t('emptyTitle')}
             </h2>
             <p className="mb-lg text-body-md text-text-secondary">
-              Run your first AI audit for &quot;{project.name}&quot; to start tracking its score
-              over time.
+              {t('emptyDesc', { name: project.name })}
             </p>
             <div className="flex flex-col gap-sm sm:flex-row sm:justify-center">
               <Link
@@ -74,13 +75,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 className="inline-flex items-center justify-center gap-xs rounded-lg bg-accent-signal px-md py-sm text-label-sm font-bold whitespace-nowrap text-white transition-opacity hover:opacity-90"
               >
                 <Plus className="size-3.5" strokeWidth={2} />
-                Run first analysis
+                {t('runFirstAnalysis')}
               </Link>
               <Link
                 href="/demo"
                 className="inline-flex items-center justify-center gap-xs rounded-lg border border-border-strong px-md py-sm text-label-sm font-bold whitespace-nowrap text-text-primary transition-colors hover:bg-surface-hover"
               >
-                View sample report
+                {t('viewSampleReport')}
               </Link>
             </div>
           </div>
@@ -148,44 +149,43 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="flex flex-col gap-gutter lg:col-span-4">
           <div className="flex flex-col rounded-xl border border-border bg-surface p-lg">
             <h3 className="mb-md text-label-sm font-bold tracking-wider text-text-secondary uppercase">
-              Key Findings
+              {t('keyFindings')}
             </h3>
             {totalIssues > 0 ? (
               <div className="space-y-md">
                 <div className="flex items-center gap-md">
                   <span className="size-2 shrink-0 rounded-full bg-[#ffb4ab]" />
                   <p className="flex-1 text-body-md text-text-primary">
-                    {issueCounts.critical} critical{' '}
-                    {issueCounts.critical === 1 ? 'issue' : 'issues'}
+                    {t('criticalIssues', { count: issueCounts.critical })}
                   </p>
                 </div>
                 <div className="flex items-center gap-md">
                   <span className="size-2 shrink-0 rounded-full bg-[#f3bf4f]" />
                   <p className="flex-1 text-body-md text-text-primary">
-                    {issueCounts.warning} warning{issueCounts.warning === 1 ? '' : 's'}
+                    {t('warnings', { count: issueCounts.warning })}
                   </p>
                 </div>
                 <div className="flex items-center gap-md">
                   <span className="size-2 shrink-0 rounded-full bg-accent-signal" />
                   <p className="flex-1 text-body-md text-text-primary">
-                    {issueCounts.suggestion} suggestion{issueCounts.suggestion === 1 ? '' : 's'}
+                    {t('suggestions', { count: issueCounts.suggestion })}
                   </p>
                 </div>
               </div>
             ) : (
-              <p className="text-body-md text-text-secondary">
-                No issues found in the latest audit — clean bill of health.
-              </p>
+              <p className="text-body-md text-text-secondary">{t('noIssues')}</p>
             )}
           </div>
 
           {priorityCategory && (
             <div className="flex flex-col items-center justify-center rounded-xl border border-accent-signal/20 bg-accent-soft-bg p-lg text-center">
               <Sparkles className="mb-sm size-5 text-accent-signal" strokeWidth={1.5} />
-              <p className="text-label-md font-bold text-accent-signal">Priority focus area</p>
+              <p className="text-label-md font-bold text-accent-signal">{t('priorityFocusArea')}</p>
               <p className="mt-xs text-label-sm text-text-secondary">
-                {CATEGORY_LABELS[priorityCategory[0]] || priorityCategory[0]} scored{' '}
-                {priorityCategory[1]}/100 — the most room to improve.
+                {t('priorityFocusDesc', {
+                  category: CATEGORY_LABELS[priorityCategory[0]] || priorityCategory[0],
+                  score: priorityCategory[1],
+                })}
               </p>
             </div>
           )}
@@ -194,7 +194,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             href={`/report/${latest.id}`}
             className="inline-flex items-center justify-center gap-xs rounded-xl border border-border-strong px-lg py-sm text-label-md font-bold text-accent-signal transition-colors hover:bg-surface-hover"
           >
-            View full report
+            {t('viewFullReport')}
             <ArrowRight className="size-3.5" strokeWidth={2} />
           </Link>
         </div>
@@ -202,8 +202,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <div>
         <div className="mb-lg flex items-end justify-between">
-          <h3 className="text-headline-md font-bold text-text-primary">Analyses</h3>
-          <p className="text-label-md text-text-secondary">Newest first</p>
+          <h3 className="text-headline-md font-bold text-text-primary">{t('analysesHeading')}</h3>
+          <p className="text-label-md text-text-secondary">{t('newestFirst')}</p>
         </div>
         <ProjectAnalysesList analyses={analysisItems} />
       </div>

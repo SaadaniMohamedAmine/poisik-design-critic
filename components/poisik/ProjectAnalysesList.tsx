@@ -1,3 +1,4 @@
+import { getTranslations, getFormatter } from 'next-intl/server';
 import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 
@@ -16,7 +17,7 @@ export interface ProjectAnalysisItem {
 // are real hex values lifted straight from the mockup's own Material theme
 // (tertiary #f3bf4f, error #ffb4ab) since neither exists as a design token
 // here — this is a deliberate, scoped exception for this page only.
-function statusOf(score: number | undefined) {
+function statusOf(score: number | undefined, t: (key: string) => string) {
   if (score === undefined) {
     return {
       label: '—',
@@ -26,20 +27,20 @@ function statusOf(score: number | undefined) {
   }
   if (score >= 80) {
     return {
-      label: 'PASSED',
+      label: t('statusPassed'),
       badgeClass: 'border-accent-signal/20 bg-accent-soft-bg text-accent-signal',
       barClass: 'bg-accent-signal',
     };
   }
   if (score >= 60) {
     return {
-      label: 'WARNING',
+      label: t('statusWarning'),
       badgeClass: 'border-[#f3bf4f]/20 bg-[#f3bf4f]/10 text-[#f3bf4f]',
       barClass: 'bg-[#f3bf4f]',
     };
   }
   return {
-    label: 'FAIL',
+    label: t('statusFail'),
     badgeClass: 'border-[#ffb4ab]/20 bg-[#ffb4ab]/10 text-[#ffb4ab]',
     barClass: 'bg-[#ffb4ab]',
   };
@@ -50,11 +51,14 @@ function statusOf(score: number | undefined) {
 // Variant Analysis" — inventing either would be fake data, so each row is
 // labeled "Audit #N" (chronological) + the real timestamp and real issue
 // count instead.
-export function ProjectAnalysesList({ analyses }: { analyses: ProjectAnalysisItem[] }) {
+export async function ProjectAnalysesList({ analyses }: { analyses: ProjectAnalysisItem[] }) {
+  const t = await getTranslations('ProjectAnalysesList');
+  const format = await getFormatter();
+
   return (
     <div className="space-y-sm">
       {analyses.map((a) => {
-        const status = statusOf(a.score);
+        const status = statusOf(a.score, t);
         return (
           <Link
             key={a.id}
@@ -68,23 +72,19 @@ export function ProjectAnalysesList({ analyses }: { analyses: ProjectAnalysisIte
 
             <div className="min-w-0 flex-1">
               <h4 className="truncate text-body-lg font-bold text-text-primary">
-                Audit #{a.index}
+                {t('audit', { index: a.index })}
               </h4>
               <p className="text-label-sm text-text-secondary">
-                {a.createdAt.toLocaleDateString(undefined, {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                })}
+                {format.dateTime(a.createdAt, { year: 'numeric', month: 'short', day: 'numeric' })}
                 {' · '}
-                {a.issuesCount} issue{a.issuesCount === 1 ? '' : 's'} flagged
+                {t('issuesFlagged', { count: a.issuesCount })}
               </p>
             </div>
 
             <div className="flex shrink-0 items-center gap-lg">
               <div className="hidden flex-col items-end gap-xs sm:flex">
                 <span className="text-label-sm text-text-secondary">
-                  Score {a.score ?? '—'}
+                  {t('score', { score: a.score ?? '—' })}
                   {a.score !== undefined && <span className="text-text-muted">/100</span>}
                 </span>
                 {a.score !== undefined && (

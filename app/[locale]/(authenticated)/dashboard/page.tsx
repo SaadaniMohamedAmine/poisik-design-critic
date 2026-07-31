@@ -9,6 +9,7 @@ import {
   Activity,
   type LucideIcon,
 } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 import { auth } from '@/auth';
 import { Link } from '@/i18n/navigation';
 import { prisma } from '@/lib/prisma';
@@ -32,6 +33,7 @@ function startOfMonth(): Date {
 }
 
 export default async function DashboardPage() {
+  const t = await getTranslations('Dashboard');
   const session = await auth();
   const userId = (session!.user as { id: string }).id;
 
@@ -57,11 +59,10 @@ export default async function DashboardPage() {
               </div>
 
               <h1 className="mb-sm text-headline-lg font-bold text-text-primary">
-                Create your first project
+                {t('emptyTitle')}
               </h1>
               <p className="mb-lg text-body-md leading-relaxed text-text-secondary">
-                Start by naming your first project to organize your design audits. Our AI engine
-                will be ready to scan your first upload.
+                {t('emptyDesc')}
               </p>
 
               <CreateProjectForm />
@@ -72,15 +73,15 @@ export default async function DashboardPage() {
             <div className="flex items-start gap-md rounded-lg border border-border bg-surface p-md">
               <Sparkles className="size-5 shrink-0 text-accent-signal" strokeWidth={1.5} />
               <div>
-                <p className="text-label-md text-text-primary">AI Powered</p>
-                <p className="text-[12px] text-text-muted">Real-time heuristics</p>
+                <p className="text-label-md text-text-primary">{t('aiPoweredTitle')}</p>
+                <p className="text-[12px] text-text-muted">{t('aiPoweredDesc')}</p>
               </div>
             </div>
             <div className="flex items-start gap-md rounded-lg border border-border bg-surface p-md">
               <ShieldCheck className="size-5 shrink-0 text-accent-signal" strokeWidth={1.5} />
               <div>
-                <p className="text-label-md text-text-primary">Standardized</p>
-                <p className="text-[12px] text-text-muted">WCAG &amp; ISO Ready</p>
+                <p className="text-label-md text-text-primary">{t('standardizedTitle')}</p>
+                <p className="text-[12px] text-text-muted">{t('standardizedDesc')}</p>
               </div>
             </div>
           </div>
@@ -148,30 +149,35 @@ export default async function DashboardPage() {
 
   const statCards: StatCard[] = [
     {
-      label: 'Total projects',
+      label: t('statTotalProjects'),
       value: projects.length,
-      delta: projectsThisMonth > 0 ? `+${projectsThisMonth} this month` : undefined,
+      delta: projectsThisMonth > 0 ? t('deltaThisMonth', { count: projectsThisMonth }) : undefined,
       icon: FolderKanban,
     },
     {
-      label: 'Total analyses',
+      label: t('statTotalAnalyses'),
       value: totalAnalyses,
-      delta: analysesThisMonth > 0 ? `+${analysesThisMonth} this month` : undefined,
+      delta: analysesThisMonth > 0 ? t('deltaThisMonth', { count: analysesThisMonth }) : undefined,
       icon: BarChart3,
     },
     {
-      label: 'Average score',
+      label: t('statAverageScore'),
       value: scoreSeries.length > 0 ? avgScore : '—',
-      delta: scoreSeries.length > 0 ? '/ 100' : undefined,
+      delta: scoreSeries.length > 0 ? t('deltaOutOf100') : undefined,
       icon: Award,
     },
     {
       // No `progress` here on purpose — PlanUsageWidget below already has
       // its own progress bar for this exact number; showing two bars for
       // one metric on the same screen was redundant.
-      label: 'Analyses left',
+      label: t('statAnalysesLeft'),
       value: limit === null ? '∞' : `${remaining}/${limit}`,
-      delta: limit === null ? 'Unlimited' : remaining === 0 ? 'Upgrade for more' : 'This month',
+      delta:
+        limit === null
+          ? t('deltaUnlimited')
+          : remaining === 0
+            ? t('deltaUpgradeForMore')
+            : t('deltaThisMonthLabel'),
       icon: Zap,
       isAtLimit: limit !== null && remaining === 0,
     },
@@ -184,10 +190,8 @@ export default async function DashboardPage() {
           <Activity className="size-5 text-accent-signal" strokeWidth={1.5} />
         </div>
         <div>
-          <h1 className="text-headline-lg font-bold text-text-primary">Overview</h1>
-          <p className="mt-xs text-body-md text-text-secondary">
-            Real-time auditing performance and project health.
-          </p>
+          <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
+          <p className="mt-xs text-body-md text-text-secondary">{t('subtitle')}</p>
         </div>
       </div>
 

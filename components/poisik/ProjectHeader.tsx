@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { FolderOpen, Pencil, Trash2, Check, X } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
@@ -31,6 +32,7 @@ export function ProjectHeader({
   analysisCount,
   children,
 }: ProjectHeaderProps) {
+  const t = useTranslations('ProjectHeader');
   const router = useRouter();
   const [name, setName] = useState(initialName);
   const [editing, setEditing] = useState(false);
@@ -56,9 +58,9 @@ export function ProjectHeader({
       if (!res.ok) throw new Error();
       setName(trimmed);
       setEditing(false);
-      toast.success('Project renamed.');
+      toast.success(t('toastRenamed'));
     } catch {
-      toast.error("Couldn't rename this project — please try again.");
+      toast.error(t('toastRenameFailed'));
     } finally {
       setSaving(false);
     }
@@ -69,10 +71,10 @@ export function ProjectHeader({
     try {
       const res = await fetch(`/api/projects/${projectId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error();
-      toast.success('Project deleted.');
+      toast.success(t('toastDeleted'));
       router.push('/projects');
     } catch {
-      toast.error("Couldn't delete this project — please try again.");
+      toast.error(t('toastDeleteFailed'));
       setDeleting(false);
     }
   }
@@ -102,7 +104,7 @@ export function ProjectHeader({
               <button
                 onClick={handleSaveName}
                 disabled={saving}
-                aria-label="Save name"
+                aria-label={t('saveNameAria')}
                 className="rounded-lg p-xs text-accent-signal transition-colors hover:bg-surface-hover disabled:opacity-50"
               >
                 <Check className="size-4" strokeWidth={2} />
@@ -112,7 +114,7 @@ export function ProjectHeader({
                   setEditing(false);
                   setDraft(name);
                 }}
-                aria-label="Cancel rename"
+                aria-label={t('cancelRenameAria')}
                 className="rounded-lg p-xs text-text-secondary transition-colors hover:bg-surface-hover"
               >
                 <X className="size-4" strokeWidth={2} />
@@ -124,19 +126,19 @@ export function ProjectHeader({
                 href="/projects"
                 className="shrink-0 text-body-md text-text-secondary transition-colors hover:text-text-primary"
               >
-                Projects /
+                {t('breadcrumb')}
               </Link>
               <h1 className="truncate text-headline-lg font-bold text-text-primary">{name}</h1>
               <button
                 onClick={() => setEditing(true)}
-                aria-label="Rename project"
+                aria-label={t('renameProjectAria')}
                 className="shrink-0 rounded-lg p-xs text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary"
               >
                 <Pencil className="size-4" strokeWidth={1.5} />
               </button>
               <button
                 onClick={() => setDeleteOpen(true)}
-                aria-label="Delete project"
+                aria-label={t('deleteProjectAria')}
                 className="shrink-0 rounded-lg p-xs text-text-muted transition-colors hover:bg-surface-hover hover:text-text-primary"
               >
                 <Trash2 className="size-4" strokeWidth={1.5} />
@@ -144,7 +146,7 @@ export function ProjectHeader({
             </div>
           )}
           <p className="mt-xs text-body-md text-text-secondary">
-            {analysisCount} {analysisCount === 1 ? 'analysis' : 'analyses'} run on this project.
+            {t('analysesRun', { count: analysisCount })}
           </p>
         </div>
       </div>
@@ -154,25 +156,22 @@ export function ProjectHeader({
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete &quot;{name}&quot;?</DialogTitle>
-            <DialogDescription>
-              This permanently deletes this project and all {analysisCount}{' '}
-              {analysisCount === 1 ? 'analysis' : 'analyses'} in it. This cannot be undone.
-            </DialogDescription>
+            <DialogTitle>{t('deleteDialogTitle', { name })}</DialogTitle>
+            <DialogDescription>{t('deleteDialogDesc', { count: analysisCount })}</DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <button
               onClick={() => setDeleteOpen(false)}
               className="rounded-lg border border-border-strong px-lg py-sm text-label-md text-text-primary transition-colors hover:bg-surface-hover"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               onClick={handleDelete}
               disabled={deleting}
               className="rounded-lg bg-accent-signal px-lg py-sm text-label-md font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
             >
-              {deleting ? 'Deleting...' : 'Yes, delete project'}
+              {deleting ? t('deleting') : t('confirmDelete')}
             </button>
           </DialogFooter>
         </DialogContent>

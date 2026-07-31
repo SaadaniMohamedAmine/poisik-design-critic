@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useTranslations, useFormatter } from 'next-intl';
 import { Search, FolderOpen, Clock, BarChart3, PlusCircle } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { CreateProjectForm } from './CreateProjectForm';
@@ -15,18 +16,6 @@ export interface ProjectGridItem {
   analysisCount: number;
 }
 
-function timeAgo(dateStr: string): string {
-  const diffMs = Date.now() - new Date(dateStr).getTime();
-  const minutes = Math.floor(diffMs / 60000);
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
-  return new Date(dateStr).toLocaleDateString();
-}
-
 // Design reference: design_v2/all_projects (Stitch mockup). Kept the layout
 // (search bar, aspect-video card, score badge, "add new" tile as a grid
 // item rather than a header button) but adapted the content to what's
@@ -38,6 +27,8 @@ function timeAgo(dateStr: string): string {
 // action wired up yet — a decorative button that does nothing would be
 // worse than not having one.
 export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
+  const t = useTranslations('Projects');
+  const format = useFormatter();
   const [query, setQuery] = useState('');
   // The sidebar's "New project" quick action links here with ?new=true so
   // it actually opens the create form instead of just landing on a page
@@ -59,20 +50,21 @@ export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
             <FolderOpen className="size-5 text-accent-signal" strokeWidth={1.5} />
           </div>
           <div>
-            <h1 className="text-headline-lg font-bold text-text-primary">Projects</h1>
-            <p className="mt-xs text-body-md text-text-secondary">
-              Manage and revisit every design audit you've run.
-            </p>
+            <h1 className="text-headline-lg font-bold text-text-primary">{t('title')}</h1>
+            <p className="mt-xs text-body-md text-text-secondary">{t('subtitle')}</p>
           </div>
         </div>
 
         {projects.length > 0 && (
           <div className="relative w-full md:w-64">
-            <Search className="absolute top-1/2 left-md size-4 -translate-y-1/2 text-text-muted" strokeWidth={1.5} />
+            <Search
+              className="absolute top-1/2 left-md size-4 -translate-y-1/2 text-text-muted"
+              strokeWidth={1.5}
+            />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search projects..."
+              placeholder={t('searchPlaceholder')}
               className="w-full rounded-full border border-border bg-surface py-sm pr-lg pl-xl text-label-md text-text-primary placeholder:text-text-muted transition-colors focus:border-accent-signal focus:outline-none"
             />
           </div>
@@ -82,7 +74,7 @@ export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
       {query && filtered.length === 0 ? (
         <div className="flex flex-col items-center gap-sm rounded-xl border border-border bg-surface py-xxl text-center">
           <Search className="size-6 text-text-muted" strokeWidth={1.5} />
-          <p className="text-body-md text-text-secondary">No projects match &quot;{query}&quot;</p>
+          <p className="text-body-md text-text-secondary">{t('noMatch', { query })}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-gutter md:grid-cols-2 lg:grid-cols-3">
@@ -122,13 +114,13 @@ export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
                 <div className="flex min-w-0 items-center gap-xs text-text-secondary">
                   <Clock className="size-3.5 shrink-0" strokeWidth={1.5} />
                   <span className="truncate text-label-sm">
-                    Updated {timeAgo(project.updatedAt)}
+                    {t('updated', { time: format.relativeTime(new Date(project.updatedAt)) })}
                   </span>
                 </div>
                 <div className="flex shrink-0 items-center gap-xs text-text-secondary">
                   <BarChart3 className="size-3.5" strokeWidth={1.5} />
                   <span className="text-label-sm">
-                    {project.analysisCount} {project.analysisCount === 1 ? 'analysis' : 'analyses'}
+                    {t('analysesCount', { count: project.analysisCount })}
                   </span>
                 </div>
               </div>
@@ -148,10 +140,10 @@ export function ProjectsGrid({ projects }: { projects: ProjectGridItem[] }) {
                 <div className="mb-md flex size-14 items-center justify-center rounded-full bg-bg-elevated transition-transform group-hover:scale-110">
                   <PlusCircle className="size-6 text-accent-signal" strokeWidth={1.5} />
                 </div>
-                <span className="text-body-lg font-bold text-text-primary">Start new project</span>
-                <p className="mt-xs text-label-sm text-text-muted">
-                  Kick off a fresh AI audit for your product.
-                </p>
+                <span className="text-body-lg font-bold text-text-primary">
+                  {t('startNewProject')}
+                </span>
+                <p className="mt-xs text-label-sm text-text-muted">{t('startNewProjectDesc')}</p>
               </button>
             ))}
         </div>

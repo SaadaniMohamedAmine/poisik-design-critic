@@ -107,7 +107,19 @@
     "errorType": "This file type isn't supported — please use JPG, PNG, or WebP.",
     "errorSize": "This file exceeds the 10MB limit — try compressing it first.",
     "errorUpload": "Upload failed — check your connection and try again.",
-    "proTip": "Pro tip: High-resolution exports (2x) yield more accurate typography audits."
+    "proTip": "Pro tip: High-resolution exports (2x) yield more accurate typography audits.",
+    "uploadTab": "Upload screenshot",
+    "urlTab": "Analyze a URL — coming soon",
+    "urlTabTooltip": "Coming soon — live URL analysis needs a screenshot-capture step that isn't wired up yet",
+    "analyzing": "Analyzing...",
+    "toastRunning": "Running your AI audit...",
+    "toastComplete": "Analysis complete — your report is ready.",
+    "errorLimitReached": "You've reached your monthly analysis limit — upgrade to keep auditing.",
+    "errorGeneric": "The analysis didn't come back as expected — try again.",
+    "outOfCredits": "You're out of credits",
+    "analysisFailed": "Analysis failed",
+    "upgradeToPro": "Upgrade to Pro",
+    "retryAnalysis": "Retry analysis"
   },
   "Report": {
     "overallScore": "Overall Design Score",
@@ -197,6 +209,132 @@
     "noAccount": "Don't have an account?",
     "getStarted": "Get Started",
     "errorInvalidCredentials": "Incorrect email or password."
+  },
+  "Dashboard": {
+    "emptyTitle": "Create your first project",
+    "emptyDesc": "Start by naming your first project to organize your design audits. Our AI engine will be ready to scan your first upload.",
+    "aiPoweredTitle": "AI Powered",
+    "aiPoweredDesc": "Real-time heuristics",
+    "standardizedTitle": "Standardized",
+    "standardizedDesc": "WCAG & ISO Ready",
+    "title": "Overview",
+    "subtitle": "Real-time auditing performance and project health.",
+    "statTotalProjects": "Total projects",
+    "statTotalAnalyses": "Total analyses",
+    "statAverageScore": "Average score",
+    "statAnalysesLeft": "Analyses left",
+    "deltaThisMonth": "+{count} this month",
+    "deltaOutOf100": "/ 100",
+    "deltaUnlimited": "Unlimited",
+    "deltaUpgradeForMore": "Upgrade for more",
+    "deltaThisMonthLabel": "This month"
+  },
+  "DashboardError": {
+    "title": "Couldn't load your dashboard",
+    "description": "Something went wrong while fetching your projects and analyses. This has been logged — please try again.",
+    "tryAgain": "Try again"
+  },
+  "ProjectsOverviewWidget": {
+    "title": "Top projects",
+    "viewAll": "View all",
+    "empty": "No projects yet",
+    "analysesCount": "{count, plural, one {# analysis} other {# analyses}}"
+  },
+  "RecentActivityWidget": {
+    "title": "Recent activity",
+    "empty": "No activity yet",
+    "emptyHint": "Run your first analysis to see it show up here.",
+    "designAudit": "Design audit"
+  },
+  "ScoreTrendWidget": {
+    "title": "Score trend",
+    "subtitle": "Performance progression across all projects",
+    "firstScoreIn": "Your first score is in",
+    "runOneMore": "Run one more analysis to start seeing a trend line.",
+    "noScoredAnalyses": "No scored analyses yet",
+    "runFirstAnalysis": "Run your first analysis to start tracking your score over time."
+  },
+  "Projects": {
+    "title": "Projects",
+    "subtitle": "Manage and revisit every design audit you've run.",
+    "searchPlaceholder": "Search projects...",
+    "noMatch": "No projects match \"{query}\"",
+    "updated": "Updated {time}",
+    "analysesCount": "{count, plural, one {# analysis} other {# analyses}}",
+    "startNewProject": "Start new project",
+    "startNewProjectDesc": "Kick off a fresh AI audit for your product.",
+    "emptyTitle": "Create your first project",
+    "emptyDesc": "A project groups every analysis you run on the same design, so you can track its progress over time."
+  },
+  "CreateProjectForm": {
+    "nameLabel": "Project name",
+    "namePlaceholder": "e.g. My SaaS Landing Page",
+    "creating": "Creating...",
+    "createProject": "Create project",
+    "securePrivate": "Secure & Private Workspace",
+    "toastCreated": "\"{name}\" created.",
+    "errorGeneric": "Something went wrong.",
+    "errorCreateFailed": "Couldn't create the project — try again."
+  },
+  "ProjectDetail": {
+    "emptyTitle": "No analyses yet",
+    "emptyDesc": "Run your first AI audit for \"{name}\" to start tracking its score over time.",
+    "runFirstAnalysis": "Run first analysis",
+    "viewSampleReport": "View sample report",
+    "keyFindings": "Key Findings",
+    "criticalIssues": "{count, plural, one {# critical issue} other {# critical issues}}",
+    "warnings": "{count, plural, one {# warning} other {# warnings}}",
+    "suggestions": "{count, plural, one {# suggestion} other {# suggestions}}",
+    "noIssues": "No issues found in the latest audit — clean bill of health.",
+    "priorityFocusArea": "Priority focus area",
+    "priorityFocusDesc": "{category} scored {score}/100 — the most room to improve.",
+    "viewFullReport": "View full report",
+    "analysesHeading": "Analyses",
+    "newestFirst": "Newest first"
+  },
+  "ProjectHeader": {
+    "breadcrumb": "Projects /",
+    "saveNameAria": "Save name",
+    "cancelRenameAria": "Cancel rename",
+    "renameProjectAria": "Rename project",
+    "deleteProjectAria": "Delete project",
+    "analysesRun": "{count, plural, one {# analysis} other {# analyses}} run on this project.",
+    "toastRenamed": "Project renamed.",
+    "toastRenameFailed": "Couldn't rename this project — please try again.",
+    "toastDeleted": "Project deleted.",
+    "toastDeleteFailed": "Couldn't delete this project — please try again.",
+    "deleteDialogTitle": "Delete \"{name}\"?",
+    "deleteDialogDesc": "This permanently deletes this project and all {count, plural, one {# analysis} other {# analyses}} in it. This cannot be undone.",
+    "cancel": "Cancel",
+    "deleting": "Deleting...",
+    "confirmDelete": "Yes, delete project"
+  },
+  "ProjectActionBar": {
+    "activeProject": "Active project:",
+    "compare": "Compare",
+    "newAnalysis": "New Analysis"
+  },
+  "ProjectAnalysesList": {
+    "audit": "Audit #{index}",
+    "issuesFlagged": "{count, plural, one {# issue} other {# issues}} flagged",
+    "score": "Score {score}",
+    "statusPassed": "PASSED",
+    "statusWarning": "WARNING",
+    "statusFail": "FAIL"
+  },
+  "ProjectScoreTrend": {
+    "firstScoreIn": "Your first score is in",
+    "runOneMore": "Run one more analysis to start seeing a trend.",
+    "auditScoreTrend": "Audit score trend",
+    "vsPreviousAudit": "vs previous audit",
+    "noAnalysesInRange": "No analyses in the last {days} days",
+    "tooltipScore": "Score"
+  },
+  "NewAnalysis": {
+    "whichProject": "Which project is this for?",
+    "pickProject": "Pick a project to add this analysis to, or start a new one.",
+    "analysesCount": "{count, plural, one {# analysis} other {# analyses}}",
+    "orStartNewProject": "Or start a new project"
   },
   "SignUp": {
     "title": "Create your account",

@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { Activity } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 
@@ -17,20 +18,20 @@ function scoreBadgeClass(score: number | undefined) {
   return 'border-border bg-bg-elevated text-text-muted';
 }
 
-export function RecentActivityWidget({ analyses }: { analyses: RecentActivityItem[] }) {
+export async function RecentActivityWidget({ analyses }: { analyses: RecentActivityItem[] }) {
+  const t = await getTranslations('RecentActivityWidget');
+
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-border bg-surface">
       <div className="flex items-center justify-between border-b border-border bg-bg-elevated p-lg">
-        <h3 className="text-headline-sm font-bold text-text-primary">Recent activity</h3>
+        <h3 className="text-headline-sm font-bold text-text-primary">{t('title')}</h3>
       </div>
 
       {analyses.length === 0 ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-sm p-xl text-center">
           <Activity className="size-8 text-text-muted" strokeWidth={1.5} />
-          <p className="text-body-md text-text-secondary">No activity yet</p>
-          <p className="text-label-sm text-text-muted">
-            Run your first analysis to see it show up here.
-          </p>
+          <p className="text-body-md text-text-secondary">{t('empty')}</p>
+          <p className="text-label-sm text-text-muted">{t('emptyHint')}</p>
         </div>
       ) : (
         <div className="divide-y divide-border">
@@ -49,7 +50,7 @@ export function RecentActivityWidget({ analyses }: { analyses: RecentActivityIte
                   <h4 className="truncate text-label-md font-medium text-text-primary transition-colors group-hover:text-accent-signal">
                     {a.projectName}
                   </h4>
-                  <p className="text-label-sm text-text-secondary">Design audit</p>
+                  <p className="text-label-sm text-text-secondary">{t('designAudit')}</p>
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-lg">

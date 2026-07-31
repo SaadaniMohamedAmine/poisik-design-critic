@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { AreaChart, Area, ResponsiveContainer, YAxis, Tooltip } from 'recharts';
 import { TrendingUp, TrendingDown, BarChart3 } from 'lucide-react';
 
@@ -21,6 +22,7 @@ const RANGES = [
 // actually filter real analyses by date and the bars plot real per-analysis
 // scores, so the same visual matches without shipping a dead control.
 export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
+  const t = useTranslations('ProjectScoreTrend');
   const [range, setRange] = useState<'30D' | '90D'>('90D');
   const [now] = useState(() => Date.now());
 
@@ -41,10 +43,8 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
           {sorted[0]?.score ?? '—'}
           <span className="text-headline-sm font-medium text-text-muted">/100</span>
         </span>
-        <p className="text-body-md text-text-secondary">Your first score is in</p>
-        <p className="text-label-sm text-text-muted">
-          Run one more analysis to start seeing a trend.
-        </p>
+        <p className="text-body-md text-text-secondary">{t('firstScoreIn')}</p>
+        <p className="text-label-sm text-text-muted">{t('runOneMore')}</p>
       </div>
     );
   }
@@ -62,7 +62,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
       <div className="mb-lg flex items-start justify-between gap-md">
         <div>
           <h3 className="text-label-sm font-bold tracking-wider text-text-secondary uppercase">
-            Audit score trend
+            {t('auditScoreTrend')}
           </h3>
           <div className="mt-xs flex flex-wrap items-baseline gap-sm">
             <span className="text-[48px] leading-none font-bold text-text-primary">
@@ -79,7 +79,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
                 <TrendingDown className="size-3.5" strokeWidth={2} />
               )}
               {delta > 0 ? '+' : ''}
-              {delta} vs previous audit
+              {delta} {t('vsPreviousAudit')}
             </span>
           </div>
         </div>
@@ -127,7 +127,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
                       })
                     : '';
                 }}
-                formatter={(value) => [`${value}/100`, 'Score']}
+                formatter={(value) => [`${value}/100`, t('tooltipScore')]}
               />
               <Area
                 type="monotone"
@@ -145,7 +145,7 @@ export function ProjectScoreTrend({ analyses }: { analyses: ScorePoint[] }) {
         <div className="flex flex-1 flex-col items-center justify-center gap-sm text-center">
           <BarChart3 className="size-8 text-text-muted" strokeWidth={1.5} />
           <p className="text-body-md text-text-secondary">
-            No analyses in the last {windowDays} days
+            {t('noAnalysesInRange', { days: windowDays })}
           </p>
         </div>
       )}

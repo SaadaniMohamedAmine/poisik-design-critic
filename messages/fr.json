@@ -107,7 +107,19 @@
     "errorType": "Ce type de fichier n'est pas pris en charge — utilisez JPG, PNG ou WebP.",
     "errorSize": "Ce fichier dépasse la limite de 10Mo — essayez de le compresser d'abord.",
     "errorUpload": "Le téléchargement a échoué — vérifiez votre connexion et réessayez.",
-    "proTip": "Astuce : Les exports haute résolution (2x) permettent des audits typographiques plus précis."
+    "proTip": "Astuce : Les exports haute résolution (2x) permettent des audits typographiques plus précis.",
+    "uploadTab": "Importer une capture",
+    "urlTab": "Analyser une URL — bientôt disponible",
+    "urlTabTooltip": "Bientôt disponible — l'analyse d'URL en direct nécessite une étape de capture d'écran qui n'est pas encore en place",
+    "analyzing": "Analyse en cours...",
+    "toastRunning": "Lancement de votre audit IA...",
+    "toastComplete": "Analyse terminée — votre rapport est prêt.",
+    "errorLimitReached": "Vous avez atteint votre limite mensuelle d'analyses — passez à un forfait supérieur pour continuer.",
+    "errorGeneric": "L'analyse n'a pas abouti comme prévu — réessayez.",
+    "outOfCredits": "Vous n'avez plus de crédits",
+    "analysisFailed": "L'analyse a échoué",
+    "upgradeToPro": "Passer à Pro",
+    "retryAnalysis": "Réessayer l'analyse"
   },
   "Report": {
     "overallScore": "Score global de design",
@@ -197,6 +209,132 @@
     "noAccount": "Vous n'avez pas de compte ?",
     "getStarted": "Commencer",
     "errorInvalidCredentials": "E-mail ou mot de passe incorrect."
+  },
+  "Dashboard": {
+    "emptyTitle": "Créez votre premier projet",
+    "emptyDesc": "Commencez par nommer votre premier projet pour organiser vos audits de design. Notre moteur IA sera prêt à scanner votre premier import.",
+    "aiPoweredTitle": "Propulsé par l'IA",
+    "aiPoweredDesc": "Heuristiques en temps réel",
+    "standardizedTitle": "Standardisé",
+    "standardizedDesc": "Conforme WCAG et ISO",
+    "title": "Aperçu",
+    "subtitle": "Performance d'audit en temps réel et santé des projets.",
+    "statTotalProjects": "Projets au total",
+    "statTotalAnalyses": "Analyses au total",
+    "statAverageScore": "Score moyen",
+    "statAnalysesLeft": "Analyses restantes",
+    "deltaThisMonth": "+{count} ce mois-ci",
+    "deltaOutOf100": "/ 100",
+    "deltaUnlimited": "Illimité",
+    "deltaUpgradeForMore": "Passez à un forfait supérieur",
+    "deltaThisMonthLabel": "Ce mois-ci"
+  },
+  "DashboardError": {
+    "title": "Impossible de charger votre tableau de bord",
+    "description": "Une erreur s'est produite lors du chargement de vos projets et analyses. Elle a été enregistrée — veuillez réessayer.",
+    "tryAgain": "Réessayer"
+  },
+  "ProjectsOverviewWidget": {
+    "title": "Projets principaux",
+    "viewAll": "Tout voir",
+    "empty": "Aucun projet pour le moment",
+    "analysesCount": "{count, plural, one {# analyse} other {# analyses}}"
+  },
+  "RecentActivityWidget": {
+    "title": "Activité récente",
+    "empty": "Aucune activité pour le moment",
+    "emptyHint": "Lancez votre première analyse pour la voir apparaître ici.",
+    "designAudit": "Audit de design"
+  },
+  "ScoreTrendWidget": {
+    "title": "Tendance du score",
+    "subtitle": "Évolution de la performance sur tous les projets",
+    "firstScoreIn": "Votre premier score est disponible",
+    "runOneMore": "Lancez une analyse de plus pour voir apparaître une tendance.",
+    "noScoredAnalyses": "Aucune analyse notée pour le moment",
+    "runFirstAnalysis": "Lancez votre première analyse pour suivre votre score dans le temps."
+  },
+  "Projects": {
+    "title": "Projets",
+    "subtitle": "Gérez et revisitez chaque audit de design que vous avez lancé.",
+    "searchPlaceholder": "Rechercher des projets...",
+    "noMatch": "Aucun projet ne correspond à « {query} »",
+    "updated": "Mis à jour {time}",
+    "analysesCount": "{count, plural, one {# analyse} other {# analyses}}",
+    "startNewProject": "Démarrer un nouveau projet",
+    "startNewProjectDesc": "Lancez un nouvel audit IA pour votre produit.",
+    "emptyTitle": "Créez votre premier projet",
+    "emptyDesc": "Un projet regroupe toutes les analyses lancées sur le même design, pour suivre sa progression dans le temps."
+  },
+  "CreateProjectForm": {
+    "nameLabel": "Nom du projet",
+    "namePlaceholder": "ex. Ma landing page SaaS",
+    "creating": "Création...",
+    "createProject": "Créer le projet",
+    "securePrivate": "Espace de travail sécurisé et privé",
+    "toastCreated": "« {name} » créé.",
+    "errorGeneric": "Une erreur est survenue.",
+    "errorCreateFailed": "Impossible de créer le projet — réessayez."
+  },
+  "ProjectDetail": {
+    "emptyTitle": "Aucune analyse pour le moment",
+    "emptyDesc": "Lancez votre premier audit IA pour « {name} » pour commencer à suivre son score dans le temps.",
+    "runFirstAnalysis": "Lancer la première analyse",
+    "viewSampleReport": "Voir un exemple de rapport",
+    "keyFindings": "Points clés",
+    "criticalIssues": "{count, plural, one {# problème critique} other {# problèmes critiques}}",
+    "warnings": "{count, plural, one {# avertissement} other {# avertissements}}",
+    "suggestions": "{count, plural, one {# suggestion} other {# suggestions}}",
+    "noIssues": "Aucun problème détecté dans le dernier audit — tout est en ordre.",
+    "priorityFocusArea": "Zone prioritaire",
+    "priorityFocusDesc": "{category} a obtenu {score}/100 — la marge de progression la plus importante.",
+    "viewFullReport": "Voir le rapport complet",
+    "analysesHeading": "Analyses",
+    "newestFirst": "Plus récentes en premier"
+  },
+  "ProjectHeader": {
+    "breadcrumb": "Projets /",
+    "saveNameAria": "Enregistrer le nom",
+    "cancelRenameAria": "Annuler le renommage",
+    "renameProjectAria": "Renommer le projet",
+    "deleteProjectAria": "Supprimer le projet",
+    "analysesRun": "{count, plural, one {# analyse} other {# analyses}} lancées sur ce projet.",
+    "toastRenamed": "Projet renommé.",
+    "toastRenameFailed": "Impossible de renommer ce projet — veuillez réessayer.",
+    "toastDeleted": "Projet supprimé.",
+    "toastDeleteFailed": "Impossible de supprimer ce projet — veuillez réessayer.",
+    "deleteDialogTitle": "Supprimer « {name} » ?",
+    "deleteDialogDesc": "Cette action supprime définitivement ce projet et {count, plural, one {son analyse} other {ses # analyses}}. Cette action est irréversible.",
+    "cancel": "Annuler",
+    "deleting": "Suppression...",
+    "confirmDelete": "Oui, supprimer le projet"
+  },
+  "ProjectActionBar": {
+    "activeProject": "Projet actif :",
+    "compare": "Comparer",
+    "newAnalysis": "Nouvelle analyse"
+  },
+  "ProjectAnalysesList": {
+    "audit": "Audit n°{index}",
+    "issuesFlagged": "{count, plural, one {# problème signalé} other {# problèmes signalés}}",
+    "score": "Score {score}",
+    "statusPassed": "RÉUSSI",
+    "statusWarning": "ATTENTION",
+    "statusFail": "ÉCHEC"
+  },
+  "ProjectScoreTrend": {
+    "firstScoreIn": "Votre premier score est disponible",
+    "runOneMore": "Lancez une analyse de plus pour voir apparaître une tendance.",
+    "auditScoreTrend": "Tendance du score d'audit",
+    "vsPreviousAudit": "vs audit précédent",
+    "noAnalysesInRange": "Aucune analyse au cours des {days} derniers jours",
+    "tooltipScore": "Score"
+  },
+  "NewAnalysis": {
+    "whichProject": "Pour quel projet est cette analyse ?",
+    "pickProject": "Choisissez un projet auquel ajouter cette analyse, ou démarrez-en un nouveau.",
+    "analysesCount": "{count, plural, one {# analyse} other {# analyses}}",
+    "orStartNewProject": "Ou démarrer un nouveau projet"
   },
   "SignUp": {
     "title": "Créez votre compte",
