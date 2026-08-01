@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { buildMetadata } from '@/lib/metadata';
 
 const SECTION_KEYS = [1, 2, 3, 4, 5, 6] as const;
 
@@ -10,7 +11,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'PrivacyPolicy' });
-  return { title: t('metaTitle'), description: t('metaDescription') };
+  return buildMetadata({
+    locale,
+    path: '/privacy-policy',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  });
 }
 
 export default async function PrivacyPolicyPage() {

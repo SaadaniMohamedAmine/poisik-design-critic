@@ -16,6 +16,8 @@
     "signUp": "S'inscrire"
   },
   "Landing": {
+    "metaTitle": "Poisik — Design et passion, avec poise.",
+    "metaDescription": "Outil d'audit UX/UI propulsé par l'IA. Obtenez une critique design de niveau expert en quelques secondes.",
     "tagline": "Design et passion, avec poise.",
     "subtitle": "Obtenez un audit UX/UI de niveau expert en quelques secondes — sans consultant. Propulsé par une IA formée aux standards d'accessibilité et aux patterns de design les plus exigeants.",
     "cta": "Analyser votre design",

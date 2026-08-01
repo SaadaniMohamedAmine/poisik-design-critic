@@ -16,6 +16,8 @@
     "signUp": "Sign Up"
   },
   "Landing": {
+    "metaTitle": "Poisik — Design and Passion, with poise.",
+    "metaDescription": "AI-powered UX/UI audit tool. Get an expert-level design critique in seconds.",
     "tagline": "Design and Passion, with poise.",
     "subtitle": "Get an expert-level UX/UI audit in seconds — no consultant required. Powered by AI trained on elite design patterns and accessibility standards.",
     "cta": "Analyze your design",

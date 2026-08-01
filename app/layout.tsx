@@ -4,6 +4,7 @@ import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/auth';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { JsonLd } from '@/components/poisik/JsonLd';
+import { SITE_URL } from '@/lib/metadata';
 import './globals.css';
 
 const inter = Inter({
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Poisik — Design and Passion, with poise.',
     description: 'AI-powered UX/UI audit tool. Get an expert-level design critique in seconds.',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://poisik.ai',
+    url: SITE_URL,
     siteName: 'Poisik',
     images: [
       {
@@ -30,7 +31,7 @@ export const metadata: Metadata = {
         height: 630,
       },
     ],
-    locale: 'en',
+    locale: 'en_US',
     type: 'website',
   },
   twitter: {
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
     description: 'AI-powered UX/UI audit tool. Get an expert-level design critique in seconds.',
     images: ['/opengraph-image.png'],
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(SITE_URL),
   robots: {
     index: true,
     follow: true,
