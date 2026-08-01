@@ -4,7 +4,9 @@ import { withSentryConfig } from '@sentry/nextjs';
 
 const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  serverExternalPackages: ['sharp'],
+};
 
 export default withSentryConfig(withNextIntl(nextConfig), {
   silent: true,
