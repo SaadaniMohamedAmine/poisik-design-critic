@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { buildMetadata } from '@/lib/metadata';
 
 export async function generateMetadata({
   params,
@@ -8,7 +9,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'About' });
-  return { title: t('metaTitle'), description: t('metaDescription') };
+  return buildMetadata({
+    locale,
+    path: '/about',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  });
 }
 
 export default async function AboutPage() {

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { buildMetadata } from '@/lib/metadata';
 
 const POST_KEYS = [
   { titleKey: 'post1Title', excerptKey: 'post1Excerpt' },
@@ -14,7 +15,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Blog' });
-  return { title: t('metaTitle'), description: t('metaDescription') };
+  return buildMetadata({
+    locale,
+    path: '/blog',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  });
 }
 
 export default async function BlogPage() {

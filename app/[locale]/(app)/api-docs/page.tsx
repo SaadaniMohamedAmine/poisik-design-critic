@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
+import { buildMetadata } from '@/lib/metadata';
 
 const EXAMPLE_REQUEST = `curl -X POST https://poisik.ai/api/v1/analyze \\
   -H "x-api-key: YOUR_API_KEY" \\
@@ -49,7 +50,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'ApiDocs' });
-  return { title: t('metaTitle'), description: t('metaDescription') };
+  return buildMetadata({
+    locale,
+    path: '/api-docs',
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  });
 }
 
 function CodeBlock({ code }: { code: string }) {
