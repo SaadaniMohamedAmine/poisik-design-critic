@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
   // packages that Next's file tracer doesn't always follow automatically —
   // without this, every route using sharp 500s on Vercel with ERR_DLOPEN_FAILED.
   outputFileTracingIncludes: {
-    '/api/**/*': ['./node_modules/sharp/**/*', './node_modules/@img/**/*'],
+    '/api/projects/[id]/analyses': ['./node_modules/sharp/**/*', './node_modules/@img/**/*'],
+    '/api/v1/analyze': ['./node_modules/sharp/**/*', './node_modules/@img/**/*'],
+    '/api/resize': ['./node_modules/sharp/**/*', './node_modules/@img/**/*'],
   },
 };
 
