@@ -12,7 +12,11 @@ export const CategoryEnum = z.enum([
 ]);
 
 export const CodeFixSchema = z.object({
-  language: z.enum(['css', 'tailwind', 'hex']),
+  // The prompt asks the model for exactly "css" | "tailwind" | "hex", but
+  // smaller/faster models (Groq) don't always comply — a strict enum here
+  // rejected the entire analysis over one out-of-enum value. Nothing in the
+  // UI switches on this field, so a free-form string is safe.
+  language: z.string(),
   snippet: z.string(),
   before: z.string().optional(),
   after: z.string().optional(),
